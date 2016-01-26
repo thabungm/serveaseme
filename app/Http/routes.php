@@ -55,6 +55,12 @@ Route::group(['prefix' => 'api'], function()
     Route::get('/users/{id}', 'UsersController@read');
     Route::delete('/users/{id}', 'UsersController@delete');
     
+    // Order
+    Route::post('/orders', 'UsersController@signup');
+    Route::put('/users', 'UsersController@update');
+    Route::get('/users/{id}', 'UsersController@read');
+    Route::delete('/users/{id}', 'UsersController@delete');
+    
 });
 
 
