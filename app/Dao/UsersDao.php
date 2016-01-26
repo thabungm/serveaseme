@@ -18,6 +18,9 @@ class UsersDao extends CommonDao implements Crud, DaoInterface {
         if (isset($inputArray['last_name'])) {
             $object->last_name = $inputArray['last_name'];
         }
+        if (isset($inputArray['email'])) {
+            $object->email = $inputArray['email'];
+        }
         if (isset($inputArray['gender'])) {
             $object->gender = $inputArray['gender'];
         }
@@ -31,18 +34,18 @@ class UsersDao extends CommonDao implements Crud, DaoInterface {
         return $object;
     }
 
-    /**
-     * 
-     * 
-     * @param type $request
-     */
+    
+    
     function create($request) {
-        
+       
         if ($request['email']) {
             $user = User::where('email', $request['email'])->get();
-            if ($user == null) {
+            
+            if (!$user->isEmpty()) {
+                throw new \Exception("Email already exist");
                 return false;
             }
+            
         }
 
 
