@@ -12,9 +12,8 @@ class UsersController extends Controller
 {
     
     
-    function __construct() {
-        
-    }
+    
+    
     
     /**
      * 

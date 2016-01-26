@@ -10,8 +10,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     function __construct() {
-        
+        $this->middleware('jwt.auth', ['except' => ['authenticate']]);
     }
+    
+    
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     function jsonResponse($resp) {
         return response()->json($resp);

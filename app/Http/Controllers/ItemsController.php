@@ -12,9 +12,7 @@ class ItemsController extends Controller
 {
     
     
-    function __construct() {
-        
-    }
+    
     
     /**
      * 

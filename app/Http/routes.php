@@ -49,6 +49,7 @@ Route::group(['prefix' => 'api'], function()
     Route::get('/category/items/{id}', 'ItemsController@getItemsByCategory');
     
     // Users routes
+    Route::post('/authenticate', 'AuthenticateController@authenticate');
     Route::post('/users', 'UsersController@signup');
     Route::put('/users', 'UsersController@update');
     Route::get('/users/{id}', 'UsersController@read');
