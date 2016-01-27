@@ -73,8 +73,17 @@ class UsersDao extends CommonDao implements Crud, DaoInterface {
         User::destroy($id);
     }
     
+    // check if user with email is there if there return else create and return user
+    public function authSocialLogin($data) {
+        $user = User::where('email', $data['email'])->get();
 
-    
-    
+        if (!$user->isEmpty()) {
+            
+            return $user[0];
+        } else {
+            $user = $this->create($data);
+            return $user;
+        }
+    }
 
 }

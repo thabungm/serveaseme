@@ -10,11 +10,6 @@ use App\Dao\UsersDao as UsersDao;
 
 class UsersController extends Controller
 {
-    
-    
-    
-    
-    
     /**
      * 
      * @param RequestFacade $request

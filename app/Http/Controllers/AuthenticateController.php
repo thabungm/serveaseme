@@ -9,9 +9,15 @@ use App\Http\Controllers\Controller;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 //use App\Models\User;
+use Socialite;
+use Auth;
+use App\Dao\UsersDao;
 
 class AuthenticateController extends Controller
 {
+    public function __construct() {
+        
+    }
     
     public function authenticate(Request $request)
     {
@@ -31,5 +37,38 @@ class AuthenticateController extends Controller
         return response()->json(compact('token'));
     }
     
+    
+    
+    
+    /**
+     * Redirect the user to the Facebook authentication page.
+     *
+     * @return Response
+     */
+    public function redirectToProviderFacebook()
+    {
+        return Socialite::driver('facebook')->scopes(['email'])->redirect();
+    }
+
+    /**
+     * Obtain the user information from Facebook
+     *
+     * @return Response
+     */
+    public function handlefbCallback()
+    {   
+        $user = Socialite::driver('facebook')->user();
+        $data=array();
+        $data['first_name'] = $user->getName();
+        $data['email'] = $user->getEmail();
+        $usersDaoObj = new UsersDao();
+        $user = $usersDaoObj->authSocialLogin($data);
+        $token = JWTAuth::fromUser($user);
+        return $this->jsonResponse(compact('token'));
+    }
+    
+    public function authenticateSocial() {
+        
+    }
     
 }

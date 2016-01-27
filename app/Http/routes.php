@@ -35,13 +35,27 @@ Route::delete('/address', function () {
 // Items
 
 Route::get('/', function () {
-    return view('index');
+    return view('welcome');
+});
+
+
+//http://serveaseme.local/index.php/authenticate/facebook
+
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/auth/facebook', 'AuthenticateController@redirectToProviderFacebook');
+    Route::get('/authenticate/callback/facebook', 'AuthenticateController@handlefbCallback');
+
 });
 
 Route::group(['prefix' => 'api'], function()
 {
     //Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
     Route::post('authenticate', 'AuthenticateController@authenticate');
+    
+    Route::get('authenticate/facebook', 'AuthenticateController@redirectToProviderFacebook');
+    Route::get('authenticate/callback/facebook', 'AuthenticateController@handleProviderCallback');
+    
+    
     Route::post('/items', 'ItemsController@create');
     Route::put('/items', 'ItemsController@update');
     Route::get('/items/{id}', 'ItemsController@read');
@@ -56,10 +70,10 @@ Route::group(['prefix' => 'api'], function()
     Route::delete('/users/{id}', 'UsersController@delete');
     
     // Order
-    Route::post('/orders', 'UsersController@signup');
-    Route::put('/users', 'UsersController@update');
-    Route::get('/users/{id}', 'UsersController@read');
-    Route::delete('/users/{id}', 'UsersController@delete');
+    Route::post('/orders', 'OrdersController@create');
+    Route::put('/orders', 'OrdersController@update');
+    Route::get('/orders/{id}', 'OrdersController@read');
+    Route::delete('/orders/{id}', 'OrdersController@delete');
     
 });
 
