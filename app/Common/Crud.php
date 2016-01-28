@@ -2,13 +2,13 @@
 namespace App\Common;
 interface Crud {
 
-    function create($request);
+    function create(\Object $request);
 
-    function read($request);
+    function read(\Object $request);
 
-    function update($request);
+    function update(\Object $request);
 
-    function delete($request);
+    function delete(\Object $request);
 }
 
 ?>
