@@ -52,6 +52,15 @@ class UsersController extends Controller
     }
     
     
+    function changePassword(RequestFacade $request){
+        $usersDao = new UsersDao();
+        print_r("here");
+        exit();
+        $user = $usersDao->changePassword(RequestFacade::all());
+        return $this->jsonResponse($user);
+    }
+    
+    
     
     
 }

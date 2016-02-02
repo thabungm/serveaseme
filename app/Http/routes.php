@@ -11,8 +11,15 @@
 |
 */
 
+//header('Access-Control-Allow-Origin: http://localhost');
+header('Access-Control-Allow-Origin: *');
 
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT');
+//header('Access-Control-Allow-headers:Authorization');
+header("Access-Control-Allow-Headers: Authorization, X-Requested-With, Content-Type, Accept");
 
+//header_remove('Access-Control-Allow-Origin');
 
 //Address
 Route::get('/', function () {
@@ -39,7 +46,6 @@ Route::get('/', function () {
 });
 
 
-//http://serveaseme.local/index.php/authenticate/facebook
 
 Route::group(['middleware' => ['web']], function () {
     Route::get('/auth/facebook', 'AuthenticateController@redirectToProviderFacebook');
@@ -60,7 +66,9 @@ Route::group(['prefix' => 'api'], function()
     Route::put('/items', 'ItemsController@update');
     Route::get('/items/{id}', 'ItemsController@read');
     Route::delete('/items/{id}', 'ItemsController@delete');
-    Route::get('/category/items/{id}', 'ItemsController@getItemsByCategory');
+    Route::get('/category/{id}/items', 'ItemsController@getItemsByCategory');
+    
+    
     
     // Users routes
     Route::post('/authenticate', 'AuthenticateController@authenticate');
@@ -68,6 +76,7 @@ Route::group(['prefix' => 'api'], function()
     Route::put('/users', 'UsersController@update');
     Route::get('/users/{id}', 'UsersController@read');
     Route::delete('/users/{id}', 'UsersController@delete');
+    Route::put('/changepassword', 'UsersController@changePassword');
     
     // Order
     Route::post('/orders', 'OrdersController@create');

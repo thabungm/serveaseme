@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Description of OrderHasItems
  *
- * @author thabung
+ * 
  */
 class OrderHasItems extends Model {
     protected $table= 'order_has_items';

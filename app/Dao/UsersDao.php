@@ -5,7 +5,7 @@ use App\Common\Crud as Crud;
 use App\Dao\CommonDao as CommonDao;
 use App\Dao\DaoInterface as DaoInterface;
 
-class UsersDao extends CommonDao implements Crud, DaoInterface {
+class UsersDao extends CommonDao  {
 
     function __construct() {
         
@@ -29,7 +29,7 @@ class UsersDao extends CommonDao implements Crud, DaoInterface {
         }
         
         if (isset($inputArray['password'])) {
-            $object->password =  Hash::make($inputArray['password']);
+            $object->password =  \Hash::make($inputArray['password']);
         }
         return $object;
     }
@@ -84,6 +84,20 @@ class UsersDao extends CommonDao implements Crud, DaoInterface {
             $user = $this->create($data);
             return $user;
         }
+    }
+    
+    public function changePassword($data) {
+        $user = User::where('id', $data['id'])->get();
+        $oldPassword = $data['old_password'];
+        if ($user->password != \Hash($oldPassword)) {
+            throw new \Exception("Old password mismatch");
+        }
+        
+
+        $user->password = \Hash($data['new_password']);
+        $user->save();
+        return $user;
+
     }
 
 }

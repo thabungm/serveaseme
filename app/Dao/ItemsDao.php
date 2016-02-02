@@ -5,7 +5,7 @@ use App\Common\Crud as Crud;
 use App\Dao\CommonDao as CommonDao;
 use App\Dao\DaoInterface as DaoInterface;
 
-class ItemsDao extends CommonDao implements Crud, DaoInterface {
+class ItemsDao extends CommonDao implements  DaoInterface {
 
     function __construct() {
         
