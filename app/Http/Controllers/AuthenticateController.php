@@ -32,9 +32,12 @@ class AuthenticateController extends Controller
             // something went wrong
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
-
+        $user = JWTAuth::toUser($token);
+        $resp = array();
+        $resp['user'] = $user;
+        $resp['token'] = $token;
         // if no errors are encountered we can return a JWT
-        return response()->json(compact('token'));
+        return $this->jsonResponse($resp);
     }
     
     
@@ -60,15 +63,22 @@ class AuthenticateController extends Controller
         $user = Socialite::driver('facebook')->user();
         $data=array();
         $data['first_name'] = $user->getName();
+        $data['social_site_id'] = $user->getId();
         $data['email'] = $user->getEmail();
         $usersDaoObj = new UsersDao();
         $user = $usersDaoObj->authSocialLogin($data);
         $token = JWTAuth::fromUser($user);
-        return $this->jsonResponse(compact('token'));
+        //$env = \App::environment();
+       
+        
+        return redirect()->away(env('WEB_CLIENT') . "auth-token/" . $token);
+        
     }
     
-    public function authenticateSocial() {
+    public function getUserByToken() {
         
+        $user = JWTAuth::parseToken()->authenticate();
+        return $this->jsonResponse($user);
     }
     
 }

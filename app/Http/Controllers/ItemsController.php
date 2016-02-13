@@ -7,6 +7,7 @@ use App\Common\Crud as Crud;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Dao\ItemsDao as ItemsDao;
+use App\Managers\ItemsManager as ItemsManager;
 
 class ItemsController extends Controller
 {
@@ -57,6 +58,20 @@ class ItemsController extends Controller
         $itemsDao = new ItemsDao();
         $items = $itemsDao->getItemsByCategory($categoryId);
         return $this->jsonResponse($items);
+    }
+    
+    
+    function getCategory(RequestFacade $request){
+        $itemsDao = new ItemsDao();
+        $items = $itemsDao->getCategory();
+        return $this->jsonResponse($items);
+    }
+    
+    function getItemChildren(RequestFacade $request) {
+        $itemsManager = new ItemsManager();
+        $path = RequestFacade::all()['path'];
+        $children = $itemsManager->getItemChildren($path);
+        return $this->jsonResponse($children);
     }
     
 }

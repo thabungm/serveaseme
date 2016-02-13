@@ -7,6 +7,7 @@ use App\Common\Crud as Crud;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Dao\UsersDao as UsersDao;
+use App\Managers\UsersManager as UsersManager;
 
 class UsersController extends Controller
 {
@@ -54,10 +55,22 @@ class UsersController extends Controller
     
     function changePassword(RequestFacade $request){
         $usersDao = new UsersDao();
-        print_r("here");
-        exit();
+        
         $user = $usersDao->changePassword(RequestFacade::all());
         return $this->jsonResponse($user);
+    }
+    
+    function forgotPassword(RequestFacade $request){
+        $usersDao = new UsersDao();
+        
+        $user = $usersDao->changePassword(RequestFacade::all());
+        return $this->jsonResponse($user);
+    }
+    
+    function sendResetPasswordLink(RequestFacade $request){
+        $userManager = new UsersManager();
+        $result = $userManager->sendResetLink(RequestFacade::all());
+        return $this->jsonResponse($result);
     }
     
     

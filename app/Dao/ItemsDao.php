@@ -4,7 +4,6 @@ use App\Models\Items as Items;
 use App\Common\Crud as Crud;
 use App\Dao\CommonDao as CommonDao;
 use App\Dao\DaoInterface as DaoInterface;
-
 class ItemsDao extends CommonDao implements  DaoInterface {
 
     function __construct() {
@@ -62,6 +61,19 @@ class ItemsDao extends CommonDao implements  DaoInterface {
 
         $items = Items::where('category_id', $id)->get();
         return $items;
+    }
+    
+    function getCategory() {
+        $items = Items::whereNull("category_id")->get();
+        return $items;
+    }
+        
+    
+    function getItemsByPath($path = "/") {
+       // \DB::enableQueryLog();
+        $results = \DB::select('select * from items where path like "'.$path.'%" order by path,price');
+        
+        return $results;
     }
 
 }

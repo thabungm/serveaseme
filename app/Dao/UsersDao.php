@@ -27,6 +27,12 @@ class UsersDao extends CommonDao  {
         if (isset($inputArray['phone_number'])) {
             $object->phone_number = $inputArray['phone_number'];
         }
+        if (isset($inputArray['social_site'])) {
+            $object->social_site = $inputArray['social_site'];
+        }
+        if (isset($inputArray['social_site_id'])) {
+            $object->social_site_id = $inputArray['social_site_id'];
+        }
         
         if (isset($inputArray['password'])) {
             $object->password =  \Hash::make($inputArray['password']);
@@ -96,6 +102,12 @@ class UsersDao extends CommonDao  {
 
         $user->password = \Hash($data['new_password']);
         $user->save();
+        return $user;
+
+    }
+    
+    public function getUserByParam($key,$value) {
+        $user = User::where($key, $value)->get();
         return $user;
 
     }
