@@ -5,7 +5,7 @@ use App\Common\Crud as Crud;
 use App\Dao\CommonDao as CommonDao;
 use App\Dao\DaoInterface as DaoInterface;
 class ItemsDao extends CommonDao implements  DaoInterface {
-
+    
     function __construct() {
         
     }
@@ -26,17 +26,55 @@ class ItemsDao extends CommonDao implements  DaoInterface {
         return $object;
     }
 
+    
+    function getItemsByCategory($id) {
+        $items = Items::where('category_id', $id)->get();
+        return $items;
+    }
+    
+    function getCategory() {
+        $items = Items::whereNull("category_id")->get();
+        return $items;
+    }
+        
+    
+    
+    
+    
+    function createChildNode($childAttrb,$parentNodeId) {
+        $parentNode = Items::find($parentNodeId);
+        return (Items::create($childAttrb,$parentNode));
+    }
+    
+    function getChildren($nodeId) {
+        
+        $node = Items::find($nodeId);
+        if ($node) {
+            return $node->children()->get();
+        } else {
+            return null;
+        }
+    }
+    
     /**
      * 
      * 
      * @param type $request
      */
     function create($request) {
-        $item = new Items();
-        $item = $this->setProperties($item, $request);
-        $item->save();
+        $item = Items::create($request);
         return $item;
     }
+    
+    /**
+     * Creating root
+     * @param type $request
+     */
+    function createRoot($request) {
+        $item = Items::create($request);
+        return $item;
+    }
+    
 
     function read($id) {
         $item = Items::find($id);
@@ -53,27 +91,30 @@ class ItemsDao extends CommonDao implements  DaoInterface {
     }
 
     function delete($id) {
-        Items::destroy($id);
+        $node = Items::find($id);
+        $node->delete();
     }
     
+    
+    function moveNode($sourceId, $destinationId) {
+        $sourceNode = Items::find($sourceId);
+        $destinationNode = Items::find($destinationId);
+        $sourceNode->appendTo($destinationNode)->save();
+        return $sourceNode->hasMoved();
+    }
+    
+    function hasChildren($nodeId) {
+        $node = Items::find($nodeId);
+        if (!$node) {
+            return false;
+        }
+        if ($node->getDescendants()->count() > 0) {
+            return true;
+        } else {
+            return false;
+        }
 
-    function getItemsByCategory($id) {
-
-        $items = Items::where('category_id', $id)->get();
-        return $items;
     }
     
-    function getCategory() {
-        $items = Items::whereNull("category_id")->get();
-        return $items;
-    }
-        
-    
-    function getItemsByPath($path = "/") {
-       // \DB::enableQueryLog();
-        $results = \DB::select('select * from items where path like "'.$path.'%" order by path,price');
-        
-        return $results;
-    }
 
 }

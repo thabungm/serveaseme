@@ -53,6 +53,25 @@ Route::group(['middleware' => ['web']], function () {
 
 });
 
+
+Route::group(['prefix' => 'api/admin'], function()
+{
+    
+//    Route::post('authenticate', 'AuthenticateController@authenticate');
+    // Items admin routes
+    Route::post('/items', 'AdminController@createItem');
+    Route::post('/child', 'AdminController@createChild');
+    Route::post('/items-root', 'AdminController@createRootItem');
+    Route::put('/items', 'AdminController@update');
+    Route::post('/item-children', 'AdminController@getItemChildren');
+    Route::delete('/items/{id}', 'AdminController@delete');
+
+
+    
+});
+
+
+
 Route::group(['prefix' => 'api'], function()
 {
     //Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
@@ -62,15 +81,13 @@ Route::group(['prefix' => 'api'], function()
     Route::get('authenticate/facebook', 'AuthenticateController@redirectToProviderFacebook');
     Route::get('authenticate/callback/facebook', 'AuthenticateController@handleProviderCallback');
     
-    // Items
-    Route::post('/items', 'ItemsController@create');
-    Route::put('/items', 'ItemsController@update');
+    // Item children
+    Route::get('/children/{parentId}', 'ItemsController@getChildren');
     Route::get('/items/{id}', 'ItemsController@read');
-    Route::delete('/items/{id}', 'ItemsController@delete');
     Route::get('/category/{id}/items', 'ItemsController@getItemsByCategory');
     Route::get('/category', 'ItemsController@getCategory');
-    Route::post('/item-children', 'ItemsController@getItemChildren');
-    
+    Route::get('has-children/{parentId}', 'ItemsController@hasChildren');
+
     
     
     // Users routes

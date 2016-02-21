@@ -12,6 +12,11 @@ use App\Managers\ItemsManager as ItemsManager;
 class ItemsController extends Controller
 {
     
+    private $itemsDao;
+    function __construct() {
+        parent::__construct();
+        $this->itemsDao = new ItemsDao();
+    }
     
     
     
@@ -24,6 +29,18 @@ class ItemsController extends Controller
         
         $itemsDao = new ItemsDao();
         $item = $itemsDao->create(RequestFacade::all());
+        return $this->jsonResponse($item);
+
+    }
+    /**
+     * 
+     * @param RequestFacade $request
+     * @return type
+     */
+    function createRoot(RequestFacade $request) {
+        
+        $itemsDao = new ItemsDao();
+        $item = $itemsDao->createRoot(RequestFacade::all());
         return $this->jsonResponse($item);
 
     }
@@ -73,5 +90,17 @@ class ItemsController extends Controller
         $children = $itemsManager->getItemChildren($path);
         return $this->jsonResponse($children);
     }
+    
+    
+    
+    function getChildren($parentId) {
+        return $this->jsonResponse($this->itemsDao->getChildren($parentId));
+    }
+    
+    function hasChildren($nodeId) {
+        return $this->jsonResponse($this->itemsDao->hasChildren($nodeId));
+    }
+    
+    
     
 }

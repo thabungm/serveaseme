@@ -90,5 +90,19 @@ class MailService {
         $mailArray['subject'] = 'New product enquiry';
         $this->sendMail($mailArray);
     }
+    
+    
+    function resetPasswordMail($inputArray) {
+        $mailService = new MailService();
+        $message = 'Hi,<br>Click <a href="'.$inputArray['reset_link'].'">here</a> to reset your password.<br> Link not working? <br> Copy paste this url to browser '. ' '. $inputArray['reset_link'] ;
+        $mailArray = array();
+        $mailArray['body'] = $message;
+        $mailArray['to'] = $inputArray['to'];
+//        $mailArray['from'] = $inputArray['to'];
+        $mailArray['cc'] = 'thabung@gmail.com';
+        $mailArray['subject'] = 'Reset your password';
+        $this->sendMail($mailArray);
+        return true;
+    }
 
 }

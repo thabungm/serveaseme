@@ -2,7 +2,7 @@
 namespace App\Managers;
 
 use App\Dao\UsersDao as UsersDao;
-
+use App\Services\MailService;
 class UsersManager   {
 
 //    function __construct() {
@@ -24,12 +24,14 @@ class UsersManager   {
         $user->reset_hash = $hash;
         $user->save();
         // send mail
+        
+        $mailService = new MailService();
+        $passwordArray = array();
+        $passwordArray['to'] = $user->email;
         $webClient = config('WEB_CLIENT');
-        $resetLink = $webClient . "#/resetpassword/" .  $hash;
-        $sent = \Mail::send('email-template/forgot-password', ['username' => $user->first_name,'reset_link'=>$resetLink], function($message)
-        {
-            $message->to('thabungm@gmail.com', 'John Smith')->from("thafs@gmail.com")->subject('Welcome!');
-        });
+        $passwordArray['reset_link'] = $webClient . "#/resetpassword/" .  $hash;
+        
+        $sent = $mailService->resetPasswordMail($passwordArray);
 
         if ($sent) {
             return "Succesfully sent";
