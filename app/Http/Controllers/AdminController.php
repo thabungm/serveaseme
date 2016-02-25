@@ -17,8 +17,8 @@ class AdminController extends Controller {
     function createChild(RequestFacade $request) {
         $req = RequestFacade::all();
         $itemsDao = new ItemsDao();
-        $childAttrib['name'] = $req['name'];
-        return $this->jsonResponse($itemsDao->createChildNode($childAttrib, $req['parent_id']));
+//        $childAttrib['name'] = $req['name'];
+        return $this->jsonResponse($itemsDao->createChildNode($req, $req['parent_id']));
     }
     // update item
     // deactivate item

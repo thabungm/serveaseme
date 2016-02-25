@@ -101,6 +101,10 @@ class ItemsController extends Controller
         return $this->jsonResponse($this->itemsDao->hasChildren($nodeId));
     }
     
+    function getDecendants($nodeId) {
+        return $this->jsonResponse($this->itemsDao->getDecendants($nodeId));
+    }
+    
     
     
 }

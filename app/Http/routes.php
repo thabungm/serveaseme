@@ -87,6 +87,7 @@ Route::group(['prefix' => 'api'], function()
     Route::get('/category/{id}/items', 'ItemsController@getItemsByCategory');
     Route::get('/category', 'ItemsController@getCategory');
     Route::get('has-children/{parentId}', 'ItemsController@hasChildren');
+    Route::get('decendants/{parentId}', 'ItemsController@getDecendants');
 
     
     

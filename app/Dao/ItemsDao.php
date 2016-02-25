@@ -4,7 +4,7 @@ use App\Models\Items as Items;
 use App\Common\Crud as Crud;
 use App\Dao\CommonDao as CommonDao;
 use App\Dao\DaoInterface as DaoInterface;
-class ItemsDao extends CommonDao implements  DaoInterface {
+class ItemsDao extends CommonDao  {
     
     function __construct() {
         
@@ -42,6 +42,8 @@ class ItemsDao extends CommonDao implements  DaoInterface {
     
     
     function createChildNode($childAttrb,$parentNodeId) {
+//        print_r($childAttrb);
+//        die();
         $parentNode = Items::find($parentNodeId);
         return (Items::create($childAttrb,$parentNode));
     }
@@ -114,6 +116,15 @@ class ItemsDao extends CommonDao implements  DaoInterface {
             return false;
         }
 
+    }
+    
+    function getDecendants($nodeId) {
+        
+        $node = Items::find($nodeId);
+        if (!$node) {
+            return false;
+        }
+        return $node->getDescendants();
     }
     
 

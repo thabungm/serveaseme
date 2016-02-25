@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController {
 
     function __construct() {
-    //    $this->middleware('jwt.auth', ['except' => ['authenticate','redirectToProviderFacebook','handleProviderCallbackFacebook']]);
+//        $this->middleware('jwt.auth', ['except' => ['authenticate','redirectToProviderFacebook','handleProviderCallbackFacebook','getChildren','getDecendants']]);
     }
 
 use AuthorizesRequests,
@@ -19,6 +19,11 @@ use AuthorizesRequests,
 
     function jsonResponse($resp) {
         return response()->json($resp);
+    }
+    
+    function getLoggedInUser() {
+       return \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->authenticate();
+        
     }
 
 }
