@@ -1,6 +1,6 @@
 <?php
 namespace App\Dao;
-use App\Models\OrderEnquiryHistory as OrderEnquiryHistory;
+use App\Models\OrdersHistory as OrderHistory;
 use App\Common\Crud as Crud;
 use App\Dao\CommonDao as CommonDao;
 use App\Dao\DaoInterface as DaoInterface;
@@ -25,9 +25,8 @@ class OrderHistoryDao extends CommonDao  {
         
         
         
-        if (isset($inputArray['item_id'])) {
-            $object->item_id = $inputArray['item_id'];
-        }
+        
+        
         if (isset($inputArray['price'])) {
             $object->price = $inputArray['price'];
         }
@@ -40,7 +39,7 @@ class OrderHistoryDao extends CommonDao  {
      * @param type $request
      */
     function create($request) {
-        $orderEnquiryHistory = new OrderEnquiryHistory();
+        $orderEnquiryHistory = new OrderHistory();
         $orderEnquiryHistory = $this->setProperties($orderEnquiryHistory, $request);
         
         $orderEnquiryHistory->save();
@@ -48,12 +47,12 @@ class OrderHistoryDao extends CommonDao  {
     }
 
     function read($id) {
-        $orderEnquiryHistory = OrderEnquiryHistory::find($id);
+        $orderEnquiryHistory = OrderHistory::find($id);
         return $orderEnquiryHistory;
     }
 
     function update($request) {
-        $orderEnquiryHistory = OrderEnquiryHistory::find($request['id']);
+        $orderEnquiryHistory = OrderHistory::find($request['id']);
         if ($orderEnquiryHistory) {
             $orderEnquiryHistory = $this->setProperties($orderEnquiryHistory, $request);
             $orderEnquiryHistory->save();
@@ -62,16 +61,16 @@ class OrderHistoryDao extends CommonDao  {
     }
 
     function delete($id) {
-        OrderEnquiryHistory::destroy($id);
+        OrderHistory::destroy($id);
     }
     
 
-    function getOrderEnquiryHistoryByUserId($id) {
-        $orderEnquiryHistorys = OrderEnquiryHistory::where('user_id', $id)->get();
+    function getOrderHistoryByUserId($id) {
+        $orderEnquiryHistorys = OrderHistory::where('user_id', $id)->get();
         return $orderEnquiryHistorys;
     }
     
-    function addToOrderEnquiryHistory($inputArray){
+    function addToOrderHistory($inputArray){
         //@TODO add transaction
 //        $itemArray = $itemsDao->read($inputArray['item_id'])->toArray();
         /////////////////////////////
@@ -81,8 +80,9 @@ class OrderHistoryDao extends CommonDao  {
 
             $itemArray = $itemsDao->read($inputArray['item_id'])->toArray();
         }
-        $eoh = new OrderEnquiryHistory();
-        $eoh = $this->setProperties($eoh,array_merge($itemArray,$inputArray), $inputArray);
+        
+        $eoh = new OrderHistory();
+        $eoh = $this->setProperties($eoh,array_merge($itemArray,$inputArray));
         $eoh->save();
         return $eoh;
     }

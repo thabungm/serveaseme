@@ -6,7 +6,7 @@ use App\Models\Orders as Order;
 use App\Common\Crud as Crud;
 use App\Dao\CommonDao as CommonDao;
 use App\Dao\DaoInterface as DaoInterface;
-use App\Events\OrderWasMade as OrderWasMade;
+use App\Events\EnquiryWasMade as OrderWasMade;
 use App\Dao\OrderHasItemsDao as OrderHasItemsDao;
 use App\Dao\OrderHistoryDao as OrderHistoryDao;
 use App\Dao\OrderAddressHistoryDao as OrderAddressHistoryDao;
@@ -20,7 +20,7 @@ class OrdersDao extends CommonDao {
     function setProperties($object, $inputArray) {
 
         if (isset($inputArray['pickup_date'])) {
-            $object->pickup_date = $inputArray['pickup_date'];
+            $object->pickup_date = date_create_from_format("d/m/Y",$inputArray['pickup_date']);
         }
         if (isset($inputArray['pickup_time'])) {
             $object->pickup_time = $inputArray['pickup_time'];
@@ -53,19 +53,30 @@ class OrdersDao extends CommonDao {
     function placeOrder($request) {
 
         //@TODO: transaction starts
-//        echo 
+//        DB::beginTransaction();
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
         $order = $this->create($request);
         $orderHasItemsDao = new OrderHasItemsDao();
         $eoahDao = new OrderAddressHistoryDao();
         $eoahDao->create(array('order_id'=>$order->id,'address_id'=>$request['address_id']));
         $orderOrderHistoryObj = new OrderHistoryDao();
+       
         foreach ($request['items'] as $value) {
-            $orderHasItemsObj = $orderHasItemsDao->create(array('item_id' => $value, 'order_id' => $order->id));
-            $orderOrderHistoryObj->addToOrderHistory(array("item_id"=>$value,'order_id' => $order->id,'pickup_date'=>$request['pickup_date'],'pickup_time'=>$request['pickup_time']));
+            $orderHasItemsObj = $orderHasItemsDao->create(array('item_id' => $value['_id'], 'order_id' => $order->id,'quantity'=>$value['_quantity']));
+            //$orderOrderHistoryObj->addToOrderHistory(array("item_id"=>$value['_id'],'order_id' => $order->id));
+
+            
+        }
+        \Illuminate\Support\Facades\DB::commit();
+
+        } catch(\Exception $e) {
+        \Illuminate\Support\Facades\DB::rollaback();
+            
         }
         // transsaction ends
 
-        \Illuminate\Support\Facades\Event::fire(new OrderWasMade());
+        //\Illuminate\Support\Facades\Event::fire(new OrderWasMade());
     }
 
     function read($id) {
