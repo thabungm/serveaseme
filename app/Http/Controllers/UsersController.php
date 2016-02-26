@@ -73,6 +73,10 @@ class UsersController extends Controller
         return $this->jsonResponse($result);
     }
     
+    function getMe(RequestFacade $request){
+        return $this->jsonResponse($this->getLoggedInUser());
+    }
+    
     
     
     

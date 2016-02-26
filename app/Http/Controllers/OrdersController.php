@@ -13,6 +13,12 @@ class OrdersController extends Controller
 {
     
     
+    private $orderDao;
+    function __construct() {
+        parent::__construct();
+        $this->orderDao = new OrdersDao();
+    }
+    
     
     
     /**
@@ -55,11 +61,13 @@ class OrdersController extends Controller
     
     
     
-    function getOrderByUser($userId) {
-        
-        
-        
+    function getOrderByUserId() {
+        $user = $this->getLoggedInUser();
+        if ($user) {
+            return $this->orderDao->getOrderHistory(array('user_id' => $user->id));
+        } else {
+            throw new Exception('Unauthorized', 401);
+        }
     }
-    
-    
+
 }

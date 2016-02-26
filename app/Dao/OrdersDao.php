@@ -71,8 +71,10 @@ class OrdersDao extends CommonDao {
         \Illuminate\Support\Facades\DB::commit();
 
         } catch(\Exception $e) {
-        \Illuminate\Support\Facades\DB::rollaback();
-            
+        \Illuminate\Support\Facades\DB::rollback();
+//            throw 
+        print_r($e->getMessage());
+        throw new \Exception("Error internal server error", 500);
         }
         // transsaction ends
 
@@ -141,6 +143,30 @@ class OrdersDao extends CommonDao {
         }
         return $returnArray;
     }
+    
+    
+    
+    function getOrderHistory($request) {
+        // limit filters sort
+
+        $query = "select orders.status ,orders.created_at as order_date, ohi.quantity, orders.status,orders.id as order_id,items.name,items.id,ohi.price from order_has_items ohi
+                    LEFT JOIN
+                    orders
+
+                    on 
+                    orders.id = ohi.order_id
+                    LEFT JOIN
+                    category items
+                    on items.id=ohi.item_id
+                    join 
+                    users
+                    on users.id=orders.user_id
+                    where users.id=? order by orders.id";
+
+        
+         $orderHistory = \DB::select($query, [$request['user_id']]);
+         return $orderHistory;
+}
     
     
     

@@ -101,12 +101,14 @@ Route::group(['prefix' => 'api'], function()
     Route::post('/forgotpassword', 'UsersController@forgotPassword');
     Route::get('/resetpassword/:hash', 'UsersController@resetPassword');
     Route::post('/resetpassword', 'UsersController@sendResetPasswordLink');
+    Route::get('/me', 'UsersController@getMe');
     
     // Order
     Route::post('/orders', 'OrdersController@create');
     Route::put('/orders', 'OrdersController@update');
     Route::get('/orders/{id}', 'OrdersController@read');
     Route::delete('/orders/{id}', 'OrdersController@delete');
+    Route::get('/orders-history', 'OrdersController@getOrderByUserId');
     // Enquiry
     Route::post('/enquiry', 'EnquiryController@create');
 //    Route::post('/p', 'EnquiryController@create');
