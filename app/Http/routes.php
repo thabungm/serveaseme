@@ -59,12 +59,19 @@ Route::group(['prefix' => 'api/admin'], function()
     
 //    Route::post('authenticate', 'AuthenticateController@authenticate');
     // Items admin routes
-    Route::post('/items', 'AdminController@createItem');
+    Route::post('/items', 'AdminController@createChild');
+    Route::put('/items', 'AdminController@updateItem');
+
     Route::post('/child', 'AdminController@createChild');
     Route::post('/items-root', 'AdminController@createRootItem');
-    Route::put('/items', 'AdminController@update');
     Route::post('/item-children', 'AdminController@getItemChildren');
     Route::delete('/items/{id}', 'AdminController@delete');
+    Route::post('/orders', 'AdminController@getOrderHistory');
+    Route::get('/order-details/{id}', 'AdminController@getOrderDetails');
+//    Route::post('/orders',function() {
+//        print_r("SHIT HAPPENS");
+//    });
+    
 
 
     

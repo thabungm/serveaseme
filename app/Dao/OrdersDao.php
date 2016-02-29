@@ -146,7 +146,7 @@ class OrdersDao extends CommonDao {
     
     
     
-    function getOrderHistory($request) {
+    function getOrderHistory($request, $otherParams=null) {
         // limit filters sort
 
         $query = "select orders.status ,orders.created_at as order_date, ohi.quantity, orders.status,orders.id as order_id,items.name,items.id,ohi.price from order_has_items ohi
@@ -161,16 +161,59 @@ class OrdersDao extends CommonDao {
                     join 
                     users
                     on users.id=orders.user_id
-                    where users.id=? order by orders.id";
+                    where users.id=? order by items.id asc";
 
+
+        $orderHistory = \DB::select($query, [$request['user_id']]);
+        return $orderHistory;
+    }
+    
+    
+    function getOrderHistoryAdmin($request) {
+        $query = "select orders.id as id, CONCAT(users.first_name,' ',users.last_name) as full_name, orders.status,CONCAT('SERV-',orders.id) as unique_order_id ,orders.created_at as order_date,orders.pickup_date as dos,orders.pickup_time as tos
+                    from
+                    orders
+                    join 
+                    users
+                    on users.id=orders.user_id
+                    order by orders.id asc";
         
-         $orderHistory = \DB::select($query, [$request['user_id']]);
-         return $orderHistory;
-}
-    
-    
-    
-    
-    
+        if (isset($request['date'])) {
+            
+        }
+        if (isset($request['date'])) {
+            
+        }
+        
+        
+        $orderHistory = \DB::select($query);
+        return $orderHistory;
+    }
+    function getOrderDetails($id) {
+        $query = "select orders.status ,orders.created_at as order_date, ohi.quantity, orders.status,orders.id as order_id,items.name,items.id,ohi.price from order_has_items ohi
+                    LEFT JOIN
+                    orders
+
+                    on 
+                    orders.id = ohi.order_id
+                    LEFT JOIN
+                    category items
+                    on items.id=ohi.item_id
+                    join 
+                    users
+                    on users.id=orders.user_id
+                    where orders.id=? order by items.id asc";
+        
+        if (isset($request['date'])) {
+            
+        }
+        if (isset($request['date'])) {
+            
+        }
+        
+        $orderHistory = \DB::select($query, [$id]);
+
+        return $orderHistory;
+    }
 
 }

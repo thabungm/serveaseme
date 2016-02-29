@@ -64,6 +64,8 @@ class OrdersController extends Controller
     function getOrderByUserId() {
         $user = $this->getLoggedInUser();
         if ($user) {
+            //echo "<pre>";
+            //print_r($user);
             return $this->orderDao->getOrderHistory(array('user_id' => $user->id));
         } else {
             throw new Exception('Unauthorized', 401);
