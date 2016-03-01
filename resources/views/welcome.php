@@ -47,42 +47,15 @@
         <!--<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.js"></script>-->
 
         <script src="bower_components/angular-messages/angular-messages.js"></script>
-        <link rel="stylesheet" href="/app/commmon//app/css/main.css"> 
+        <link rel="stylesheet" href="/app/commmon/app/css/main.css"> 
         <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"> 
         <script src="bower_components/angular-resource/angular-resource.js"></script>
         <script src="bower_components/ngCart/dist/ngCart.js"></script>
         
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="bower_components/angular-route/angular-route.js"></script>
-        <script src="/app/assets/lib/js/checklist-model.js"></script>
-        <script src="/app/assets/lib/bootstrap/ui-bootstrap-tpls-1.1.2.min.js"></script>
-        <script src="/app/app-url.js"></script>
-
-        <script src="/app/locality.js"></script>
-        <script src="/app/app.js"></script>
-        <script src="/app/ordersenquiry/order-enquiry-controller.js"></script>
-
-        <script src="/app/users/authFactory.js"></script>
-        <script src="/app/items/itemFactory.js"></script>
-
-        <script src="/app/products/product.js"></script>
-        <script src="/app/products/orderFactory.js"></script>
-        <script src="/app/products/product-controller.js"></script>
-        <script src="/app/users/login-controller.js"></script>
-        <script src="/app/users/singnup-controller.js"></script>
-        <script src="/app/users/userFactory.js"></script>
-        <script src="/app/users/addressFactory.js"></script>
-        <script src="/app/users/user-controller.js"></script>
-        <script src="/app/httpinterceptor.js"></script>
-        <script src="/app/address/address-controller.js"></script>
-        <script src="/app/items/item-controller.js"></script>
         
-        <script src="/app/services/laundry/laundry-controller.js"></script>
-        <script src="/app/ordersenquiry/orderFactory.js"></script>
-        <script src="/app/ordersenquiry/order-enquiry-controller.js"></script>
-        <script src="/app/admin/admin-controller.js"></script>
-        <script src="/app/admin/admin-controller.js"></script>
-        <script src="/app/services/driver/driver-controller.js"></script>
+        <script src="dist/app/minifyify-app.js"
         
         
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
