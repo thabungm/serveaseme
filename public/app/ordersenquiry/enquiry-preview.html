@@ -1,0 +1,49 @@
+<hr>
+
+<div class="container">
+    <div class="col-xs-12">
+
+
+        <hr>
+        <div class="row">
+            <div >
+                <h4>Services included:</h4><br>
+                 <ngcart-cart template_url="app/templates/ngCart/cart.html"></ngcart-cart>
+
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <h4>Address for pickup:</h4><br>
+                <ul >
+                    <li>Name : {{address.full_name}}</li>
+                    <li>Address : {{address.address}}</li>
+                    <li>Area : {{address.area}}</li>
+                    <li>Mobile number : {{address.mobile_number}}</li>
+                    <li>Landmark : {{address.landmark}}</li>
+                    <li>City : {{address.city}}</li>
+                    <li>State : {{address.state}}</li>
+                    <li>Pin : {{address.pin}}</li>
+                </ul>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <h4>Pickup timing </h4>
+                <ul>
+                    <li>Pickup date: {{enquiry_made.pickup_date}}</li>
+                    <li>Pickup time: {{enquiry_made.pickup_time}}</li>
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+    <buttton class="btn btn-success" ng-click="checkout()">Checkout</buttton>
+    <!--<button class="" ng-click="placeEnquiry()">Place enquiry</button>-->
+</div>
+

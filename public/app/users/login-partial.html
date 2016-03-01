@@ -1,0 +1,111 @@
+<div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
+    <div class="panel panel-info" >
+        <div class="panel-heading">
+            <div class="panel-title">Sign In</div>
+            <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#/forgot-password">Forgot password?</a></div>
+        </div>     
+
+        <div style="padding-top:30px" class="panel-body" >
+
+            <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+
+            <form ng-submit="submit();" accept-charset="UTF-8" role="form">
+
+                <div style="margin-bottom: 25px" class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input id="login-username" type="email" required class="form-control" ng-model="user.email" value="" placeholder="Email">                                        
+                </div>
+
+                <div style="margin-bottom: 25px" class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input id="login-password" type="password" class="form-control" name="password" ng-model='user.password' placeholder="password">
+                </div>
+                <p class="errorMsg">{{errorMessage}}</p>
+
+
+
+                
+                
+
+
+                <div style="margin-top:10px" class="form-group">
+                    <!-- Button -->
+
+                    <div class="col-sm-12 controls">
+                        <button id="btn-login"  class="btn btn-success">Login  </button>
+                        <a id="btn-fblogin" href="{{facebookLoginLink}}" class="btn btn-primary">Login with Facebook</a>
+
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-12 control">
+                        <div style="padding-top:15px; font-size:85%" >
+                            Don't have an account! 
+                            <a href="#/signup" >
+                                Sign Up Here
+                            </a>
+                        </div>
+                    </div>
+                </div>    
+            </form>     
+
+
+
+        </div>                     
+    </div>  
+</div>
+
+
+
+
+
+<div style="padding-top:5px" class="container">
+</div>
+
+    <hr>
+    <div class="row text-center">
+        <h2>Services</h2>
+        <div ng-repeat="category in categoryList" class="col-md-3 col-sm-6 hero-feature">
+            <div class="thumbnail">
+                <img class="product-thumbnail" src="app/assets/app/images/{{category.image}}" alt="">
+                <div class="caption">
+                    <h3>{{category.name}}</h3>
+                    <p>{{category.description}}</p>
+                    
+                    
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="container text-center content-section">
+        We professionals for all your home needs
+            <h2 class="heading">How It Works
+                <span class="border-inner-bottom"></span>
+            </h2>
+            <div class="work-categories">
+                <div class="col-xs-12 col-sm-4 box">
+                    <img class="product-thumbnail" src="app/assets/app/images/book-service.svg" alt="">
+                    <h4>Book</h4>
+                    <p class="col-xs-8">Share your need and information with us.</p>
+                </div>
+                <div class="col-xs-12 col-sm-4 box">
+                    <img class="product-thumbnail" src="app/assets/app/images/calendar.svg" alt="">
+                    <h4>Schedule</h4>
+                    <p class="col-xs-8">Schedule a time for us to attend to you.</p>
+                </div>
+                <div class="col-xs-12 col-sm-4 box">
+                    <img class="product-thumbnail" src="app/assets/app/images/relax.svg" alt="">
+
+                    <h4>Relax</h4>
+                    <p class="col-xs-8">Our expert team will do the assigned task while you relax.</p>
+                </div>
+            </div>
+        </div
+    
+    
+</div>
+
+

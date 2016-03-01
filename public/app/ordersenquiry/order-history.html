@@ -1,0 +1,37 @@
+
+<hr>
+<div ng-show='!orderHistory.items==undefined' class="pull-right">
+    <h3 class='pull-left'>No order found!</h3>
+    <img width="500px" src='app/assets/app/images/not-found.svg'>
+</div>
+<uib-accordion close-others="false" ng-repeat="anOrder in orderHistory" >
+    <uib-accordion-group is-open="false">
+        <uib-accordion-heading>
+            <span>Order Date: {{anOrder.order_date}}</span> <span style='margin-left: 20%'>Status </span><span class="{{statusClass[anOrder.status]}}">{{anOrder.status}}</span>  <span class="pull-right">Total amount: {{anOrder.total_amnt | currency:"&#8377;"}}</span>
+            
+        </uib-accordion-heading>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in anOrder.items">
+                  <td>{{item.name}}</td><td>{{item.price  | currency:"&#8377;"}}</td><td>{{item.quantity}}</td><td>{{getTotal(item.price,item.quantity) | currency:"&#8377;" }}</td>
+                </tr>
+                         
+
+
+                    </tbody>
+                    </table>
+        
+               
+
+    </uib-accordion-group>
+</uib-accordion>

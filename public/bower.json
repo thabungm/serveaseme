@@ -1,0 +1,30 @@
+{
+  "name": "ServEaseme",
+  "authors": [
+    "Thabung"
+  ],
+  "description": "ServeasMe",
+  "main": "app.js",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.4.x",
+    "angular-mocks": "1.4.x",
+    "jquery": "~2.1.1",
+    "bootstrap": "~3.1.1",
+    "angular-route": "~1.4.9",
+    "angular-resource": "1.4.x",
+    "angular-cookies": "~1.4.9",
+    "ngCart": "ngcart#~1.0.0",
+    "angular-sanitize": "~1.5.0"
+  }
+}

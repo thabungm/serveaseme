@@ -1,0 +1,137 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'angular-route',
+1 verbose cli   '--save' ]
+2 info using npm@1.4.3
+3 info using node@v0.10.26
+4 verbose cache add [ 'angular-route', null ]
+5 verbose cache add name=undefined spec="angular-route" args=["angular-route",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'angular-route',
+6 verbose parsed url   path: 'angular-route',
+6 verbose parsed url   href: 'angular-route' }
+7 silly lockFile 54a09c02-angular-route angular-route
+8 verbose lock angular-route /home/thabung/.npm/54a09c02-angular-route.lock
+9 silly lockFile 54a09c02-angular-route angular-route
+10 silly lockFile 54a09c02-angular-route angular-route
+11 verbose addNamed [ 'angular-route', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 44e54571-angular-route angular-route@
+14 verbose lock angular-route@ /home/thabung/.npm/44e54571-angular-route.lock
+15 silly addNameRange { name: 'angular-route', range: '*', hasData: false }
+16 verbose url raw angular-route
+17 verbose url resolving [ 'https://registry.npmjs.org/', './angular-route' ]
+18 verbose url resolved https://registry.npmjs.org/angular-route
+19 info trying registry request attempt 1 at 16:50:40
+20 http GET https://registry.npmjs.org/angular-route
+21 http 200 https://registry.npmjs.org/angular-route
+22 silly registry.get cb [ 200,
+22 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+22 silly registry.get     etag: '"ELFW0S7ZE4QS7KKMQ1BBWAL1Q"',
+22 silly registry.get     'content-type': 'application/json',
+22 silly registry.get     'cache-control': 'max-age=300',
+22 silly registry.get     'content-length': '62395',
+22 silly registry.get     'accept-ranges': 'bytes',
+22 silly registry.get     date: 'Fri, 29 Jan 2016 11:20:46 GMT',
+22 silly registry.get     via: '1.1 varnish',
+22 silly registry.get     age: '0',
+22 silly registry.get     connection: 'keep-alive',
+22 silly registry.get     'x-served-by': 'cache-sin6923-SIN',
+22 silly registry.get     'x-cache': 'HIT',
+22 silly registry.get     'x-cache-hits': '1',
+22 silly registry.get     'x-timer': 'S1454066445.769211,VS0,VE1001',
+22 silly registry.get     vary: 'Accept' } ]
+23 silly addNameRange number 2 { name: 'angular-route', range: '*', hasData: true }
+24 silly addNameRange versions [ 'angular-route',
+24 silly addNameRange   [ '1.2.17-build.163.1',
+24 silly addNameRange     '1.3.0-rc.5',
+24 silly addNameRange     '1.3.0',
+24 silly addNameRange     '1.3.1',
+24 silly addNameRange     '1.3.2',
+24 silly addNameRange     '1.3.3',
+24 silly addNameRange     '1.3.4-build.3588',
+24 silly addNameRange     '1.2.27',
+24 silly addNameRange     '1.3.4',
+24 silly addNameRange     '1.3.5',
+24 silly addNameRange     '1.3.6',
+24 silly addNameRange     '1.3.7',
+24 silly addNameRange     '1.2.28',
+24 silly addNameRange     '1.3.8',
+24 silly addNameRange     '1.4.0-beta.0',
+24 silly addNameRange     '1.3.9',
+24 silly addNameRange     '1.3.10',
+24 silly addNameRange     '1.4.0-beta.1',
+24 silly addNameRange     '1.4.0-beta.2',
+24 silly addNameRange     '1.3.11',
+24 silly addNameRange     '1.4.0-beta.3',
+24 silly addNameRange     '1.3.12',
+24 silly addNameRange     '1.3.13',
+24 silly addNameRange     '1.4.0-beta.4',
+24 silly addNameRange     '1.3.14',
+24 silly addNameRange     '1.4.0-beta.5',
+24 silly addNameRange     '1.4.0-beta.6',
+24 silly addNameRange     '1.3.15',
+24 silly addNameRange     '1.4.0-rc.0',
+24 silly addNameRange     '1.4.0-rc.1',
+24 silly addNameRange     '1.4.0-rc.2',
+24 silly addNameRange     '1.4.0',
+24 silly addNameRange     '1.3.16',
+24 silly addNameRange     '1.4.1',
+24 silly addNameRange     '1.4.2',
+24 silly addNameRange     '1.3.17',
+24 silly addNameRange     '1.4.3',
+24 silly addNameRange     '1.4.4',
+24 silly addNameRange     '1.3.18',
+24 silly addNameRange     '1.4.5',
+24 silly addNameRange     '1.3.19',
+24 silly addNameRange     '1.4.6',
+24 silly addNameRange     '1.5.0-beta.0',
+24 silly addNameRange     '1.2.29',
+24 silly addNameRange     '1.3.20',
+24 silly addNameRange     '1.4.7',
+24 silly addNameRange     '1.5.0-beta.2',
+24 silly addNameRange     '1.4.8',
+24 silly addNameRange     '1.5.0-rc.0',
+24 silly addNameRange     '1.5.0-rc.1',
+24 silly addNameRange     '1.4.9',
+24 silly addNameRange     '1.5.0-rc.2' ] ]
+25 verbose addNamed [ 'angular-route', '1.4.9' ]
+26 verbose addNamed [ '1.4.9', '1.4.9' ]
+27 silly lockFile 53cb8291-angular-route-1-4-9 angular-route@1.4.9
+28 verbose lock angular-route@1.4.9 /home/thabung/.npm/53cb8291-angular-route-1-4-9.lock
+29 silly lockFile 35eb242f-ar-route-angular-route-1-4-9-tgz https://registry.npmjs.org/angular-route/-/angular-route-1.4.9.tgz
+30 verbose lock https://registry.npmjs.org/angular-route/-/angular-route-1.4.9.tgz /home/thabung/.npm/35eb242f-ar-route-angular-route-1-4-9-tgz.lock
+31 verbose addRemoteTarball [ 'https://registry.npmjs.org/angular-route/-/angular-route-1.4.9.tgz',
+31 verbose addRemoteTarball   'dd7f71d1af810e770a1460a3cd6a3cebc0caf12a' ]
+32 silly lockFile 35eb242f-ar-route-angular-route-1-4-9-tgz https://registry.npmjs.org/angular-route/-/angular-route-1.4.9.tgz
+33 silly lockFile 35eb242f-ar-route-angular-route-1-4-9-tgz https://registry.npmjs.org/angular-route/-/angular-route-1.4.9.tgz
+34 silly lockFile 53cb8291-angular-route-1-4-9 angular-route@1.4.9
+35 silly lockFile 53cb8291-angular-route-1-4-9 angular-route@1.4.9
+36 silly lockFile 44e54571-angular-route angular-route@
+37 silly lockFile 44e54571-angular-route angular-route@
+38 error Error: EACCES, mkdir '/home/thabung/tmp/npm-19549-G4eIHrcI'
+38 error  { [Error: EACCES, mkdir '/home/thabung/tmp/npm-19549-G4eIHrcI']
+38 error   errno: 3,
+38 error   code: 'EACCES',
+38 error   path: '/home/thabung/tmp/npm-19549-G4eIHrcI' }
+39 error Please try running this command again as root/Administrator.
+40 error System Linux 3.19.0-25-generic
+41 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install" "angular-route" "--save"
+42 error cwd /var/www/html/angular
+43 error node -v v0.10.26
+44 error npm -v 1.4.3
+45 error path /home/thabung/tmp/npm-19549-G4eIHrcI
+46 error code EACCES
+47 error errno 3
+48 error stack Error: EACCES, mkdir '/home/thabung/tmp/npm-19549-G4eIHrcI'
+49 verbose exit [ 3, true ]

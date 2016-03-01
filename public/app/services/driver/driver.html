@@ -1,0 +1,38 @@
+<hr>
+
+<div class="container" ng-show="now_showing == 'service_types'">
+
+    <h3>Driver service</h3>
+
+    
+    
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Service Type</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+
+            </thead>
+            <tbody>
+            <tr  ng-repeat="item in dirverItems ">
+                <td>{{item.name}}</td>
+                <td>{{item.price | currency:"&#8377;"}}</td>
+                <td><ngcart-addtocart template_url='app/templates/ngCart/addtocart.html' id="{{ item.id }}" name="{{ item.name }}" price="{{ item.price }}" quantity="1" quantity-max="15" data="item"></ngcart-addtocart></td>
+            </tr>
+            </tbody>
+        </table>
+        
+        <a  ng-click="showAddressDetails()"  class='btn btn-sm btn-primary'>Next</a>
+        
+    </div>
+    <p class="errorMsg">{{errorMessage}}</p>
+    <!--<a href='#/address' ng-show="false" class='btn btn-sm btn-primary'>Next</a>-->
+    
+    
+    
+    
+</div>
+

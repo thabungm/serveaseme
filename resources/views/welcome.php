@@ -1,73 +1,173 @@
 <!DOCTYPE html>
-
-<html >
+<html lang="en" ng-app="mainApp">
     <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <!--<link rel="icon" href="/app/assets/lib/bootstrap/favicon.ico">-->
+
         <title>ServEaseMe</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="/app/assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/app/assets/lib/css/sweet-alert.css" rel="stylesheet">
+
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <link href="/app/assets/lib/bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="/app/assets/lib/bootstrap/starter-template.css" rel="stylesheet">
+        <link href="/app/commmon//app/css/main.css" rel="stylesheet">
+        <link href="/app/assets/lib/bootstrap/font-awesome.css" rel="stylesheet">
+        <link href="/app/assets/lib/bootstrap/social-buttons.css" rel="stylesheet">
+
+        <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+        <!--[if lt IE 9]><script src="/app/assets/lib/bootstrap/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="/app/assets/lib/bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
+        <script src="/app/assets/lib/js/sweet-alert.js"></script>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+        <script src="/app/env.js"></script>
+        <script src="/app/config.js"></script>
+
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <!--<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>-->
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <!--<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.js"></script>-->
 
-        <script src="/js/laundry-book.js"></script>
+        <script src="bower_components/angular-messages/angular-messages.js"></script>
+        <link rel="stylesheet" href="/app/commmon//app/css/main.css"> 
+        <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"> 
+        <script src="bower_components/angular-resource/angular-resource.js"></script>
+        <script src="bower_components/ngCart/dist/ngCart.js"></script>
         
+        <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+        <script src="bower_components/angular-route/angular-route.js"></script>
+        <script src="/app/assets/lib/js/checklist-model.js"></script>
+        <script src="/app/assets/lib/bootstrap/ui-bootstrap-tpls-1.1.2.min.js"></script>
+        <script src="/app/app-url.js"></script>
 
+        <script src="/app/locality.js"></script>
+        <script src="/app/app.js"></script>
+        <script src="/app/ordersenquiry/order-enquiry-controller.js"></script>
+
+        <script src="/app/users/authFactory.js"></script>
+        <script src="/app/items/itemFactory.js"></script>
+
+        <script src="/app/products/product.js"></script>
+        <script src="/app/products/orderFactory.js"></script>
+        <script src="/app/products/product-controller.js"></script>
+        <script src="/app/users/login-controller.js"></script>
+        <script src="/app/users/singnup-controller.js"></script>
+        <script src="/app/users/userFactory.js"></script>
+        <script src="/app/users/addressFactory.js"></script>
+        <script src="/app/users/user-controller.js"></script>
+        <script src="/app/httpinterceptor.js"></script>
+        <script src="/app/address/address-controller.js"></script>
+        <script src="/app/items/item-controller.js"></script>
+        
+        <script src="/app/services/laundry/laundry-controller.js"></script>
+        <script src="/app/ordersenquiry/orderFactory.js"></script>
+        <script src="/app/ordersenquiry/order-enquiry-controller.js"></script>
+        <script src="/app/admin/admin-controller.js"></script>
+        <script src="/app/admin/admin-controller.js"></script>
+        <script src="/app/services/driver/driver-controller.js"></script>
+        
+        
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         
 
     </head>
-    <body ng-app="laundryModule">
-    
-        <div class="container">
-            <div ng-controller="laundryController" class="content">
-                <div class="address">
-                    <form id="RegForm1" name="RegForm1" method="post"  enctype="multipart/form-data" onSubmit="return CheckRegister();">
-                            <div class="col-md-7 col-md-22">
-                            <div class="form-group">
-                                <input type="text" name="name" ng-model="booking.name" class="form-control" placeholder="Name" maxlength="40" />
-                            </div>
-                            <div class="form-group">
-                                <select name="area" ng-model="booking.area" class="form-control">
-                                    <option value="">Area For Pickup</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" ng-model='booking.phone' name="phone" class="form-control" placeholder="Mobile Number" maxlength="40" />
-                            </div>
-                            <div class="form-group">
-                            <textarea ng-model='booking.textarea' name="address" rows="4" cols="5" placeholder=" Pickup Address"  class="form-control form-control2">
-        }
-</textarea><!--                                <input type="text" name="address" class="form-control form-control2" placeholder="Pickup Address" </maxlength="100" />
- -->                            </div>
-                            <div class="form-group form-control3">
-                                <input type="text" ng-model='booking.email' name="email" class="form-control" placeholder="E-mail Id" maxlength="40" />
-                            </div>
-                            </div>
-                            <div class="col-md-1">
-                            <div class="form-group">
-                                <input ng-model='booking.landmark' type="text" name="landmark" class="form-control" placeholder="Landmark" maxlength="40" />
-                            </div>
-                            <div class="form-group">
-                                <input id="datepicker" ng-model='booking.booking_date' name="datepicker" class="form-control" placeholder="Pickup Date" maxlength="40" />
-                            </div>
-                            <div class="form-group">
-                                <select ng-model='booking.pickup_time' name="p_time" class="form-control">
-                                    <option value="">Time For Pickup</option>
-                                    <option value="10am-11am">10am-11am</option>
-                                    <option value="11am-12pm">11am-12pm</option>
-                                    <option value="12pm-1pm">12pm-1pm</option>
-                                    <option value="1pm-2pm">1pm-2pm</option>
-                                    <option value="2pm-3pm">2pm-3pm</option>
-                                    <option value="3pm-4pm">3pm-4pm</option>
-                                    <option value="4pm-5pm">4pm-5pm</option>
-                                    <option value="5pm-6pm">5pm-6pm</option>
-                                    <option value="6pm-7pm">6pm-7pm</option>
-                                    <option value="7pm-8pm">7pm-8pm</option>
-                                    <option value="8pm-9pm">8pm-9pm</option>
-                                </select>
-                            </div>
-                            </div>
-                            <button type="submit" name="Submit" class="btn btn-orange2 pull-right">BOOK YOUR PICKUP</button>
-                        </form>
 
+    <body>
+
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top main-header" role="navigation">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#/"><img src="/app/assets//app/images/logo.png"></a>
+                    <!--<a class="navbar-brand" href="#/">Home</a>-->
                 </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div ng-controller="loginCtrl" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#/about-us">About Us</a>
+                        </li>
+<!--                        <li>
+                            <a href="#">Career</a>
+                        </li>
+                        <li>
+                            <a href="#">Contact</a>
+                        </li>-->
+                    </ul>
+                    <div class="pull-right"><ngcart-summary template_url="/app/templates/ngCart/summary.html"></ngcart-summary></div>
+
+                    <login></login>
+                   
+                    
+                    
+                    
+                </div>
+                
+                
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+
+        <!-- Page Content -->
+        <div class="container" style="    margin-top: 40px;" ng-controller="orderItemCtrl">
+            
+            
+            
+            <div ng-view>
+
+
             </div>
         </div>
+        <hr>
+
+        <!-- Footer -->
+        <!--        <footer>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p>Copyright &copy; Your Website 2014</p>
+                        </div>
+                    </div>
+                </footer>
+                 /.container 
+        
+                 jQuery 
+                <script src="js/jquery.js"></script>-->
+
+        <!-- Bootstrap Core JavaScript -->
+
     </body>
+    <script>
+  
+</script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
 </html>

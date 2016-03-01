@@ -1,0 +1,47 @@
+.disabled {
+    z-index: 1000;
+    background-color: lightgrey;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.container .jumbotron, .container-fluid .jumbotron {
+    border-radius: 0px;
+}
+
+.navbar-nav>a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+
+.navbar {
+    min-height: 72px;
+}
+
+.product-thumbnail {
+    width:30%;
+}
+.errorMsg{color:red;}
+.required_span{color:red;}
+.address_list {
+    -moz-box-shadow: 0 0 1px black;
+    -webkit-box-shadow: 0 0 1px black;
+    box-shadow: 0 0 1px black;
+}
+.cart_added {
+    color:green;
+}
+
+
+ul.cat_node {
+    list-style: circle;
+}
+li.cat_node {
+    margin-left: 20px;
+}
+.panel.ng-isolate-scope.panel-default.panel-open {
+    border:none !important;
+}
+
+

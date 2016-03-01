@@ -1,0 +1,104 @@
+<hr>
+
+  <div ng-controller="adminCtrl">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="input-group input-group-lg add-on">
+<!--          <input type="text" class="form-control search-query" ng-model="query" ng-change="search()" placeholder="Search">
+          <div class="input-group-btn">
+            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+          </div>-->
+        </div>
+      </div>
+      <div class="col-md-6">
+      	<h4 class="text-center">ORDER Dashboard</h4>
+      </div>
+      <div class="col-md-3">
+        <select class="form-control input-lg pull-right" ng-model="itemsPerPage" ng-change="perPage()" ng-options="('show '+size+' per page') for size in pageSizes"></select>
+      </div>
+    <!--</div><a href="#myModal" role="button" class="btn btn-default" data-toggle="modal">Launch demo modal</a>-->
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Modal header</h3>
+	</div>
+	<div class="modal-body">
+		<p>One fine body…</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		<button class="btn btn-primary">Save changes</button>
+	</div>
+</div>
+</div>
+</div>
+    
+    <table ng-show="show_order_list" class="table table-striped table-hover">
+      <tbody><tr>
+        <th class="id"><a ng-click="sort_by('id')">Id <i class="fa fa-sort"></i></a></th>
+        <th class="description" title="non-sortable">Date of order</th>
+        <th class="field3"><a ng-click="sort_by('field3')">Date of service <i class="fa fa-sort"></i></a></th>
+        <th class="field4"><a ng-click="sort_by('field4')">Time of service <i class="fa fa-sort"></i></a></th>
+        <th class="field4"><a ng-click="sort_by('field4')">Status<i class="fa fa-sort"></i></a></th>
+        <th class="field4"><a ng-click="sort_by('field4')">Order by<i class="fa fa-sort"></i></a></th>
+        <th></th>
+      </tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="9">{{sizes}}
+          <div class="text-center">
+            <ul class="pagination">
+              <li ng-class="{disabled: currentPage == 0}">
+                <a href="javascript:;" ng-click="prevPage()">« Prev</a>
+              </li>
+              <li ng-repeat="n in range(pagedItems.length)" ng-class="{active: n == currentPage}" ng-click="setPage()">
+                <a href="javascript:;" ng-bind="n + 1">1</a>
+              </li>
+              <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                <a href="javascript:;" ng-click="nextPage()">Next »</a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr></tfoot>
+      <tbody>
+        <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse">
+            <td><a href="" ng-click="showOrderDetails(item.id)">{{item.unique_order_id}}</a></td>
+          <td>{{item.order_date}}</td>
+          <td>{{item.dos}}</td>
+          <td>{{item.tos}}</td>
+          <td><label class="{{status_colors[item.status]}}">{{item.status}}</td>
+          <td>{{item.full_name}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div ng-show="!show_order_list"class="container">
+  <h3>Order Details</h3>
+    <div class="row"><a href="">ORDER# SERV{{orderDetails.id}}</a></div>
+    <div class="row"> Status: <label class="{{status_colors[orderDetails.status]}}">{{  orderDetails.status}}</label></div>
+    <div class="row"> Total Amount: {{  orderDetails.total_amount | currency}}</div>
+  <table class="table table-striped table-hover">
+      <tbody>
+      <tr>
+        <th class="id">Item Name </th>
+        <th class="description">Price</th>
+        <th class="">Quantity / No. of days </th>
+        <th class="">Total</th>
+        
+
+      </tr>
+      <tr ng-repeat="item in orderDetails.items">
+        <td>{{item.name}}</td><td>{{item.price | currency}}</td><td>{{item.quantity}}</td><td>{{item.price*item.quantity}}</td>
+      </tr>
+    
+</tbody>
+</table>
+<a class="success" ng-click="showOrderList()"  href="">BACK</a>
+
+  </div>

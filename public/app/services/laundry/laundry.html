@@ -1,0 +1,44 @@
+<hr>
+
+<div class="container" ng-show="now_showing == 'service_types'">
+
+    <h3>Services we offer</h3>
+
+    <ul class="nav nav-tabs">
+        <li  ng-repeat="service in laundryServiceTypes">
+            <a href='' ng-click='showClothPriceList(service.id,service.name)' >{{service.name}}</a>
+<!--            <input id='service_{{service.id}}'  checklist-value="service.id" type="checkbox" checklist-model="enquiry.items" value="{{service.id}}"> <label for='service_{{service.id}}'>{{service.name}}</label>-->
+            <!--<input id='radio' type='radio' value='{{service.id}}' name='category' ng-model='enquiry.category'>-->    
+        </li>
+    </ul>
+    <div class="container">
+        <h3>{{clothItems.name}}</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Cloth</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+
+            </thead>
+            <tbody>
+            <tr  ng-repeat="item in clothItems.items ">
+                <td>{{item.name}}</td>
+                <td>{{item.price | currency:"&#8377;"}}</td>
+                <td><ngcart-addtocart template_url='app/templates/ngCart/addtocart.html'  id="{{ item.id }}" name="{{ item.name }}" price="{{ item.price }}" quantity="1" quantity-max="15" data="item"></ngcart-addtocart></td>
+            </tr>
+            </tbody>
+        </table>
+        
+        <a  ng-click="showAddressDetails()"  class='btn btn-sm btn-primary'>Next</a>
+        
+    </div>
+    <p class="errorMsg">{{errorMessage}}</p>
+    <!--<a href='#/address' ng-show="false" class='btn btn-sm btn-primary'>Next</a>-->
+    
+    
+    
+    
+</div>
+
