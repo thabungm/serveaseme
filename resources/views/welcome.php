@@ -25,7 +25,6 @@
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="/app/commmon//app/css/main.css"> 
         <script src="/app/config.js"></script>
-
         
         
         <?php
@@ -46,6 +45,7 @@
         }
 
          ?>
+        <script src="app/assets/lib/bootstrap/ui-bootstrap-tpls-1.1.2.min.js"></script>
 
 
         
@@ -105,7 +105,9 @@
         <!-- Page Content -->
         <div class="container" style="    margin-top: 40px;" ng-controller="orderItemCtrl">
             
-           
+            <div id='ajax_loader' style="position: fixed; left: 40%; top: 30%;z-index: 999999" ng-show='$root.show_loader'>
+                <img src="https://www.drupal.org/files/issues/ajax-loader.gif"></img>
+            </div>
             
     <!-- END: App-Loading Screen. -->
 
