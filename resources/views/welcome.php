@@ -18,7 +18,7 @@
         <link href="/app/assets/lib/bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
         <!-- Custom styles for this template -->
         <link href="/app/assets/lib/bootstrap/starter-template.css" rel="stylesheet">
-        <link href="/app/commmon//app/css/main.css" rel="stylesheet">
+        <link href="/app/commmon/app/css/main.css" rel="stylesheet">
         <link href="/app/assets/lib/bootstrap/font-awesome.css" rel="stylesheet">
         <link href="/app/assets/lib/bootstrap/social-buttons.css" rel="stylesheet">
         <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"> 
@@ -105,78 +105,8 @@
         <!-- Page Content -->
         <div class="container" style="    margin-top: 40px;" ng-controller="orderItemCtrl">
             
-            <div class="m-app-loading" ng-animate-children>
-
-        <!--
-            HACKY CODE WARNING: I'm putting Style block inside directive so that it
-            will be removed from the DOM when we remove the directive container.
-        -->
-        <style type="text/css">
-            div.m-app-loading {
-                position: fixed ;
-            }
-            div.m-app-loading div.animated-container {
-                background-color: #333333 ;
-                bottom: 0px ;
-                left: 0px ;
-                opacity: 1.0 ;
-                position: fixed ;
-                right: 0px ;
-                top: 0px ;
-                z-index: 999999 ;
-            }
-            /* Used to initialize the ng-leave animation state. */
-            div.m-app-loading div.animated-container.ng-leave {
-                opacity: 1.0 ;
-                transition: all linear 200ms ;
-                    -webkit-transition: all linear 200ms ;
-            }
-            /* Used to set the end properties of the ng-leave animation state. */
-            div.m-app-loading div.animated-container.ng-leave-active {
-                opacity: 0 ;
-            }
-            div.m-app-loading div.messaging {
-                color: #FFFFFF ;
-                font-family: monospace ;
-                left: 0px ;
-                margin-top: -37px ;
-                position: absolute ;
-                right: 0px ;
-                text-align: center ;
-                top: 50% ;
-            }
-            div.m-app-loading h1 {
-                font-size: 26px ;
-                line-height: 35px ;
-                margin: 0px 0px 20px 0px ;
-            }
-            div.m-app-loading p {
-                font-size: 18px ;
-                line-height: 14px ;
-                margin: 0px 0px 0px 0px ;
-            }
-        </style>
-
-
-        <!-- BEGIN: Actual animated container. -->
-        <div class="animated-container">
-
-            <div class="messaging">
-
-                <h1>
-                    Initializing the Awesome!
-                </h1>
-
-                <p>
-                    Please stand by for your ticket to awesome-town!
-                </p>
-
-            </div>
-
-        </div>
-        <!-- END: Actual animated container. -->
-
-    </div>
+           
+            
     <!-- END: App-Loading Screen. -->
 
             
