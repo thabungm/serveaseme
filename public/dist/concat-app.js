@@ -245,6 +245,7 @@ APP_LOCALITY = ["Kahilpara",
 APP_LOCALITY = APP_LOCALITY.sort();
 var mainApp = angular.module('mainApp', ['ngRoute', 'ngResource', 'ngCookies','ngMessages',"checklist-model","ngSanitize",'ngCart','ngAnimate', 'ui.bootstrap']);
 console.log("#################XXXXXXXXXXXXXXXXXXXX##################");
+
 console.log(HEADERS);
 var isPublicRoute = function(path) {
     publicPathArray = ['/signup','/login','/forgot-password','/auth/facebook','/auth-token','/about-us'];
@@ -267,38 +268,13 @@ mainApp.config(['$routeProvider', '$sceProvider', function ($routeProvider, $sce
         
         
     }]);
-mainApp.directive(
-            "mAppLoading",
-            function( $animate ) {
-                // Return the directive configuration.
-                return({
-                    link: link,
-                    restrict: "C"
-                });
-                // I bind the JavaScript events to the scope.
-                function link( scope, element, attributes ) {
-                    // Due to the way AngularJS prevents animation during the bootstrap
-                    // of the application, we can't animate the top-level container; but,
-                    // since we added "ngAnimateChildren", we can animated the inner
-                    // container during this phase.
-                    // --
-                    // NOTE: Am using .eq(1) so that we don't animate the Style block.
-                    $animate.leave( element.children().eq( 1 ) ).then(
-                        function cleanupAfterAnimation() {
-                            // Remove the root directive element.
-                            element.remove();
-                            // Clear the closed-over variable references.
-                            scope = element = attributes = null;
-                        }
-                    );
-                }
-            }
-        );
+
+
 
 
 mainApp.run(['$rootScope', '$location', 'AuthFactory','$cookies', function ($rootScope, $location, Auth,$cookies) {
         
-        
+    $rootScope.show_loader = 0;
         $rootScope.enquiry_made = {};
          var history = [];
 
@@ -977,10 +953,12 @@ mainApp.factory('httpinterceptor',['$q','$location','$rootScope','$cookies',func
                     req.headers.Authorization = HEADERS.Authorization;
 
                 }
+                $rootScope.show_loader++;
                 return req;
 //            return response || $q.when(response);
             },
         response: function(response){
+            $rootScope.show_loader--;
             if (response.status === 401) {
                 console.log("Response 401");
                //AuthFactory.logout();
@@ -988,6 +966,7 @@ mainApp.factory('httpinterceptor',['$q','$location','$rootScope','$cookies',func
             return response || $q.when(response);
         },
         responseError: function(rejection) {
+            $rootScope.show_loader--;
             if (rejection.status === 401) {
                 console.log("Response Error 401",rejection);
                 
