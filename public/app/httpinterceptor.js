@@ -5,10 +5,12 @@ mainApp.factory('httpinterceptor',['$q','$location','$rootScope','$cookies',func
                     req.headers.Authorization = HEADERS.Authorization;
 
                 }
+                $rootScope.show_loader++;
                 return req;
 //            return response || $q.when(response);
             },
         response: function(response){
+            $rootScope.show_loader--;
             if (response.status === 401) {
                 console.log("Response 401");
                //AuthFactory.logout();
@@ -16,6 +18,7 @@ mainApp.factory('httpinterceptor',['$q','$location','$rootScope','$cookies',func
             return response || $q.when(response);
         },
         responseError: function(rejection) {
+            $rootScope.show_loader--;
             if (rejection.status === 401) {
                 console.log("Response Error 401",rejection);
                 
