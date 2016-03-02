@@ -23,7 +23,8 @@ header("Access-Control-Allow-Headers: Authorization, X-Requested-With, Content-T
 
 //Address
 Route::get('/', function () {
-    return view('welcome');
+    
+    return view('welcome',array("env"=>  env('APP_ENV')));
 });
 
 Route::get('/address', function () {
@@ -41,9 +42,7 @@ Route::delete('/address', function () {
 
 // Items
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 
 

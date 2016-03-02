@@ -24,7 +24,15 @@ class AuthenticateController extends Controller
         $credentials = $request->only('email', 'password');
 
         try {
+//            $credentials['ttl'] = 1;
             // verify the credentials and create a token for the user
+            
+            
+//            $jwt = \Illuminate\Support\Facades\Config::get('jwt');
+//            $jwt['ttl'] = 1;
+//            \Illuminate\Support\Facades\Config::set('jwt',$jwt);
+            
+//            $app['config']
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 401);
             }

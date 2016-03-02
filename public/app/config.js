@@ -1,6 +1,6 @@
 var API_ENGINE_URL;
 var LOGIN_FACEBOOK_LINK;
-
+var SERV_ENV = "production";
 var STATUS_COLORS = {new:"label label-info",processing:"label btn-primary btn-xs",completed:"label label-success"}
 switch (SERV_ENV) {
     case 'production':
