@@ -1,3 +1,23 @@
+mainApp.config(function($stateProvider) {
+  $stateProvider
+    .state('login', {
+      url: '/login',
+      
+      views: {
+        '': {
+          templateUrl: 'app/users/login-partial.html',
+          controller: 'loginCtrl'
+        }
+      },
+      data: {
+        displayName: '',
+      }
+    })
+    
+
+})
+
+/*
 mainApp.config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider.when('/login',
@@ -13,6 +33,7 @@ mainApp.config(['$routeProvider', function ($routeProvider) {
                 }
         );
     }]);
+    */
 mainApp.controller('loginCtrl', ['$scope', 'AuthFactory','$location','ItemFactory','$routeParams', function ($scope, Auth, $location,ItemFactory,$routeParams) {
         $scope.user = {};
         $scope.facebookLoginLink = LOGIN_FACEBOOK_LINK;
@@ -30,13 +51,8 @@ mainApp.controller('loginCtrl', ['$scope', 'AuthFactory','$location','ItemFactor
 
             });
         };
-        $scope.getCategories = function () {
-            var promise = ItemFactory.getAllCategories().$promise;
-            promise.then(function (productList) {
-                $scope.categoryList = productList;
-            });
-        };
-        $scope.getCategories();
+       
+       
         $scope.logout = function () {
             Auth.logout();
             $location.path("/login");

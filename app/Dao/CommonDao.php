@@ -10,6 +10,14 @@ class CommonDao {
         
         
     }
+
+    public function formatDateSave($date) {
+        $explode = explode("/", $date);
+        return $explode[2] . "-" . $explode[1] . "-" . $explode[0];
+        
+    }
+
+    
     
     
     public function setDefaultCreateParam($object) {

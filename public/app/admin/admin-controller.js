@@ -243,25 +243,27 @@ mainApp.controller('adminCtrl', ['$scope', 'OrderFactory', '$location','$filter'
         $scope.show_order_list  = true;
     }
 
+    $scope.updateOrder = function(id,status) {
+        swal({   title: "Are you sure?",   
+            text: "You will not be able to recover this imaginary file!",  
+             type: "warning",   
+             showCancelButton: true, 
+               confirmButtonColor: "#DD6B55",
+                  confirmButtonText: "Yes, delete it!",  
+                   closeOnConfirm: false }, 
+                   function(){  
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    }
-    
-    
-    
+        var promise = OrderFactory.updateOrder({id:id,status:status}).$promise;
+        promise.then(function(res) {
+
+            if (res) {
+//                 swal("Deleted!", "The order is updated.", "success"); });
+            }
+        });
+    });
+}
+
+}    
     
     
 ]);

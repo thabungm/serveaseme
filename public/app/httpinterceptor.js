@@ -12,13 +12,19 @@ mainApp.factory('httpinterceptor',['$q','$location','$rootScope','$cookies',func
         response: function(response){
             $rootScope.show_loader--;
             if (response.status === 401) {
-                console.log("Response 401");
+               $location.path("/");
                //AuthFactory.logout();
             }
             return response || $q.when(response);
         },
         responseError: function(rejection) {
-            $rootScope.show_loader--;
+            if (rejection.status == 500) {
+                $rootScope.show_loader--;
+
+                swal({title:"Something went wrong",text:"Please relogin",type:"warning"});
+                $location.path("/");
+            }
+
             if (rejection.status === 401) {
                 console.log("Response Error 401",rejection);
                 

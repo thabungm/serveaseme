@@ -5,3 +5,4 @@ Homestead.json
 .env
 /nbproject/private/
 /public/bower_components/
+/public/app/config.js

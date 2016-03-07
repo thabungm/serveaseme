@@ -1,3 +1,22 @@
+mainApp.config(function($stateProvider) {
+  $stateProvider
+    .state('Products', {
+      url: '/',
+      
+      views: {
+        '': {
+          templateUrl: 'app/items/all-products.html',
+          controller: 'itemCtrl'
+        }
+      },
+      data: {
+        displayName: 'Home',
+      }
+    })
+    
+
+});
+/*
 mainApp.config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider.when('/my-info',
@@ -22,6 +41,7 @@ mainApp.config(['$routeProvider', function ($routeProvider) {
 
         
     }]);
+*/
 mainApp.controller('userCtrl', ['$scope', 'UserFactory', '$routeParams', 'OrderFactory','$location', function ($scope, UserFactory, $routeParams, OrderFactory,$location) {
         $scope.user = {};
         $scope.get = function () {

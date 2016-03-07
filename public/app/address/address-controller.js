@@ -1,12 +1,39 @@
-mainApp.config(['$routeProvider', function ($routeProvider) {
+mainApp.config(function($stateProvider) {
+  $stateProvider
+    .state('address', {
+      url: '/address',
+      
+      views: {
+        '': {
+          templateUrl: 'app/users/address-partial.html',
+          controller: 'addressCtrl'
+        }
+      },
+      data: {
+        displayName: 'Address',
+      }
+    }) 
+    
 
+});
+
+//mainApp.config(['$stateProvider', function ($stateProvider) {
+//
+//        
+//        $stateProvider.state('address', {
+//            url: '/address',
+//            views: {
+//                'main@': {
+//                    templateUrl: 'app/users/address-partial.html',
+//                }
+//            },
+//            data: {
+//                displayName: 'Users'
+//            }
+//        });
         
-        $routeProvider.when('/address',
-                {
-                    templateUrl: 'app/users/address-partial.html',
-                    controller: 'addressCtrl'
-                }
-        );
+        /*
+        
         $routeProvider.when('/address/service/:service_type',
                 {
                     templateUrl: 'app/users/address-partial.html',
@@ -19,15 +46,16 @@ mainApp.config(['$routeProvider', function ($routeProvider) {
                     controller: 'addressCtrl'
                 }
         );
+        */
 
-    }]);
+//    }]);
 
 
-mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$routeParams', '$rootScope', '$location', function ($scope, AddressFactory, $routeParams, $rootScope, $location) {
+mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$stateParams', '$rootScope', '$location', function ($scope, AddressFactory, $stateParams, $rootScope, $location) {
         $scope.address = {};
         $scope.get = function () {
             $scope.errorMessage = "";
-            var promise = AddressFactory.get({id: $routeParams.id}).$promise;
+            var promise = AddressFactory.get({id: $stateParams.id}).$promise;
             promise.then(function (result) {
                 if (result.error) {
                     $scope.errorMessage = result.error;
@@ -44,6 +72,9 @@ mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$routeParams', '
             var promise = AddressFactory.getAddressByUser({id: $rootScope.user.id}).$promise;
             promise.then(function (result) {
                 $scope.addressList = result;
+                if (result[0]) {
+                    $scope.enquiry.address_id = result[0].id;
+                }
                 if (0 == $scope.addressList.length) {
                     $scope.setMode('create_address');
                     console.log($scope.addressList.length);
@@ -78,11 +109,12 @@ mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$routeParams', '
                 return;
             }
             $scope.address.user_id = $rootScope.user.id;
-
+            $scope.address.state="Assam";
+            $scope.address.city="Guwahati";
             $scope.errorMessage = "";
 //            var isUpdate = false;
-            if ($routeParams.id) {
-                $scope.address.id = $routeParams.id;
+            if ($stateParams.id) {
+                $scope.address.id = $stateParams.id;
                 var promise = AddressFactory.update($scope.address).$promise;
 //                isUpdate = true;
 
@@ -100,7 +132,7 @@ mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$routeParams', '
                     $scope.address = result;
                     swal("Address saved!");
                     
-                    if ($routeParams.id) {
+                    if ($stateParams.id) {
                         $rootScope.back();
                     } else {
                         $scope.enquiry.address_id = result.id;
@@ -166,8 +198,8 @@ mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$routeParams', '
         
         $scope.order = {};
         var laundry_service = {dry_wash: 1, wash_iron: 2};
-        if ($routeParams.service_type) {
-            var laundry_type = $routeParams.service_type.split('=');
+        if ($stateParams.service_type) {
+            var laundry_type = $stateParams.service_type.split('=');
             var items = [];
             if (laundry_type[1]) {
 
@@ -192,6 +224,7 @@ mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$routeParams', '
         $scope.enquiry.updated_by = $rootScope.user.id;
         $scope.placeEnquiry = function () {
             if ($scope.enquiry.address_id) {
+                
                 $rootScope.$emit('addEnquiryDetails',{
                     address_id:$scope.enquiry.address_id,
                     pickup_date:$scope.enquiry.pickup_date,
@@ -226,7 +259,7 @@ mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$routeParams', '
         };
         
         $scope.$watch('$viewContentLoaded', function () {
-            if ($routeParams.id) {
+            if ($stateParams.id) {
                 $scope.get();
             }
 
@@ -243,7 +276,7 @@ mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$routeParams', '
         require: 'ngModel',
          link: function (scope, element, attrs, ngModelCtrl) {
             $(element).datepicker({
-                dateFormat: 'd/mm/yy',
+                dateFormat: 'dd/mm/yy',
                 minDate:0,
                 onSelect: function (date) {
                     scope.enquiry.pickup_date = date;

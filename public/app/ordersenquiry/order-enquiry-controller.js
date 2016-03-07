@@ -1,4 +1,4 @@
-'use strict';
+/*
 mainApp.config(['$routeProvider', function ($routeProvider) {
 
 
@@ -15,11 +15,24 @@ mainApp.config(['$routeProvider', function ($routeProvider) {
                     controller: 'orderItemCtrl'
                 }
         );
+        $routeProvider.when('/order-summary',
+                {
+                    templateUrl: 'app/ordersenquiry/order-summary.html',
+                    controller: 'orderItemCtrl'
+                }
+        );
+        $routeProvider.when('/order-success',
+                {
+                    templateUrl: 'app/ordersenquiry/order-success.html',
+                    controller: 'orderItemCtrl'
+                }
+        );
 
 
 
     }]);
-mainApp.controller('orderItemCtrl', ['$scope', '$rootScope', 'AddressFactory','OrderFactory', '$cookies','$location','ngCart', function ($scope, $rootScope, AddressFactory,OrderFactory, $cookies,$location,ngCart) {
+*/
+mainApp.controller('orderItemCtrl', ['$scope', '$rootScope', 'AddressFactory','OrderFactory', '$cookies','$location','ngCart','$stateParams', function ($scope, $rootScope, AddressFactory,OrderFactory, $cookies,$location,ngCart,$stateParams) {
 
 
         $rootScope.$on('addToCartEnquiry', function (idk, item) {
@@ -94,19 +107,25 @@ mainApp.controller('orderItemCtrl', ['$scope', '$rootScope', 'AddressFactory','O
         }
         $scope.enquiry_made = $rootScope.enquiry_made;
         
+        $rootScope.formatDate = function(inputDate) {
+            return new Date(inputDate).toISOString();
+        };
         
         
+
+
         $scope.checkout = function() {
             var order = {};
             order.address_id = $scope.enquiry_made.address_id;
-            order.pickup_date = $scope.enquiry_made.pickup_date;
+            
+            order.pickup_date = $scope.enquiry_made.pickup_date
             order.pickup_time = $scope.enquiry_made.pickup_time;
             order.items = ngCart.getItems();
             var promise = OrderFactory.placeOrder(order).$promise;
             promise.then(function(result) {
                 swal("Order placed!","Our team will contact you soon!");
                 $rootScope.$emit('emptyCart');
-                $location.path("/");
+                $location.path("/order-summary/"+result.id);
                 
             })
         };
@@ -121,6 +140,8 @@ mainApp.controller('orderItemCtrl', ['$scope', '$rootScope', 'AddressFactory','O
             return quantity*amt;
         };
         $scope.statusClass = STATUS_COLORS;
+
+        $scope.lengthOfOrder = 0;
         $scope.getOrderHistory = function() {
             var promise = OrderFactory.getOrderHistory().$promise;
             
@@ -136,16 +157,39 @@ mainApp.controller('orderItemCtrl', ['$scope', '$rootScope', 'AddressFactory','O
                         $scope.orderHistory[val.order_id].total_amnt = $scope.getTotal(val.quantity,val.price) + $scope.orderHistory[val.order_id].total_amnt;
                     } else {
                         
-                        $scope.orderHistory[val.order_id] = {total_amnt:$scope.getTotal(val.quantity,val.price),items:[val],order_date:val.order_date,status:val.status};
+                        $scope.orderHistory[val.order_id] = {total_amnt:$scope.getTotal(val.quantity,val.price),items:[val],order_date:val.order_date,status:val.status,pickup_date:val.pickup_date};
                     }
                 });
-                console.log($scope.orderHistory);
+                $scope.lengthOfOrder = Object.keys($scope.orderHistory).length;
+                console.log($scope.lengthOfOrder);
                 
                 
             })
         };
+        $scope.orderSummary = {};
+        $scope.orderSummaryTotal = 0;
+        $scope.getMyOrderSummary = function(orderId) {
+            var promise = OrderFactory.getMyOrderSummary({id:orderId}).$promise;
+            promise.then(function(resp) {
+                $scope.orderSummary = resp;
+                angular.forEach(resp,function(val) {
+                  $scope.orderSummaryTotal+=$scope.getTotal(val.quantity,val.price);
+                });
+                console.log("#############################");
+                console.log($scope.orderSummaryTotal);
+
+            }); 
+
+        }
+
+
+
         if ($location.path() == '/orders') {
-            $scope.getOrderHistory();
+            $scope.getMyOrderSummary();
+        }
+        var sss = $location.path() ;
+        if ($stateParams.order_id) {
+            $scope.getMyOrderSummary($stateParams.order_id);
         }
 
 

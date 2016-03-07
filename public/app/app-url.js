@@ -32,6 +32,7 @@ var APP_URL = {
     add_item:API_ENGINE_URL + "admin/items",
     update_item:API_ENGINE_URL + "admin/items",
     delete_item:API_ENGINE_URL + "admin/items/:id",
+    update_order:API_ENGINE_URL + "admin/orders"
     
 };
 

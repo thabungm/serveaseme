@@ -20,7 +20,8 @@ class OrdersDao extends CommonDao {
     function setProperties($object, $inputArray) {
 
         if (isset($inputArray['pickup_date'])) {
-            $object->pickup_date = date_create_from_format("d/m/Y",$inputArray['pickup_date']);
+
+            $object->pickup_date = $this->formatDateSave($inputArray['pickup_date']);
         }
         if (isset($inputArray['pickup_time'])) {
             $object->pickup_time = $inputArray['pickup_time'];
@@ -68,8 +69,9 @@ class OrdersDao extends CommonDao {
 
             
         }
-        \Illuminate\Support\Facades\DB::commit();
 
+        \Illuminate\Support\Facades\DB::commit();
+        return $order;
         } catch(\Exception $e) {
         \Illuminate\Support\Facades\DB::rollback();
 //            throw 
@@ -82,9 +84,17 @@ class OrdersDao extends CommonDao {
     }
 
     function read($id) {
+
         $order = Order::find($id);
         return $order;
     }
+    function getUserOrder($orderId,$userId) {
+
+        $query = $this->getOrderQueryString() ." where  orders.id=? and users.id=? order by items.id asc";
+        $orderHistory = \DB::select($query, [$orderId,$userId]);
+        return $orderHistory;
+    }
+    
 
     function update($request) {
         $order = Order::find($request['id']);
@@ -145,11 +155,10 @@ class OrdersDao extends CommonDao {
     }
     
     
-    
-    function getOrderHistory($request, $otherParams=null) {
-        // limit filters sort
+    function getOrderQueryString() {
 
-        $query = "select orders.status ,orders.created_at as order_date, ohi.quantity, orders.status,orders.id as order_id,items.name,items.id,ohi.price from order_has_items ohi
+        return "select orders.status ,orders.created_at as order_date, ohi.quantity, orders.status,orders.id as order_id,orders.pickup_date,items.name,items.id,ohi.price
+                    from order_has_items ohi
                     LEFT JOIN
                     orders
 
@@ -160,10 +169,10 @@ class OrdersDao extends CommonDao {
                     on items.id=ohi.item_id
                     join 
                     users
-                    on users.id=orders.user_id
-                    where users.id=? order by items.id asc";
-
-
+                    on users.id=orders.user_id";
+    }
+    function getOrderHistory($request, $otherParams=null) {
+        $query = $this->getOrderQueryString() ." where users.id=? order by items.id asc";
         $orderHistory = \DB::select($query, [$request['user_id']]);
         return $orderHistory;
     }
@@ -189,31 +198,36 @@ class OrdersDao extends CommonDao {
         $orderHistory = \DB::select($query);
         return $orderHistory;
     }
+
+
     function getOrderDetails($id) {
-        $query = "select orders.status ,orders.created_at as order_date, ohi.quantity, orders.status,orders.id as order_id,items.name,items.id,ohi.price from order_has_items ohi
-                    LEFT JOIN
-                    orders
-
-                    on 
-                    orders.id = ohi.order_id
-                    LEFT JOIN
-                    category items
-                    on items.id=ohi.item_id
-                    join 
-                    users
-                    on users.id=orders.user_id
-                    where orders.id=? order by items.id asc";
-        
-        if (isset($request['date'])) {
-            
-        }
-        if (isset($request['date'])) {
-            
-        }
-        
+        $query = $this->getOrderQueryString() . "  where orders.id=? order by items.id asc";
         $orderHistory = \DB::select($query, [$id]);
-
         return $orderHistory;
     }
 
+    function getOrderDetailsByUserId($orderId,$userId) {
+
+        $query = $this->getOrderQueryString() . "  where orders.id=? and users.id=? order by items.id asc";
+        $orderHistory = \DB::select($query, [$orderId,$userId]);
+        return $orderHistory;
+
+    }
+
+    function updateOrder($inputArray) {
+        $order = $this->read($inputArray['id']);
+        if ($order) {
+            if (isset($inputArray['status'])) {
+                $order->status = $inputArray['status'];
+                $oder->update();
+                return $order;
+
+            }
+
+        } else {
+            return false;
+        }
+
+
+    }
 }

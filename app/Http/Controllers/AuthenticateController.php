@@ -28,9 +28,9 @@ class AuthenticateController extends Controller
             // verify the credentials and create a token for the user
             
             
-//            $jwt = \Illuminate\Support\Facades\Config::get('jwt');
-//            $jwt['ttl'] = 1;
-//            \Illuminate\Support\Facades\Config::set('jwt',$jwt);
+           // $jwt = \Illuminate\Support\Facades\Config::get('jwt');
+            //$jwt['ttl'] = 1;
+            //\Illuminate\Support\Facades\Config::set('jwt',$jwt);
             
 //            $app['config']
             if (! $token = JWTAuth::attempt($credentials)) {

@@ -41,7 +41,8 @@ class OrdersController extends Controller
     
     function read($id) {
         $orderDao = new OrdersDao();
-        $order = $orderDao->read($id);
+        $user = $this->getLoggedInUser();
+        $order = $orderDao->getUserOrder($id,$user->id);
         return $this->jsonResponse($order);
     }
 
@@ -64,9 +65,17 @@ class OrdersController extends Controller
     function getOrderByUserId() {
         $user = $this->getLoggedInUser();
         if ($user) {
-            //echo "<pre>";
-            //print_r($user);
             return $this->orderDao->getOrderHistory(array('user_id' => $user->id));
+        } else {
+            throw new Exception('Unauthorized', 401);
+        }
+    }
+
+    function getUserOrderDetails() {
+        $user = $this->getLoggedInUser();
+        if ($user) {
+            $req = RequestFacade::all();
+            return $this->orderDao->getOrderDetailsByUserId($req['order_id'], $user->id);
         } else {
             throw new Exception('Unauthorized', 401);
         }

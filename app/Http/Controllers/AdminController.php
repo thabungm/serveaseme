@@ -47,7 +47,13 @@ class AdminController extends Controller {
         $ordersDao = new OrdersDao();
         
         return $this->jsonResponse($ordersDao->getOrderDetails($id));
-//    return 
+
+    }
+    function updateOrder() {
+        $ordersDao = new OrdersDao();
+        return $ordersDao->updateOrder(RequestFacade::all());
+
+
     }
 
 }

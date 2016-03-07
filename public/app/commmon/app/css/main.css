@@ -43,5 +43,12 @@ li.cat_node {
 .panel.ng-isolate-scope.panel-default.panel-open {
     border:none !important;
 }
-
+a:focus {
+    outline: none !important;
+     /*outline: 5px auto -webkit-focus-ring-color;*/ 
+    outline-offset: -2px;
+    text-decoration: none !important;
+}
+a{    text-decoration: none !important;
+}
 

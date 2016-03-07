@@ -67,6 +67,8 @@ Route::group(['prefix' => 'api/admin'], function()
     Route::delete('/items/{id}', 'AdminController@delete');
     Route::post('/orders', 'AdminController@getOrderHistory');
     Route::get('/order-details/{id}', 'AdminController@getOrderDetails');
+    Route::put('/orders', 'AdminController@updateOrder');
+
 //    Route::post('/orders',function() {
 //        print_r("SHIT HAPPENS");
 //    });

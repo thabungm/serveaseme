@@ -1,20 +1,33 @@
-mainApp.config(['$routeProvider', function ($routeProvider) {
-        
-        
-        $routeProvider.when('/service/Laundry/:id',
-                {
-                    templateUrl: 'app/services/laundry/laundry.html',
-                    controller: 'laundryCtrl'
-                }
-        );}]);
+mainApp.config(function($stateProvider) {
+  $stateProvider
+    
+    .state('laundry', {
+      url: '/service/Laundry/:id',
+      
+      views: {
+        '': {
+          templateUrl: 'app/services/laundry/laundry.html',
+          controller: 'laundryCtrl'
+        }
+      },
+      data: {
+        displayName: 'Laundry',
+      }
+    })  
+    
+
+});
         
 //$scope.clothPric  = {};        
 mainApp.controller('laundryCtrl', ['$scope', 'CategoryFactory',
-    '$routeParams',"$rootScope","$location","ngCart","ngCartItem", function ($scope, CategoryFactory, $routeParams,$rootScope,$location,ngCart,ngCartItem) {
+    '$stateParams',"$rootScope","$location","ngCart","ngCartItem", function ($scope, CategoryFactory, $stateParams,$rootScope,$location,ngCart,ngCartItem) {
         $scope.laundryServiceTypes = {};
         $scope.laundryServiceNames = {};
         $scope.now_showing = "service_types";
         $scope.getChildren = function (id,callback) {
+            if (id == undefined) {
+                return;
+            }
             var promise = CategoryFactory.getChildren({parent_id:id}).$promise;
             promise.then(function (itemList) {
                 callback(itemList);
@@ -65,8 +78,8 @@ mainApp.controller('laundryCtrl', ['$scope', 'CategoryFactory',
         };
         
         
-        $scope.$watch('$viewContentLoaded', function () {
-            $scope.getChildren($routeParams.id,function(itemList) {
+        $scope.$watch('$stateChangeStart', function () {
+            $scope.getChildren($stateParams.id,function(itemList) {
                 $scope.laundryServiceTypes = itemList;
                 var first = true;
                 angular.forEach($scope.laundryServiceTypes, function (value, key) {
