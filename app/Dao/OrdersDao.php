@@ -10,6 +10,7 @@ use App\Events\EnquiryWasMade as OrderWasMade;
 use App\Dao\OrderHasItemsDao as OrderHasItemsDao;
 use App\Dao\OrderHistoryDao as OrderHistoryDao;
 use App\Dao\OrderAddressHistoryDao as OrderAddressHistoryDao;
+use App\Models\OrderAddressHistory as OrderAddressHistory;
 ///var/www/html/laravel/app/Dao/OrderHistoryDao.php
 class OrdersDao extends CommonDao {
 
@@ -171,6 +172,7 @@ class OrdersDao extends CommonDao {
                     users
                     on users.id=orders.user_id";
     }
+
     function getOrderHistory($request, $otherParams=null) {
         $query = $this->getOrderQueryString() ." where users.id=? order by items.id asc";
         $orderHistory = \DB::select($query, [$request['user_id']]);
@@ -185,7 +187,7 @@ class OrdersDao extends CommonDao {
                     join 
                     users
                     on users.id=orders.user_id
-                    order by orders.id asc";
+                    order by orders.id desc";
         
         if (isset($request['date'])) {
             
@@ -219,7 +221,7 @@ class OrdersDao extends CommonDao {
         if ($order) {
             if (isset($inputArray['status'])) {
                 $order->status = $inputArray['status'];
-                $oder->update();
+                $order->update();
                 return $order;
 
             }
@@ -227,6 +229,12 @@ class OrdersDao extends CommonDao {
         } else {
             return false;
         }
+
+
+    }
+
+    function getAddressByOrder($orderId) {
+        return OrderAddressHistory::where('order_id', $orderId)->first();
 
 
     }

@@ -13,6 +13,10 @@
 <script src="bower_components/angular-utils-ui-breadcrumbs/uiBreadcrumbs.js"></script>
 <!--<script src="bower_components/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html"></script>-->
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/snapjs/snap.js"></script>
+<script src="bower_components/angular-snap/angular-snap.js"></script>
+
+
 <!--<script src="bower_components/angular-ui-router/src/state.js"></script>-->
 
 
@@ -21,6 +25,7 @@
         <script src="/app/app-url.js"></script>
         <script src="/app/locality.js"></script>
         <script src="/app/app.js"></script>
+        <script src="/app/states.js"></script>
         <script src="/app/ordersenquiry/order-enquiry-controller.js"></script>
         <script src="/app/users/authFactory.js"></script>
         <script src="/app/items/itemFactory.js"></script>

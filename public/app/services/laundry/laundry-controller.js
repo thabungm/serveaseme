@@ -19,8 +19,8 @@ mainApp.config(function($stateProvider) {
 });
         
 //$scope.clothPric  = {};        
-mainApp.controller('laundryCtrl', ['$scope', 'CategoryFactory',
-    '$stateParams',"$rootScope","$location","ngCart","ngCartItem", function ($scope, CategoryFactory, $stateParams,$rootScope,$location,ngCart,ngCartItem) {
+mainApp.controller('laundryCtrl', ['$scope', 'ItemFactory',
+    '$stateParams',"$rootScope","$location","ngCart","ngCartItem", function ($scope, ItemFactory, $stateParams,$rootScope,$location,ngCart,ngCartItem) {
         $scope.laundryServiceTypes = {};
         $scope.laundryServiceNames = {};
         $scope.now_showing = "service_types";
@@ -28,7 +28,7 @@ mainApp.controller('laundryCtrl', ['$scope', 'CategoryFactory',
             if (id == undefined) {
                 return;
             }
-            var promise = CategoryFactory.getChildren({parent_id:id}).$promise;
+            var promise = ItemFactory.getChildren({parent_id:id}).$promise;
             promise.then(function (itemList) {
                 callback(itemList);
                 

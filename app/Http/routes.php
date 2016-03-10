@@ -68,10 +68,11 @@ Route::group(['prefix' => 'api/admin'], function()
     Route::post('/orders', 'AdminController@getOrderHistory');
     Route::get('/order-details/{id}', 'AdminController@getOrderDetails');
     Route::put('/orders', 'AdminController@updateOrder');
+    Route::get('/order-address/{id}', 'AdminController@getAddressByOrder');
+//             api/admin/order-address
 
-//    Route::post('/orders',function() {
-//        print_r("SHIT HAPPENS");
-//    });
+
+
     
 
 
@@ -116,7 +117,7 @@ Route::group(['prefix' => 'api'], function()
     Route::put('/orders', 'OrdersController@update');
     Route::get('/orders/{id}', 'OrdersController@read');
     Route::delete('/orders/{id}', 'OrdersController@delete');
-    Route::get('/orders-history', 'OrdersController@getOrderByUserId');
+    Route::get('/orders', 'OrdersController@getOrderByUserId');
     // Enquiry
     Route::post('/enquiry', 'EnquiryController@create');
 //    Route::post('/p', 'EnquiryController@create');

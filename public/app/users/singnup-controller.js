@@ -1,12 +1,3 @@
-mainApp.config(['$routeProvider', function ($routeProvider) {
-        
-        $routeProvider.when('/signup',
-                {
-                    templateUrl: 'app/users/signup-partial.html',
-                    controller: 'signupCtrl'
-                }
-        );
-}]);
 mainApp.controller('signupCtrl', ['$scope', 'UserFactory','$location', function ($scope, UserFactory,$location) {
         $scope.user = {};
         $scope.submit = function (isValid) {

@@ -185,7 +185,7 @@ mainApp.controller('orderItemCtrl', ['$scope', '$rootScope', 'AddressFactory','O
 
 
         if ($location.path() == '/orders') {
-            $scope.getMyOrderSummary();
+            $scope.getOrderHistory();
         }
         var sss = $location.path() ;
         if ($stateParams.order_id) {

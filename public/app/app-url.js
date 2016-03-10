@@ -12,7 +12,7 @@ var APP_URL = {
     order_read: API_ENGINE_URL + "orders/:id",
     order_update: API_ENGINE_URL + "orders/:id",
     order_delete: API_ENGINE_URL + "orders/:id",
-    order_history: API_ENGINE_URL + "orders-history",
+    order_history: API_ENGINE_URL + "orders",
     
 //    place_enquiry: API_ENGINE_URL + "enquiry",
     
@@ -32,7 +32,8 @@ var APP_URL = {
     add_item:API_ENGINE_URL + "admin/items",
     update_item:API_ENGINE_URL + "admin/items",
     delete_item:API_ENGINE_URL + "admin/items/:id",
-    update_order:API_ENGINE_URL + "admin/orders"
+    update_order:API_ENGINE_URL + "admin/orders",
+    order_address:API_ENGINE_URL + "admin/order-address/:id"
     
 };
 

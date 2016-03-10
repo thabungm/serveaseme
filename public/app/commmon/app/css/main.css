@@ -51,4 +51,33 @@ a:focus {
 }
 a{    text-decoration: none !important;
 }
+.hamburger-menu-app {
+    font-size: 200% !important;
+    margin-left: 5px !important;
+    float: left;
+}
+.menu-hamburger {
+    margin-top: 27px !important;
+}
+.web-logo {margin-left: 20%;}
+.side-bar {margin-top:50%;}
 
+.top-menu-cart { float:right;    font-size: 16px;}
+    @media (max-width:767px) {
+       .top-menu-cart { margin:-40px 15px 0 0; float:right;} 
+       button.navbar-toggle { margin:13px 65px 0 0 !important;}
+    }
+    
+    
+    .cart-number{
+            border-radius: 50%;
+            font-weight: 200;
+            border: none;
+            font-family: fantasy;
+            font-family: fantasy;
+            background: green;
+            color: white;
+    }
+    
+   
+    

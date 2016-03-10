@@ -1,21 +1,4 @@
-mainApp.config(function($stateProvider) {
-  $stateProvider
-    .state('address', {
-      url: '/address',
-      
-      views: {
-        '': {
-          templateUrl: 'app/users/address-partial.html',
-          controller: 'addressCtrl'
-        }
-      },
-      data: {
-        displayName: 'Address',
-      }
-    }) 
-    
 
-});
 
 //mainApp.config(['$stateProvider', function ($stateProvider) {
 //
@@ -286,3 +269,10 @@ mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$stateParams', '
         }
     };
 });
+
+/*.directive('address-info', function () {
+    return {
+        restrict: 'E',
+        templateUrl: 'app/address/address-info.html'};
+});
+*/

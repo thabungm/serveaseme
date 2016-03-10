@@ -7,8 +7,7 @@ mainApp.factory('ItemFactory', ['$resource', '$rootScope', '$cookies', function 
 
                     save: {method: 'POST', headers: HEADERS,url:APP_URL.add_item},
                     update: {method: 'PUT', headers: HEADERS,url:APP_URL.update_item},
-                    changePassword: {method: 'PUT', headers: HEADERS,url: APP_URL.change_password},
-                    forgotPassword: {method: 'POST', headers: HEADERS,url: APP_URL.forgot_password}
+                   
                    
                 });
 

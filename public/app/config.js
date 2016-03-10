@@ -10,7 +10,7 @@ switch (SERV_ENV) {
         LOGIN_FACEBOOK_LINK = 'http://serveaseme.local/index.php/auth/facebook';
         break;
     default:
-       API_ENGINE_URL = 'http://serveaseme.local/index.php/api/';
+       API_ENGINE_URL = location.origin + '/index.php/api/';
         LOGIN_FACEBOOK_LINK = 'http://serveaseme.local/index.php/auth/facebook';
     
 }

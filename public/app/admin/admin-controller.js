@@ -1,15 +1,5 @@
-var generateData = function () {
-    var arr = [];
-    var letterWords = ["alpha", "bravo", "charlie", "daniel", "earl", "fish", "grace", "henry", "ian", "jack", "karen", "mike", "delta", "alex", "larry", "bob", "zelda"]
-    for (var i = 1; i < 60; i++) {
-        var id = letterWords[Math.floor(Math.random() * letterWords.length)];
-        arr.push({"id": id + i, "name": "name " + i, "description": "Description of item #" + i, "field3": id, "field4": "Some stuff about rec: " + i, "field5": "field" + i});
-    }
-    return arr;
-}
 
 var sortingOrder = 'name'; //default sort
-
 mainApp.config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider.when('/admin/orders',
@@ -146,6 +136,7 @@ mainApp.controller('adminCtrl', ['$scope', 'OrderFactory', '$location','$filter'
 
         $scope.orderDetails = {items:[]};
         $scope.showOrderDetails =function(id) {
+            $scope.orderAddressHistory(id);
             $scope.orderDetails.items = [];
             var promise = OrderFactory.adminGetOrderDetails({id:id}).$promise;
             promise.then(function(result) {
@@ -155,6 +146,7 @@ mainApp.controller('adminCtrl', ['$scope', 'OrderFactory', '$location','$filter'
                 angular.forEach(result,function(val) {
                     if (!$scope.orderDetails.status) {
                         $scope.orderDetails.status = val.status;
+                        $scope.orderDetails.order_id = val.order_id;
                     }
                     $scope.orderDetails.items.push(val);
                     itemTotal+= val.price*val.quantity;
@@ -167,7 +159,11 @@ mainApp.controller('adminCtrl', ['$scope', 'OrderFactory', '$location','$filter'
                 
 
             });
-        }
+        };
+
+
+   
+
     
     // /admin/category
     
@@ -245,23 +241,43 @@ mainApp.controller('adminCtrl', ['$scope', 'OrderFactory', '$location','$filter'
 
     $scope.updateOrder = function(id,status) {
         swal({   title: "Are you sure?",   
-            text: "You will not be able to recover this imaginary file!",  
+            text: "You want to update!",  
              type: "warning",   
              showCancelButton: true, 
                confirmButtonColor: "#DD6B55",
-                  confirmButtonText: "Yes, delete it!",  
+                  confirmButtonText: "Yes",  
                    closeOnConfirm: false }, 
                    function(){  
 
-        var promise = OrderFactory.updateOrder({id:id,status:status}).$promise;
+        var promise = OrderFactory.updateOrder({id:$scope.orderDetails.order_id,status:$scope.orderDetails.status}).$promise;
         promise.then(function(res) {
 
             if (res) {
+                swal("Done!");
+                $scope.show_order_list  = true;
+                $scope.generateData();
 //                 swal("Deleted!", "The order is updated.", "success"); });
             }
+            });
         });
-    });
-}
+    };
+
+    $scope.address = {};
+    $scope.orderAddressHistory = function(orderId) {
+        var promise = OrderFactory.getOrderAddress({id:orderId}).$promise;
+        promise.then(function(res) {
+
+            if (res) {
+                $scope.address = res;
+             }
+            });
+        
+
+    }
+
+
+
+
 
 }    
     

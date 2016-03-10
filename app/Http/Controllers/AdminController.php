@@ -39,21 +39,24 @@ class AdminController extends Controller {
 
     function getOrderHistory(RequestFacade $request) {
         $ordersDao = new OrdersDao();
-        
         return $this->jsonResponse($ordersDao->getOrderHistoryAdmin(RequestFacade::all()));
-//    return 
     }
+
     function getOrderDetails($id) {
         $ordersDao = new OrdersDao();
-        
         return $this->jsonResponse($ordersDao->getOrderDetails($id));
 
     }
+
     function updateOrder() {
         $ordersDao = new OrdersDao();
         return $ordersDao->updateOrder(RequestFacade::all());
-
-
     }
 
+
+    function getAddressByOrder($orderId) {
+        $ordersDao = new OrdersDao();
+        $req = RequestFacade::all();
+        return $this->jsonResponse($ordersDao->getAddressByOrder($orderId));
+    }
 }

@@ -1,16 +1,6 @@
-mainApp.config(['$routeProvider', function ($routeProvider) {
-        
-        
-        $routeProvider.when('/service/Drivers/:id',
-                {
-                    templateUrl: 'app/services/driver/driver.html',
-                    controller: 'driverCtrl'
-                }
-        );}]);
-        
 //$scope.clothPric  = {};        
 mainApp.controller('driverCtrl', ['$scope', 'ItemFactory',
-    '$routeParams',"$rootScope","$location","ngCart","ngCartItem", function ($scope, ItemFactory, $routeParams,$rootScope,$location,ngCart,ngCartItem) {
+    '$stateParams',"$rootScope","$location","ngCart","ngCartItem", function ($scope, ItemFactory, $stateParams,$rootScope,$location,ngCart,ngCartItem) {
         
         $scope.now_showing = "service_types";
         
@@ -41,7 +31,7 @@ mainApp.controller('driverCtrl', ['$scope', 'ItemFactory',
         
         
         $scope.$watch('$viewContentLoaded', function () {
-            var promise = ItemFactory.getChildren({parent_id:$routeParams.id}).$promise;
+            var promise = ItemFactory.getChildren({parent_id:$stateParams.id}).$promise;
             promise.then(function(itemList) {
                 $scope.dirverItems = itemList;
             });

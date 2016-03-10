@@ -1,4 +1,4 @@
-var mainApp = angular.module('mainApp', ['ngRoute', 'ngResource', 'ngCookies','ngMessages',"checklist-model","ngSanitize",'ngCart','ngAnimate', 'ui.bootstrap','ui.router', 'angularUtils.directives.uiBreadcrumbs']);
+var mainApp = angular.module('mainApp', ['ngRoute', 'ngResource', 'ngCookies','ngMessages',"checklist-model","ngSanitize",'ngCart','ngAnimate', 'ui.bootstrap','ui.router', 'angularUtils.directives.uiBreadcrumbs','snap']);
 var isPublicRoute = function(path) {
     publicPathArray = ['/signup','/login','/forgot-password','/auth/facebook','/auth-token','/about-us'];
     if (location.href.indexOf('auth-token') > -1) {
@@ -10,16 +10,11 @@ var isPublicRoute = function(path) {
         return false;
     }
 };
-mainApp.config(['$routeProvider', '$sceProvider', function ($routeProvider, $sceProvider) {
-        $routeProvider.when('/about-us',
-                {
-                    templateUrl: 'app/home/about-us.html',
-                    
-                }
-        );
-        
-        
-    }]);
+
+
+
+
+
 
 
 
@@ -29,6 +24,7 @@ mainApp.run(['$rootScope', '$location', 'AuthFactory','$cookies', function ($roo
     $rootScope.show_loader = 0;
         $rootScope.enquiry_made = {};
          var history = [];
+         $rootScope.statusList = ['new','processing','completed'];
 
         $rootScope.$on('$routeChangeSuccess', function() {
             history.push($location.$$path);
