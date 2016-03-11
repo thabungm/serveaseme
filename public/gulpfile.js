@@ -33,8 +33,8 @@ var jsLibFiles = [
 "bower_components/angular-route/angular-route.js",
 "bower_components/checklist-model/checklist-model.js",
 "bower_components/angular-bootstrap/ui-bootstrap.js",
-"bower_components/angular-ui-router/release/angular-ui-router.js",
 "bower_components/angular-utils-ui-breadcrumbs/uiBreadcrumbs.js",
+"bower_components/angular-ui-router/release/angular-ui-router.js",
 "bower_components/snapjs/snap.js",
 "bower_components/angular-snap/angular-snap.js"
 ];
