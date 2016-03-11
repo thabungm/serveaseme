@@ -63,7 +63,7 @@ var jsAppFiles = [
 ];
 
 
-var runForApp = true;
+var runForApp = false;
 if (runForApp) {
 	var souceFileArr = jsAppFiles;
 	var destination= "dist/app";

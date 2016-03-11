@@ -9,7 +9,7 @@
         <meta name="author" content="">
         <!--<link rel="icon" href="/app/assets/lib/bootstrap/favicon.ico">-->
 
-        <title>Laravel and angular</title>
+        <title>ServEaseMe</title>
 
         <!-- Bootstrap core CSS -->
         <link href="/app/assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -65,7 +65,7 @@
                 <img src="https://www.drupal.org/files/issues/ajax-loader.gif"></img>
             </div>
         </div>-->
-        <div class="container" style="    margin-top: 40px;" ng-controller="orderItemCtrl">
+        <div class="container" style="    ng-controller="orderItemCtrl">
 
             <div id='ajax_loader' style="position: fixed; left: 40%; top: 30%;z-index: 999999" ng-show='$root.show_loader'>
                 <img src="https://www.drupal.org/files/issues/ajax-loader.gif"></img>
@@ -80,7 +80,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="#/" class="navbar-brand">Brand</a>
+            <div class="navbar-brand"><a style="margin-bottom:10%;" href="#/" class=""><img src="/app/assets/app/images/logo.png"></a></div>
             
             
         
