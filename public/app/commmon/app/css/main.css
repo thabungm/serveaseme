@@ -80,7 +80,10 @@ a{    text-decoration: none !important;
             font-family: fantasy;
             background: green;
             color: white;
+    
     }
+
+    .step-desc {width:100%;}
     
    
     
