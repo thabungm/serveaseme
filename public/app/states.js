@@ -1,7 +1,7 @@
 mainApp.config(function($stateProvider) {
   $stateProvider
     .state('home', {
-      url: '/',
+      url: '/#',
       
       views: {
         '': {
