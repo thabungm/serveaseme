@@ -1,6 +1,1733 @@
-angular.module("checklist-model",[]).directive("checklistModel",["$parse","$compile",function(e,t){function n(e,t,n){if(angular.isArray(e))for(var a=e.length;a--;)if(n(e[a],t))return!0;return!1}function a(e,t,a){return e=angular.isArray(e)?e:[],n(e,t,a)||e.push(t),e}function i(e,t,n){if(angular.isArray(e))for(var a=e.length;a--;)if(n(e[a],t)){e.splice(a,1);break}return e}function r(r,o,s){function l(e,t){var n=d(r.$parent);angular.isFunction(p)&&(t===!0?p(r.$parent,a(n,e,g)):p(r.$parent,i(n,e,g)))}function u(e,t){return f&&f(r)===!1?void l(h,r[s.ngModel]):void(r[s.ngModel]=n(e,h,g))}var c=s.checklistModel;s.$set("checklistModel",null),t(o)(r),s.$set("checklistModel",c);var d=e(c),p=d.assign,m=e(s.checklistChange),f=e(s.checklistBeforeChange),h=s.checklistValue?e(s.checklistValue)(r.$parent):s.value,g=angular.equals;if(s.hasOwnProperty("checklistComparator"))if("."==s.checklistComparator[0]){var b=s.checklistComparator.substring(1);g=function(e,t){return e[b]===t[b]}}else g=e(s.checklistComparator)(r.$parent);r.$watch(s.ngModel,function(e,t){if(e!==t){if(f&&f(r)===!1)return void(r[s.ngModel]=n(d(r.$parent),h,g));l(h,e),m&&m(r)}}),angular.isFunction(r.$parent.$watchCollection)?r.$parent.$watchCollection(c,u):r.$parent.$watch(c,u,!0)}return{restrict:"A",priority:1e3,terminal:!0,scope:!0,compile:function(e,t){if(("INPUT"!==e[0].tagName||"checkbox"!==t.type)&&"MD-CHECKBOX"!==e[0].tagName&&!t.btnCheckbox)throw'checklist-model should be applied to `input[type="checkbox"]` or `md-checkbox`.';if(!t.checklistValue&&!t.value)throw"You should provide `value` or `checklist-value`.";return t.ngModel||t.$set("ngModel","checked"),r}}}]),angular.module("ui.bootstrap",["ui.bootstrap.tpls","ui.bootstrap.collapse","ui.bootstrap.accordion","ui.bootstrap.alert","ui.bootstrap.buttons","ui.bootstrap.carousel","ui.bootstrap.dateparser","ui.bootstrap.isClass","ui.bootstrap.position","ui.bootstrap.datepicker","ui.bootstrap.debounce","ui.bootstrap.dropdown","ui.bootstrap.stackedMap","ui.bootstrap.modal","ui.bootstrap.paging","ui.bootstrap.pager","ui.bootstrap.pagination","ui.bootstrap.tooltip","ui.bootstrap.popover","ui.bootstrap.progressbar","ui.bootstrap.rating","ui.bootstrap.tabs","ui.bootstrap.timepicker","ui.bootstrap.typeahead"]),angular.module("ui.bootstrap.tpls",["uib/template/accordion/accordion-group.html","uib/template/accordion/accordion.html","uib/template/alert/alert.html","uib/template/carousel/carousel.html","uib/template/carousel/slide.html","uib/template/datepicker/datepicker.html","uib/template/datepicker/day.html","uib/template/datepicker/month.html","uib/template/datepicker/popup.html","uib/template/datepicker/year.html","uib/template/modal/backdrop.html","uib/template/modal/window.html","uib/template/pager/pager.html","uib/template/pagination/pagination.html","uib/template/tooltip/tooltip-html-popup.html","uib/template/tooltip/tooltip-popup.html","uib/template/tooltip/tooltip-template-popup.html","uib/template/popover/popover-html.html","uib/template/popover/popover-template.html","uib/template/popover/popover.html","uib/template/progressbar/bar.html","uib/template/progressbar/progress.html","uib/template/progressbar/progressbar.html","uib/template/rating/rating.html","uib/template/tabs/tab.html","uib/template/tabs/tabset.html","uib/template/timepicker/timepicker.html","uib/template/typeahead/typeahead-match.html","uib/template/typeahead/typeahead-popup.html"]),angular.module("ui.bootstrap.collapse",[]).directive("uibCollapse",["$animate","$q","$parse","$injector",function(e,t,n,a){var i=a.has("$animateCss")?a.get("$animateCss"):null;return{link:function(a,r,o){function s(){r.hasClass("collapse")&&r.hasClass("in")||t.resolve(d(a)).then(function(){r.removeClass("collapse").addClass("collapsing").attr("aria-expanded",!0).attr("aria-hidden",!1),i?i(r,{addClass:"in",easing:"ease",to:{height:r[0].scrollHeight+"px"}}).start()["finally"](l):e.addClass(r,"in",{to:{height:r[0].scrollHeight+"px"}}).then(l)})}function l(){r.removeClass("collapsing").addClass("collapse").css({height:"auto"}),p(a)}function u(){return r.hasClass("collapse")||r.hasClass("in")?void t.resolve(m(a)).then(function(){r.css({height:r[0].scrollHeight+"px"}).removeClass("collapse").addClass("collapsing").attr("aria-expanded",!1).attr("aria-hidden",!0),i?i(r,{removeClass:"in",to:{height:"0"}}).start()["finally"](c):e.removeClass(r,"in",{to:{height:"0"}}).then(c)}):c()}function c(){r.css({height:"0"}),r.removeClass("collapsing").addClass("collapse"),f(a)}var d=n(o.expanding),p=n(o.expanded),m=n(o.collapsing),f=n(o.collapsed);a.$eval(o.uibCollapse)||r.addClass("in").addClass("collapse").attr("aria-expanded",!0).attr("aria-hidden",!1).css({height:"auto"}),a.$watch(o.uibCollapse,function(e){e?u():s()})}}}]),angular.module("ui.bootstrap.accordion",["ui.bootstrap.collapse"]).constant("uibAccordionConfig",{closeOthers:!0}).controller("UibAccordionController",["$scope","$attrs","uibAccordionConfig",function(e,t,n){this.groups=[],this.closeOthers=function(a){var i=angular.isDefined(t.closeOthers)?e.$eval(t.closeOthers):n.closeOthers;i&&angular.forEach(this.groups,function(e){e!==a&&(e.isOpen=!1)})},this.addGroup=function(e){var t=this;this.groups.push(e),e.$on("$destroy",function(n){t.removeGroup(e)})},this.removeGroup=function(e){var t=this.groups.indexOf(e);-1!==t&&this.groups.splice(t,1)}}]).directive("uibAccordion",function(){return{controller:"UibAccordionController",controllerAs:"accordion",transclude:!0,templateUrl:function(e,t){return t.templateUrl||"uib/template/accordion/accordion.html"}}}).directive("uibAccordionGroup",function(){return{require:"^uibAccordion",transclude:!0,replace:!0,templateUrl:function(e,t){return t.templateUrl||"uib/template/accordion/accordion-group.html"},scope:{heading:"@",isOpen:"=?",isDisabled:"=?"},controller:function(){this.setHeading=function(e){this.heading=e}},link:function(e,t,n,a){a.addGroup(e),e.openClass=n.openClass||"panel-open",e.panelClass=n.panelClass||"panel-default",e.$watch("isOpen",function(n){t.toggleClass(e.openClass,!!n),n&&a.closeOthers(e)}),e.toggleOpen=function(t){e.isDisabled||t&&32!==t.which||(e.isOpen=!e.isOpen)};var i="accordiongroup-"+e.$id+"-"+Math.floor(1e4*Math.random());e.headingId=i+"-tab",e.panelId=i+"-panel"}}}).directive("uibAccordionHeading",function(){return{transclude:!0,template:"",replace:!0,require:"^uibAccordionGroup",link:function(e,t,n,a,i){a.setHeading(i(e,angular.noop))}}}).directive("uibAccordionTransclude",function(){return{require:"^uibAccordionGroup",link:function(e,t,n,a){e.$watch(function(){return a[n.uibAccordionTransclude]},function(e){e&&(t.find("span").html(""),t.find("span").append(e))})}}}),angular.module("ui.bootstrap.alert",[]).controller("UibAlertController",["$scope","$attrs","$interpolate","$timeout",function(e,t,n,a){e.closeable=!!t.close;var i=angular.isDefined(t.dismissOnTimeout)?n(t.dismissOnTimeout)(e.$parent):null;i&&a(function(){e.close()},parseInt(i,10))}]).directive("uibAlert",function(){return{controller:"UibAlertController",controllerAs:"alert",templateUrl:function(e,t){return t.templateUrl||"uib/template/alert/alert.html"},transclude:!0,replace:!0,scope:{type:"@",close:"&"}}}),angular.module("ui.bootstrap.buttons",[]).constant("uibButtonConfig",{activeClass:"active",toggleEvent:"click"}).controller("UibButtonsController",["uibButtonConfig",function(e){this.activeClass=e.activeClass||"active",this.toggleEvent=e.toggleEvent||"click"}]).directive("uibBtnRadio",["$parse",function(e){return{require:["uibBtnRadio","ngModel"],controller:"UibButtonsController",controllerAs:"buttons",link:function(t,n,a,i){var r=i[0],o=i[1],s=e(a.uibUncheckable);n.find("input").css({display:"none"}),o.$render=function(){n.toggleClass(r.activeClass,angular.equals(o.$modelValue,t.$eval(a.uibBtnRadio)))},n.on(r.toggleEvent,function(){if(!a.disabled){var e=n.hasClass(r.activeClass);(!e||angular.isDefined(a.uncheckable))&&t.$apply(function(){o.$setViewValue(e?null:t.$eval(a.uibBtnRadio)),o.$render()})}}),a.uibUncheckable&&t.$watch(s,function(e){a.$set("uncheckable",e?"":null)})}}}]).directive("uibBtnCheckbox",function(){return{require:["uibBtnCheckbox","ngModel"],controller:"UibButtonsController",controllerAs:"button",link:function(e,t,n,a){function i(){return o(n.btnCheckboxTrue,!0)}function r(){return o(n.btnCheckboxFalse,!1)}function o(t,n){return angular.isDefined(t)?e.$eval(t):n}var s=a[0],l=a[1];t.find("input").css({display:"none"}),l.$render=function(){t.toggleClass(s.activeClass,angular.equals(l.$modelValue,i()))},t.on(s.toggleEvent,function(){n.disabled||e.$apply(function(){l.$setViewValue(t.hasClass(s.activeClass)?r():i()),l.$render()})})}}}),angular.module("ui.bootstrap.carousel",[]).controller("UibCarouselController",["$scope","$element","$interval","$timeout","$animate",function(e,t,n,a,i){function r(){for(;v.length;)v.shift()}function o(e){if(angular.isUndefined(h[e].index))return h[e];for(var t=0,n=h.length;n>t;++t)if(h[t].index===e)return h[t]}function s(n,a,o){y||(angular.extend(n,{direction:o,active:!0}),angular.extend(f.currentSlide||{},{direction:o,active:!1}),i.enabled(t)&&!e.$currentTransition&&n.$element&&f.slides.length>1&&(n.$element.data(g,n.direction),f.currentSlide&&f.currentSlide.$element&&f.currentSlide.$element.data(g,n.direction),e.$currentTransition=!0,i.on("addClass",n.$element,function(t,n){if("close"===n&&(e.$currentTransition=null,i.off("addClass",t),v.length)){var a=v.pop(),o=e.indexOfSlide(a),l=o>f.getCurrentIndex()?"next":"prev";r(),s(a,o,l)}})),f.currentSlide=n,b=a,c())}function l(){p&&(n.cancel(p),p=null)}function u(t){t.length||(e.$currentTransition=null,r())}function c(){l();var t=+e.interval;!isNaN(t)&&t>0&&(p=n(d,t))}function d(){var t=+e.interval;m&&!isNaN(t)&&t>0&&h.length?e.next():e.pause()}var p,m,f=this,h=f.slides=e.slides=[],g="uib-slideDirection",b=-1,v=[];f.currentSlide=null;var y=!1;f.addSlide=function(t,n){t.$element=n,h.push(t),1===h.length||t.active?(e.$currentTransition&&(e.$currentTransition=null),f.select(h[h.length-1]),1===h.length&&e.play()):t.active=!1},f.getCurrentIndex=function(){return f.currentSlide&&angular.isDefined(f.currentSlide.index)?+f.currentSlide.index:b},f.next=e.next=function(){var t=(f.getCurrentIndex()+1)%h.length;return 0===t&&e.noWrap()?void e.pause():f.select(o(t),"next")},f.prev=e.prev=function(){var t=f.getCurrentIndex()-1<0?h.length-1:f.getCurrentIndex()-1;return e.noWrap()&&t===h.length-1?void e.pause():f.select(o(t),"prev")},f.removeSlide=function(e){angular.isDefined(e.index)&&h.sort(function(e,t){return+e.index>+t.index});var t=v.indexOf(e);-1!==t&&v.splice(t,1);var n=h.indexOf(e);h.splice(n,1),a(function(){h.length>0&&e.active?n>=h.length?f.select(h[n-1]):f.select(h[n]):b>n&&b--}),0===h.length&&(f.currentSlide=null,r())},f.select=e.select=function(t,n){var a=e.indexOfSlide(t);void 0===n&&(n=a>f.getCurrentIndex()?"next":"prev"),t&&t!==f.currentSlide&&!e.$currentTransition?s(t,a,n):t&&t!==f.currentSlide&&e.$currentTransition&&(v.push(t),t.active=!1)},e.indexOfSlide=function(e){return angular.isDefined(e.index)?+e.index:h.indexOf(e)},e.isActive=function(e){return f.currentSlide===e},e.pause=function(){e.noPause||(m=!1,l())},e.play=function(){m||(m=!0,c())},e.$on("$destroy",function(){y=!0,l()}),e.$watch("noTransition",function(e){i.enabled(t,!e)}),e.$watch("interval",c),e.$watchCollection("slides",u)}]).directive("uibCarousel",function(){return{transclude:!0,replace:!0,controller:"UibCarouselController",controllerAs:"carousel",templateUrl:function(e,t){return t.templateUrl||"uib/template/carousel/carousel.html"},scope:{interval:"=",noTransition:"=",noPause:"=",noWrap:"&"}}}).directive("uibSlide",function(){return{require:"^uibCarousel",transclude:!0,replace:!0,templateUrl:function(e,t){return t.templateUrl||"uib/template/carousel/slide.html"},scope:{active:"=?",actual:"=?",index:"=?"},link:function(e,t,n,a){a.addSlide(e,t),e.$on("$destroy",function(){a.removeSlide(e)}),e.$watch("active",function(t){t&&a.select(e)})}}}).animation(".item",["$animateCss",function(e){function t(e,t,n){e.removeClass(t),n&&n()}var n="uib-slideDirection";return{beforeAddClass:function(a,i,r){if("active"===i){var o=!1,s=a.data(n),l="next"===s?"left":"right",u=t.bind(this,a,l+" "+s,r);return a.addClass(s),e(a,{addClass:l}).start().done(u),function(){o=!0}}r()},beforeRemoveClass:function(a,i,r){if("active"===i){var o=!1,s=a.data(n),l="next"===s?"left":"right",u=t.bind(this,a,l,r);return e(a,{addClass:l}).start().done(u),function(){o=!0}}r()}}}]),angular.module("ui.bootstrap.dateparser",[]).service("uibDateParser",["$log","$locale","dateFilter","orderByFilter",function(e,t,n,a){function i(e,t){var n=[],i=e.split(""),r=e.indexOf("'");if(r>-1){var o=!1;e=e.split("");for(var s=r;s<e.length;s++)o?("'"===e[s]&&(s+1<e.length&&"'"===e[s+1]?(e[s+1]="$",i[s+1]=""):(i[s]="",o=!1)),e[s]="$"):"'"===e[s]&&(e[s]="$",i[s]="",o=!0);e=e.join("")}return angular.forEach(m,function(a){var r=e.indexOf(a.key);if(r>-1){e=e.split(""),i[r]="("+a.regex+")",e[r]="$";for(var o=r+1,s=r+a.key.length;s>o;o++)i[o]="",e[o]="$";e=e.join(""),n.push({index:r,key:a.key,apply:a[t],matcher:a.regex})}}),{regex:new RegExp("^"+i.join("")+"$"),map:a(n,"index")}}function r(e,t,n){return 1>n?!1:1===t&&n>28?29===n&&(e%4===0&&e%100!==0||e%400===0):3===t||5===t||8===t||10===t?31>n:!0}function o(e){return parseInt(e,10)}function s(e,t){return e&&t?d(e,t):e}function l(e,t){return e&&t?d(e,t,!0):e}function u(e,t){var n=Date.parse("Jan 01, 1970 00:00:00 "+e)/6e4;return isNaN(n)?t:n}function c(e,t){return e=new Date(e.getTime()),e.setMinutes(e.getMinutes()+t),e}function d(e,t,n){n=n?-1:1;var a=u(t,e.getTimezoneOffset());return c(e,n*(a-e.getTimezoneOffset()))}var p,m,f=/[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;this.init=function(){p=t.id,this.parsers={},this.formatters={},m=[{key:"yyyy",regex:"\\d{4}",apply:function(e){this.year=+e},formatter:function(e){var t=new Date;return t.setFullYear(Math.abs(e.getFullYear())),n(t,"yyyy")}},{key:"yy",regex:"\\d{2}",apply:function(e){this.year=+e+2e3},formatter:function(e){var t=new Date;return t.setFullYear(Math.abs(e.getFullYear())),n(t,"yy")}},{key:"y",regex:"\\d{1,4}",apply:function(e){this.year=+e},formatter:function(e){var t=new Date;return t.setFullYear(Math.abs(e.getFullYear())),n(t,"y")}},{key:"M!",regex:"0?[1-9]|1[0-2]",apply:function(e){this.month=e-1},formatter:function(e){var t=e.getMonth();return/^[0-9]$/.test(t)?n(e,"MM"):n(e,"M")}},{key:"MMMM",regex:t.DATETIME_FORMATS.MONTH.join("|"),apply:function(e){this.month=t.DATETIME_FORMATS.MONTH.indexOf(e)},formatter:function(e){return n(e,"MMMM")}},{key:"MMM",regex:t.DATETIME_FORMATS.SHORTMONTH.join("|"),apply:function(e){this.month=t.DATETIME_FORMATS.SHORTMONTH.indexOf(e)},formatter:function(e){return n(e,"MMM")}},{key:"MM",regex:"0[1-9]|1[0-2]",apply:function(e){this.month=e-1},formatter:function(e){return n(e,"MM")}},{key:"M",regex:"[1-9]|1[0-2]",apply:function(e){this.month=e-1},formatter:function(e){return n(e,"M")}},{key:"d!",regex:"[0-2]?[0-9]{1}|3[0-1]{1}",apply:function(e){this.date=+e},formatter:function(e){var t=e.getDate();return/^[1-9]$/.test(t)?n(e,"dd"):n(e,"d")}},{key:"dd",regex:"[0-2][0-9]{1}|3[0-1]{1}",apply:function(e){this.date=+e},formatter:function(e){return n(e,"dd")}},{key:"d",regex:"[1-2]?[0-9]{1}|3[0-1]{1}",apply:function(e){this.date=+e},formatter:function(e){return n(e,"d")}},{key:"EEEE",regex:t.DATETIME_FORMATS.DAY.join("|"),formatter:function(e){return n(e,"EEEE")}},{key:"EEE",regex:t.DATETIME_FORMATS.SHORTDAY.join("|"),formatter:function(e){return n(e,"EEE")}},{key:"HH",regex:"(?:0|1)[0-9]|2[0-3]",apply:function(e){this.hours=+e},formatter:function(e){return n(e,"HH")}},{key:"hh",regex:"0[0-9]|1[0-2]",apply:function(e){this.hours=+e},formatter:function(e){return n(e,"hh")}},{key:"H",regex:"1?[0-9]|2[0-3]",apply:function(e){this.hours=+e},formatter:function(e){return n(e,"H")}},{key:"h",regex:"[0-9]|1[0-2]",apply:function(e){this.hours=+e},formatter:function(e){return n(e,"h")}},{key:"mm",regex:"[0-5][0-9]",apply:function(e){this.minutes=+e},formatter:function(e){return n(e,"mm")}},{key:"m",regex:"[0-9]|[1-5][0-9]",apply:function(e){this.minutes=+e},formatter:function(e){return n(e,"m")}},{key:"sss",regex:"[0-9][0-9][0-9]",apply:function(e){this.milliseconds=+e},formatter:function(e){return n(e,"sss")}},{key:"ss",regex:"[0-5][0-9]",apply:function(e){this.seconds=+e},formatter:function(e){return n(e,"ss")}},{key:"s",regex:"[0-9]|[1-5][0-9]",apply:function(e){this.seconds=+e},formatter:function(e){return n(e,"s")}},{key:"a",regex:t.DATETIME_FORMATS.AMPMS.join("|"),apply:function(e){12===this.hours&&(this.hours=0),"PM"===e&&(this.hours+=12)},formatter:function(e){return n(e,"a")}},{key:"Z",regex:"[+-]\\d{4}",apply:function(e){var t=e.match(/([+-])(\d{2})(\d{2})/),n=t[1],a=t[2],i=t[3];this.hours+=o(n+a),this.minutes+=o(n+i)},formatter:function(e){return n(e,"Z")}},{key:"ww",regex:"[0-4][0-9]|5[0-3]",formatter:function(e){return n(e,"ww")}},{key:"w",regex:"[0-9]|[1-4][0-9]|5[0-3]",formatter:function(e){return n(e,"w")}},{key:"GGGG",regex:t.DATETIME_FORMATS.ERANAMES.join("|").replace(/\s/g,"\\s"),formatter:function(e){return n(e,"GGGG")}},{key:"GGG",regex:t.DATETIME_FORMATS.ERAS.join("|"),formatter:function(e){return n(e,"GGG")}},{key:"GG",regex:t.DATETIME_FORMATS.ERAS.join("|"),formatter:function(e){return n(e,"GG")}},{key:"G",regex:t.DATETIME_FORMATS.ERAS.join("|"),formatter:function(e){return n(e,"G")}}]},this.init(),this.filter=function(e,n){if(!angular.isDate(e)||isNaN(e)||!n)return"";n=t.DATETIME_FORMATS[n]||n,t.id!==p&&this.init(),this.formatters[n]||(this.formatters[n]=i(n,"formatter"));var a=this.formatters[n],r=a.map,o=n;return r.reduce(function(t,n,a){var i=o.match(new RegExp("(.*)"+n.key));return i&&angular.isString(i[1])&&(t+=i[1],o=o.replace(i[1]+n.key,"")),n.apply?t+n.apply.call(null,e):t},"")},this.parse=function(n,a,o){if(!angular.isString(n)||!a)return n;a=t.DATETIME_FORMATS[a]||a,a=a.replace(f,"\\$&"),t.id!==p&&this.init(),this.parsers[a]||(this.parsers[a]=i(a,"apply"));var s=this.parsers[a],l=s.regex,u=s.map,c=n.match(l),d=!1;if(c&&c.length){var m,h;angular.isDate(o)&&!isNaN(o.getTime())?m={year:o.getFullYear(),month:o.getMonth(),date:o.getDate(),hours:o.getHours(),minutes:o.getMinutes(),seconds:o.getSeconds(),milliseconds:o.getMilliseconds()}:(o&&e.warn("dateparser:","baseDate is not a valid date"),m={year:1900,month:0,date:1,hours:0,minutes:0,seconds:0,milliseconds:0});for(var g=1,b=c.length;b>g;g++){var v=u[g-1];"Z"===v.matcher&&(d=!0),v.apply&&v.apply.call(m,c[g])}var y=d?Date.prototype.setUTCFullYear:Date.prototype.setFullYear,$=d?Date.prototype.setUTCHours:Date.prototype.setHours;return r(m.year,m.month,m.date)&&(!angular.isDate(o)||isNaN(o.getTime())||d?(h=new Date(0),y.call(h,m.year,m.month,m.date),$.call(h,m.hours||0,m.minutes||0,m.seconds||0,m.milliseconds||0)):(h=new Date(o),y.call(h,m.year,m.month,m.date),$.call(h,m.hours,m.minutes,m.seconds,m.milliseconds))),h}},this.toTimezone=s,this.fromTimezone=l,this.timezoneToOffset=u,this.addDateMinutes=c,this.convertTimezoneToLocal=d}]),angular.module("ui.bootstrap.isClass",[]).directive("uibIsClass",["$animate",function(e){var t=/^\s*([\s\S]+?)\s+on\s+([\s\S]+?)\s*$/,n=/^\s*([\s\S]+?)\s+for\s+([\s\S]+?)\s*$/;return{restrict:"A",compile:function(a,i){function r(e,t,n){l.push(e),u.push({scope:e,element:t}),f.forEach(function(t,n){o(t,e)}),e.$on("$destroy",s)}function o(t,a){var i=t.match(n),r=a.$eval(i[1]),o=i[2],s=c[t];if(!s){var l=function(t){var n=null;u.some(function(e){var a=e.scope.$eval(p);return a===t?(n=e,!0):void 0}),s.lastActivated!==n&&(s.lastActivated&&e.removeClass(s.lastActivated.element,r),n&&e.addClass(n.element,r),s.lastActivated=n)};c[t]=s={lastActivated:null,scope:a,watchFn:l,compareWithExp:o,watcher:a.$watch(o,l)}}s.watchFn(a.$eval(o))}function s(e){var t=e.targetScope,n=l.indexOf(t);if(l.splice(n,1),u.splice(n,1),l.length){var a=l[0];angular.forEach(c,function(e){e.scope===t&&(e.watcher=a.$watch(e.compareWithExp,e.watchFn),e.scope=a)})}else c={}}var l=[],u=[],c={},d=i.uibIsClass.match(t),p=d[2],m=d[1],f=m.split(",");return r}}}]),angular.module("ui.bootstrap.position",[]).factory("$uibPosition",["$document","$window",function(e,t){var n,a={normal:/(auto|scroll)/,hidden:/(auto|scroll|hidden)/},i={auto:/\s?auto?\s?/i,primary:/^(top|bottom|left|right)$/,secondary:/^(top|bottom|left|right|center)$/,vertical:/^(top|bottom)$/};return{getRawNode:function(e){return e[0]||e},parseStyle:function(e){return e=parseFloat(e),isFinite(e)?e:0},offsetParent:function(n){function a(e){return"static"===(t.getComputedStyle(e).position||"static")}n=this.getRawNode(n);for(var i=n.offsetParent||e[0].documentElement;i&&i!==e[0].documentElement&&a(i);)i=i.offsetParent;return i||e[0].documentElement},scrollbarWidth:function(){if(angular.isUndefined(n)){var t=angular.element('<div style="position: absolute; top: -9999px; width: 50px; height: 50px; overflow: scroll;"></div>');e.find("body").append(t),n=t[0].offsetWidth-t[0].clientWidth,n=isFinite(n)?n:0,t.remove()}return n},scrollParent:function(n,i){n=this.getRawNode(n);var r=i?a.hidden:a.normal,o=e[0].documentElement,s=t.getComputedStyle(n),l="absolute"===s.position,u=n.parentElement||o;if(u===o||"fixed"===s.position)return o;for(;u.parentElement&&u!==o;){var c=t.getComputedStyle(u);if(l&&"static"!==c.position&&(l=!1),!l&&r.test(c.overflow+c.overflowY+c.overflowX))break;u=u.parentElement}return u},position:function(n,a){n=this.getRawNode(n);var i=this.offset(n);if(a){var r=t.getComputedStyle(n);i.top-=this.parseStyle(r.marginTop),i.left-=this.parseStyle(r.marginLeft)}var o=this.offsetParent(n),s={top:0,left:0};return o!==e[0].documentElement&&(s=this.offset(o),s.top+=o.clientTop-o.scrollTop,s.left+=o.clientLeft-o.scrollLeft),{width:Math.round(angular.isNumber(i.width)?i.width:n.offsetWidth),height:Math.round(angular.isNumber(i.height)?i.height:n.offsetHeight),top:Math.round(i.top-s.top),left:Math.round(i.left-s.left)}},offset:function(n){n=this.getRawNode(n);var a=n.getBoundingClientRect();return{width:Math.round(angular.isNumber(a.width)?a.width:n.offsetWidth),height:Math.round(angular.isNumber(a.height)?a.height:n.offsetHeight),top:Math.round(a.top+(t.pageYOffset||e[0].documentElement.scrollTop)),left:Math.round(a.left+(t.pageXOffset||e[0].documentElement.scrollLeft))}},viewportOffset:function(n,a,i){n=this.getRawNode(n),i=i!==!1;var r=n.getBoundingClientRect(),o={top:0,left:0,bottom:0,right:0},s=a?e[0].documentElement:this.scrollParent(n),l=s.getBoundingClientRect();if(o.top=l.top+s.clientTop,o.left=l.left+s.clientLeft,s===e[0].documentElement&&(o.top+=t.pageYOffset,o.left+=t.pageXOffset),o.bottom=o.top+s.clientHeight,o.right=o.left+s.clientWidth,i){var u=t.getComputedStyle(s);o.top+=this.parseStyle(u.paddingTop),o.bottom-=this.parseStyle(u.paddingBottom),o.left+=this.parseStyle(u.paddingLeft),o.right-=this.parseStyle(u.paddingRight)}return{top:Math.round(r.top-o.top),bottom:Math.round(o.bottom-r.bottom),left:Math.round(r.left-o.left),right:Math.round(o.right-r.right)}},parsePlacement:function(e){var t=i.auto.test(e);return t&&(e=e.replace(i.auto,"")),e=e.split("-"),e[0]=e[0]||"top",i.primary.test(e[0])||(e[0]="top"),e[1]=e[1]||"center",i.secondary.test(e[1])||(e[1]="center"),t?e[2]=!0:e[2]=!1,e},positionElements:function(e,n,a,r){e=this.getRawNode(e),n=this.getRawNode(n);var o=angular.isDefined(n.offsetWidth)?n.offsetWidth:n.prop("offsetWidth"),s=angular.isDefined(n.offsetHeight)?n.offsetHeight:n.prop("offsetHeight");a=this.parsePlacement(a);var l=r?this.offset(e):this.position(e),u={top:0,left:0,placement:""};if(a[2]){var c=this.viewportOffset(e),d=t.getComputedStyle(n),p={width:o+Math.round(Math.abs(this.parseStyle(d.marginLeft)+this.parseStyle(d.marginRight))),height:s+Math.round(Math.abs(this.parseStyle(d.marginTop)+this.parseStyle(d.marginBottom)))};if(a[0]="top"===a[0]&&p.height>c.top&&p.height<=c.bottom?"bottom":"bottom"===a[0]&&p.height>c.bottom&&p.height<=c.top?"top":"left"===a[0]&&p.width>c.left&&p.width<=c.right?"right":"right"===a[0]&&p.width>c.right&&p.width<=c.left?"left":a[0],a[1]="top"===a[1]&&p.height-l.height>c.bottom&&p.height-l.height<=c.top?"bottom":"bottom"===a[1]&&p.height-l.height>c.top&&p.height-l.height<=c.bottom?"top":"left"===a[1]&&p.width-l.width>c.right&&p.width-l.width<=c.left?"right":"right"===a[1]&&p.width-l.width>c.left&&p.width-l.width<=c.right?"left":a[1],"center"===a[1])if(i.vertical.test(a[0])){var m=l.width/2-o/2;c.left+m<0&&p.width-l.width<=c.right?a[1]="left":c.right+m<0&&p.width-l.width<=c.left&&(a[1]="right")}else{var f=l.height/2-p.height/2;c.top+f<0&&p.height-l.height<=c.bottom?a[1]="top":c.bottom+f<0&&p.height-l.height<=c.top&&(a[1]="bottom")}}switch(a[0]){case"top":u.top=l.top-s;break;case"bottom":u.top=l.top+l.height;break;case"left":u.left=l.left-o;break;case"right":u.left=l.left+l.width}switch(a[1]){case"top":u.top=l.top;break;case"bottom":u.top=l.top+l.height-s;break;case"left":u.left=l.left;break;case"right":u.left=l.left+l.width-o;break;case"center":i.vertical.test(a[0])?u.left=l.left+l.width/2-o/2:u.top=l.top+l.height/2-s/2}return u.top=Math.round(u.top),u.left=Math.round(u.left),u.placement="center"===a[1]?a[0]:a[0]+"-"+a[1],u},positionArrow:function(e,n){e=this.getRawNode(e);var a=e.querySelector(".tooltip-inner, .popover-inner");if(a){var r=angular.element(a).hasClass("tooltip-inner"),o=r?e.querySelector(".tooltip-arrow"):e.querySelector(".arrow");if(o){if(n=this.parsePlacement(n),"center"===n[1])return void angular.element(o).css({top:"",bottom:"",right:"",left:"",margin:""});var s="border-"+n[0]+"-width",l=t.getComputedStyle(o)[s],u="border-";u+=i.vertical.test(n[0])?n[0]+"-"+n[1]:n[1]+"-"+n[0],u+="-radius";var c=t.getComputedStyle(r?a:e)[u],d={top:"auto",bottom:"auto",left:"auto",right:"auto",margin:0};switch(n[0]){case"top":d.bottom=r?"0":"-"+l;break;case"bottom":d.top=r?"0":"-"+l;break;case"left":d.right=r?"0":"-"+l;break;case"right":d.left=r?"0":"-"+l}d[n[1]]=c,angular.element(o).css(d)}}}}}]),angular.module("ui.bootstrap.datepicker",["ui.bootstrap.dateparser","ui.bootstrap.isClass","ui.bootstrap.position"]).value("$datepickerSuppressError",!1).constant("uibDatepickerConfig",{datepickerMode:"day",formatDay:"dd",formatMonth:"MMMM",formatYear:"yyyy",formatDayHeader:"EEE",formatDayTitle:"MMMM yyyy",formatMonthTitle:"yyyy",maxDate:null,maxMode:"year",minDate:null,minMode:"day",ngModelOptions:{},shortcutPropagation:!1,showWeeks:!0,yearColumns:5,yearRows:4}).controller("UibDatepickerController",["$scope","$attrs","$parse","$interpolate","$locale","$log","dateFilter","uibDatepickerConfig","$datepickerSuppressError","uibDateParser",function(e,t,n,a,i,r,o,s,l,u){var c=this,d={$setViewValue:angular.noop},p={},m=[];this.modes=["day","month","year"],t.datepickerOptions?angular.forEach(["formatDay","formatDayHeader","formatDayTitle","formatMonth","formatMonthTitle","formatYear","initDate","maxDate","maxMode","minDate","minMode","showWeeks","shortcutPropagation","startingDay","yearColumns","yearRows"],function(t){switch(t){case"formatDay":case"formatDayHeader":case"formatDayTitle":case"formatMonth":case"formatMonthTitle":case"formatYear":c[t]=angular.isDefined(e.datepickerOptions[t])?a(e.datepickerOptions[t])(e.$parent):s[t];break;case"showWeeks":case"shortcutPropagation":case"yearColumns":case"yearRows":c[t]=angular.isDefined(e.datepickerOptions[t])?e.datepickerOptions[t]:s[t];break;case"startingDay":angular.isDefined(e.datepickerOptions.startingDay)?c.startingDay=e.datepickerOptions.startingDay:angular.isNumber(s.startingDay)?c.startingDay=s.startingDay:c.startingDay=(i.DATETIME_FORMATS.FIRSTDAYOFWEEK+8)%7;break;case"maxDate":case"minDate":e.datepickerOptions[t]?e.$watch(function(){return e.datepickerOptions[t]},function(e){e?angular.isDate(e)?c[t]=u.fromTimezone(new Date(e),p.timezone):c[t]=new Date(o(e,"medium")):c[t]=null,c.refreshView()}):c[t]=s[t]?u.fromTimezone(new Date(s[t]),p.timezone):null;break;case"maxMode":case"minMode":e.datepickerOptions[t]?e.$watch(function(){return e.datepickerOptions[t]},function(n){c[t]=e[t]=angular.isDefined(n)?n:datepickerOptions[t],("minMode"===t&&c.modes.indexOf(e.datepickerMode)<c.modes.indexOf(c[t])||"maxMode"===t&&c.modes.indexOf(e.datepickerMode)>c.modes.indexOf(c[t]))&&(e.datepickerMode=c[t])}):c[t]=e[t]=s[t]||null;break;case"initDate":e.datepickerOptions.initDate?(this.activeDate=u.fromTimezone(e.datepickerOptions.initDate,p.timezone)||new Date,e.$watch(function(){return e.datepickerOptions.initDate},function(e){e&&(d.$isEmpty(d.$modelValue)||d.$invalid)&&(c.activeDate=u.fromTimezone(e,p.timezone),c.refreshView())})):this.activeDate=new Date}}):(angular.forEach(["formatDay","formatMonth","formatYear","formatDayHeader","formatDayTitle","formatMonthTitle"],function(n){c[n]=angular.isDefined(t[n])?a(t[n])(e.$parent):s[n]}),angular.forEach(["showWeeks","yearRows","yearColumns","shortcutPropagation"],function(n){c[n]=angular.isDefined(t[n])?e.$parent.$eval(t[n]):s[n]}),angular.isDefined(t.startingDay)?c.startingDay=e.$parent.$eval(t.startingDay):angular.isNumber(s.startingDay)?c.startingDay=s.startingDay:c.startingDay=(i.DATETIME_FORMATS.FIRSTDAYOFWEEK+8)%7,angular.forEach(["minDate","maxDate"],function(n){t[n]?m.push(e.$parent.$watch(t[n],function(e){e?angular.isDate(e)?c[n]=u.fromTimezone(new Date(e),p.timezone):c[n]=new Date(o(e,"medium")):c[n]=null,c.refreshView()})):c[n]=s[n]?u.fromTimezone(new Date(s[n]),p.timezone):null}),angular.forEach(["minMode","maxMode"],function(n){t[n]?m.push(e.$parent.$watch(t[n],function(a){c[n]=e[n]=angular.isDefined(a)?a:t[n],("minMode"===n&&c.modes.indexOf(e.datepickerMode)<c.modes.indexOf(c[n])||"maxMode"===n&&c.modes.indexOf(e.datepickerMode)>c.modes.indexOf(c[n]))&&(e.datepickerMode=c[n])})):c[n]=e[n]=s[n]||null}),angular.isDefined(t.initDate)?(this.activeDate=u.fromTimezone(e.$parent.$eval(t.initDate),p.timezone)||new Date,m.push(e.$parent.$watch(t.initDate,function(e){e&&(d.$isEmpty(d.$modelValue)||d.$invalid)&&(c.activeDate=u.fromTimezone(e,p.timezone),c.refreshView())}))):this.activeDate=new Date),e.datepickerMode=e.datepickerMode||s.datepickerMode,e.uniqueId="datepicker-"+e.$id+"-"+Math.floor(1e4*Math.random()),e.disabled=angular.isDefined(t.disabled)||!1,angular.isDefined(t.ngDisabled)&&m.push(e.$parent.$watch(t.ngDisabled,function(t){e.disabled=t,c.refreshView()})),e.isActive=function(t){return 0===c.compare(t.date,c.activeDate)?(e.activeDateId=t.uid,!0):!1},this.init=function(e){d=e,p=e.$options||s.ngModelOptions,d.$modelValue&&(this.activeDate=d.$modelValue),d.$render=function(){c.render()}},this.render=function(){if(d.$viewValue){var e=new Date(d.$viewValue),t=!isNaN(e);t?this.activeDate=u.fromTimezone(e,p.timezone):l||r.error('Datepicker directive: "ng-model" value must be a Date object')}this.refreshView()},this.refreshView=function(){if(this.element){e.selectedDt=null,this._refreshView(),e.activeDt&&(e.activeDateId=e.activeDt.uid);var t=d.$viewValue?new Date(d.$viewValue):null;t=u.fromTimezone(t,p.timezone),d.$setValidity("dateDisabled",!t||this.element&&!this.isDisabled(t))}},this.createDateObject=function(t,n){var a=d.$viewValue?new Date(d.$viewValue):null;a=u.fromTimezone(a,p.timezone);var i={date:t,label:u.filter(t,n),selected:a&&0===this.compare(t,a),disabled:this.isDisabled(t),current:0===this.compare(t,new Date),customClass:this.customClass(t)||null};return a&&0===this.compare(t,a)&&(e.selectedDt=i),c.activeDate&&0===this.compare(i.date,c.activeDate)&&(e.activeDt=i),i},this.isDisabled=function(n){return e.disabled||this.minDate&&this.compare(n,this.minDate)<0||this.maxDate&&this.compare(n,this.maxDate)>0||t.dateDisabled&&e.dateDisabled({date:n,mode:e.datepickerMode})},this.customClass=function(t){return e.customClass({date:t,mode:e.datepickerMode})},this.split=function(e,t){for(var n=[];e.length>0;)n.push(e.splice(0,t));return n},e.select=function(t){if(e.datepickerMode===c.minMode){var n=d.$viewValue?u.fromTimezone(new Date(d.$viewValue),p.timezone):new Date(0,0,0,0,0,0,0);n.setFullYear(t.getFullYear(),t.getMonth(),t.getDate()),n=u.toTimezone(n,p.timezone),d.$setViewValue(n),
-d.$render()}else c.activeDate=t,e.datepickerMode=c.modes[c.modes.indexOf(e.datepickerMode)-1]},e.move=function(e){var t=c.activeDate.getFullYear()+e*(c.step.years||0),n=c.activeDate.getMonth()+e*(c.step.months||0);c.activeDate.setFullYear(t,n,1),c.refreshView()},e.toggleMode=function(t){t=t||1,e.datepickerMode===c.maxMode&&1===t||e.datepickerMode===c.minMode&&-1===t||(e.datepickerMode=c.modes[c.modes.indexOf(e.datepickerMode)+t])},e.keys={13:"enter",32:"space",33:"pageup",34:"pagedown",35:"end",36:"home",37:"left",38:"up",39:"right",40:"down"};var f=function(){c.element[0].focus()};e.$on("uib:datepicker.focus",f),e.keydown=function(t){var n=e.keys[t.which];if(n&&!t.shiftKey&&!t.altKey&&!e.disabled)if(t.preventDefault(),c.shortcutPropagation||t.stopPropagation(),"enter"===n||"space"===n){if(c.isDisabled(c.activeDate))return;e.select(c.activeDate)}else!t.ctrlKey||"up"!==n&&"down"!==n?(c.handleKeyDown(n,t),c.refreshView()):e.toggleMode("up"===n?1:-1)},e.$on("$destroy",function(){for(;m.length;)m.shift()()})}]).controller("UibDaypickerController",["$scope","$element","dateFilter",function(e,t,n){function a(e,t){return 1!==t||e%4!==0||e%100===0&&e%400!==0?r[t]:29}function i(e){var t=new Date(e);t.setDate(t.getDate()+4-(t.getDay()||7));var n=t.getTime();return t.setMonth(0),t.setDate(1),Math.floor(Math.round((n-t)/864e5)/7)+1}var r=[31,28,31,30,31,30,31,31,30,31,30,31];this.step={months:1},this.element=t,this.init=function(t){angular.extend(t,this),e.showWeeks=t.showWeeks,t.refreshView()},this.getDates=function(e,t){for(var n,a=new Array(t),i=new Date(e),r=0;t>r;)n=new Date(i),a[r++]=n,i.setDate(i.getDate()+1);return a},this._refreshView=function(){var t=this.activeDate.getFullYear(),a=this.activeDate.getMonth(),r=new Date(this.activeDate);r.setFullYear(t,a,1);var o=this.startingDay-r.getDay(),s=o>0?7-o:-o,l=new Date(r);s>0&&l.setDate(-s+1);for(var u=this.getDates(l,42),c=0;42>c;c++)u[c]=angular.extend(this.createDateObject(u[c],this.formatDay),{secondary:u[c].getMonth()!==a,uid:e.uniqueId+"-"+c});e.labels=new Array(7);for(var d=0;7>d;d++)e.labels[d]={abbr:n(u[d].date,this.formatDayHeader),full:n(u[d].date,"EEEE")};if(e.title=n(this.activeDate,this.formatDayTitle),e.rows=this.split(u,7),e.showWeeks){e.weekNumbers=[];for(var p=(11-this.startingDay)%7,m=e.rows.length,f=0;m>f;f++)e.weekNumbers.push(i(e.rows[f][p].date))}},this.compare=function(e,t){var n=new Date(e.getFullYear(),e.getMonth(),e.getDate()),a=new Date(t.getFullYear(),t.getMonth(),t.getDate());return n.setFullYear(e.getFullYear()),a.setFullYear(t.getFullYear()),n-a},this.handleKeyDown=function(e,t){var n=this.activeDate.getDate();if("left"===e)n-=1;else if("up"===e)n-=7;else if("right"===e)n+=1;else if("down"===e)n+=7;else if("pageup"===e||"pagedown"===e){var i=this.activeDate.getMonth()+("pageup"===e?-1:1);this.activeDate.setMonth(i,1),n=Math.min(a(this.activeDate.getFullYear(),this.activeDate.getMonth()),n)}else"home"===e?n=1:"end"===e&&(n=a(this.activeDate.getFullYear(),this.activeDate.getMonth()));this.activeDate.setDate(n)}}]).controller("UibMonthpickerController",["$scope","$element","dateFilter",function(e,t,n){this.step={years:1},this.element=t,this.init=function(e){angular.extend(e,this),e.refreshView()},this._refreshView=function(){for(var t,a=new Array(12),i=this.activeDate.getFullYear(),r=0;12>r;r++)t=new Date(this.activeDate),t.setFullYear(i,r,1),a[r]=angular.extend(this.createDateObject(t,this.formatMonth),{uid:e.uniqueId+"-"+r});e.title=n(this.activeDate,this.formatMonthTitle),e.rows=this.split(a,3)},this.compare=function(e,t){var n=new Date(e.getFullYear(),e.getMonth()),a=new Date(t.getFullYear(),t.getMonth());return n.setFullYear(e.getFullYear()),a.setFullYear(t.getFullYear()),n-a},this.handleKeyDown=function(e,t){var n=this.activeDate.getMonth();if("left"===e)n-=1;else if("up"===e)n-=3;else if("right"===e)n+=1;else if("down"===e)n+=3;else if("pageup"===e||"pagedown"===e){var a=this.activeDate.getFullYear()+("pageup"===e?-1:1);this.activeDate.setFullYear(a)}else"home"===e?n=0:"end"===e&&(n=11);this.activeDate.setMonth(n)}}]).controller("UibYearpickerController",["$scope","$element","dateFilter",function(e,t,n){function a(e){return parseInt((e-1)/r,10)*r+1}var i,r;this.element=t,this.yearpickerInit=function(){i=this.yearColumns,r=this.yearRows*i,this.step={years:r}},this._refreshView=function(){for(var t,n=new Array(r),o=0,s=a(this.activeDate.getFullYear());r>o;o++)t=new Date(this.activeDate),t.setFullYear(s+o,0,1),n[o]=angular.extend(this.createDateObject(t,this.formatYear),{uid:e.uniqueId+"-"+o});e.title=[n[0].label,n[r-1].label].join(" - "),e.rows=this.split(n,i),e.columns=i},this.compare=function(e,t){return e.getFullYear()-t.getFullYear()},this.handleKeyDown=function(e,t){var n=this.activeDate.getFullYear();"left"===e?n-=1:"up"===e?n-=i:"right"===e?n+=1:"down"===e?n+=i:"pageup"===e||"pagedown"===e?n+=("pageup"===e?-1:1)*r:"home"===e?n=a(this.activeDate.getFullYear()):"end"===e&&(n=a(this.activeDate.getFullYear())+r-1),this.activeDate.setFullYear(n)}}]).directive("uibDatepicker",function(){return{replace:!0,templateUrl:function(e,t){return t.templateUrl||"uib/template/datepicker/datepicker.html"},scope:{datepickerMode:"=?",datepickerOptions:"=?",dateDisabled:"&",customClass:"&",shortcutPropagation:"&?"},require:["uibDatepicker","^ngModel"],controller:"UibDatepickerController",controllerAs:"datepicker",link:function(e,t,n,a){var i=a[0],r=a[1];i.init(r)}}}).directive("uibDaypicker",function(){return{replace:!0,templateUrl:function(e,t){return t.templateUrl||"uib/template/datepicker/day.html"},require:["^uibDatepicker","uibDaypicker"],controller:"UibDaypickerController",link:function(e,t,n,a){var i=a[0],r=a[1];r.init(i)}}}).directive("uibMonthpicker",function(){return{replace:!0,templateUrl:function(e,t){return t.templateUrl||"uib/template/datepicker/month.html"},require:["^uibDatepicker","uibMonthpicker"],controller:"UibMonthpickerController",link:function(e,t,n,a){var i=a[0],r=a[1];r.init(i)}}}).directive("uibYearpicker",function(){return{replace:!0,templateUrl:function(e,t){return t.templateUrl||"uib/template/datepicker/year.html"},require:["^uibDatepicker","uibYearpicker"],controller:"UibYearpickerController",link:function(e,t,n,a){var i=a[0];angular.extend(i,a[1]),i.yearpickerInit(),i.refreshView()}}}).constant("uibDatepickerPopupConfig",{altInputFormats:[],appendToBody:!1,clearText:"Clear",closeOnDateSelection:!0,closeText:"Done",currentText:"Today",datepickerPopup:"yyyy-MM-dd",datepickerPopupTemplateUrl:"uib/template/datepicker/popup.html",datepickerTemplateUrl:"uib/template/datepicker/datepicker.html",html5Types:{date:"yyyy-MM-dd","datetime-local":"yyyy-MM-ddTHH:mm:ss.sss",month:"yyyy-MM"},onOpenFocus:!0,showButtonBar:!0}).controller("UibDatepickerPopupController",["$scope","$element","$attrs","$compile","$parse","$document","$rootScope","$uibPosition","dateFilter","uibDateParser","uibDatepickerPopupConfig","$timeout","uibDatepickerConfig",function(e,t,n,a,i,r,o,s,l,u,c,d,p){function m(e){return e.replace(/([A-Z])/g,function(e){return"-"+e.toLowerCase()})}function f(t){var n=u.parse(t,y,e.date);if(isNaN(n))for(var a=0;a<O.length;a++)if(n=u.parse(t,O[a],e.date),!isNaN(n))return n;return n}function h(e){if(angular.isNumber(e)&&(e=new Date(e)),!e)return null;if(angular.isDate(e)&&!isNaN(e))return e;if(angular.isString(e)){var t=f(e);if(!isNaN(t))return u.toTimezone(t,E.timezone)}return T.$options&&T.$options.allowInvalid?e:void 0}function g(e,t){var a=e||t;return n.ngRequired||a?(angular.isNumber(a)&&(a=new Date(a)),a?angular.isDate(a)&&!isNaN(a)?!0:angular.isString(a)?!isNaN(f(t)):!1:!0):!0}function b(n){if(e.isOpen||!e.disabled){var a=P[0],i=t[0].contains(n.target),r=void 0!==a.contains&&a.contains(n.target);!e.isOpen||i||r||e.$apply(function(){e.isOpen=!1})}}function v(n){27===n.which&&e.isOpen?(n.preventDefault(),n.stopPropagation(),e.$apply(function(){e.isOpen=!1}),t[0].focus()):40!==n.which||e.isOpen||(n.preventDefault(),n.stopPropagation(),e.$apply(function(){e.isOpen=!0}))}var y,$,w,k,D,x,C,M,T,E,P,O,S={},A=!1,_=[];e.watchData={},this.init=function(s){if(T=s,E=s.$options||p.ngModelOptions,$=angular.isDefined(n.closeOnDateSelection)?e.$parent.$eval(n.closeOnDateSelection):c.closeOnDateSelection,w=angular.isDefined(n.datepickerAppendToBody)?e.$parent.$eval(n.datepickerAppendToBody):c.appendToBody,k=angular.isDefined(n.onOpenFocus)?e.$parent.$eval(n.onOpenFocus):c.onOpenFocus,D=angular.isDefined(n.datepickerPopupTemplateUrl)?n.datepickerPopupTemplateUrl:c.datepickerPopupTemplateUrl,x=angular.isDefined(n.datepickerTemplateUrl)?n.datepickerTemplateUrl:c.datepickerTemplateUrl,O=angular.isDefined(n.altInputFormats)?e.$parent.$eval(n.altInputFormats):c.altInputFormats,e.showButtonBar=angular.isDefined(n.showButtonBar)?e.$parent.$eval(n.showButtonBar):c.showButtonBar,c.html5Types[n.type]?(y=c.html5Types[n.type],A=!0):(y=n.uibDatepickerPopup||c.datepickerPopup,n.$observe("uibDatepickerPopup",function(e,t){var n=e||c.datepickerPopup;if(n!==y&&(y=n,T.$modelValue=null,!y))throw new Error("uibDatepickerPopup must have a date format specified.")})),!y)throw new Error("uibDatepickerPopup must have a date format specified.");if(A&&n.uibDatepickerPopup)throw new Error("HTML5 date input types do not support custom formats.");C=angular.element("<div uib-datepicker-popup-wrap><div uib-datepicker></div></div>"),e.ngModelOptions=angular.copy(E),e.ngModelOptions.timezone=null,C.attr({"ng-model":"date","ng-model-options":"ngModelOptions","ng-change":"dateSelection(date)","template-url":D}),M=angular.element(C.children()[0]),M.attr("template-url",x),A&&"month"===n.type&&(M.attr("datepicker-mode",'"month"'),M.attr("min-mode","month")),e.datepickerOptions&&angular.forEach(e.datepickerOptions,function(e,t){-1===["minDate","maxDate","minMode","maxMode","initDate","datepickerMode"].indexOf(t)?M.attr(m(t),e):M.attr(m(t),"datepickerOptions."+t)}),angular.forEach(["minMode","maxMode","datepickerMode","shortcutPropagation"],function(t){if(n[t]){var a=i(n[t]),r={get:function(){return a(e.$parent)}};if(M.attr(m(t),"watchData."+t),"datepickerMode"===t){var o=a.assign;r.set=function(t){o(e.$parent,t)}}Object.defineProperty(e.watchData,t,r)}}),angular.forEach(["minDate","maxDate","initDate"],function(t){if(n[t]){var a=i(n[t]);_.push(e.$parent.$watch(a,function(n){"minDate"===t||"maxDate"===t?(null===n?S[t]=null:angular.isDate(n)?S[t]=u.fromTimezone(new Date(n),E.timezone):S[t]=new Date(l(n,"medium")),e.watchData[t]=null===n?null:S[t]):e.watchData[t]=u.fromTimezone(new Date(n),E.timezone)})),M.attr(m(t),"watchData."+t)}}),n.dateDisabled&&M.attr("date-disabled","dateDisabled({ date: date, mode: mode })"),angular.forEach(["formatDay","formatMonth","formatYear","formatDayHeader","formatDayTitle","formatMonthTitle","showWeeks","startingDay","yearRows","yearColumns"],function(e){angular.isDefined(n[e])&&M.attr(m(e),n[e])}),n.customClass&&M.attr("custom-class","customClass({ date: date, mode: mode })"),A?T.$formatters.push(function(t){return e.date=u.fromTimezone(t,E.timezone),t}):(T.$$parserName="date",T.$validators.date=g,T.$parsers.unshift(h),T.$formatters.push(function(t){return T.$isEmpty(t)?(e.date=t,t):(e.date=u.fromTimezone(t,E.timezone),angular.isNumber(e.date)&&(e.date=new Date(e.date)),u.filter(e.date,y))})),T.$viewChangeListeners.push(function(){e.date=f(T.$viewValue)}),t.on("keydown",v),P=a(C)(e),C.remove(),w?r.find("body").append(P):t.after(P),e.$on("$destroy",function(){for(e.isOpen===!0&&(o.$$phase||e.$apply(function(){e.isOpen=!1})),P.remove(),t.off("keydown",v),r.off("click",b);_.length;)_.shift()()})},e.getText=function(t){return e[t+"Text"]||c[t+"Text"]},e.isDisabled=function(t){return"today"===t&&(t=new Date),e.watchData.minDate&&e.compare(t,S.minDate)<0||e.watchData.maxDate&&e.compare(t,S.maxDate)>0},e.compare=function(e,t){return new Date(e.getFullYear(),e.getMonth(),e.getDate())-new Date(t.getFullYear(),t.getMonth(),t.getDate())},e.dateSelection=function(n){angular.isDefined(n)&&(e.date=n);var a=e.date?u.filter(e.date,y):null;t.val(a),T.$setViewValue(a),$&&(e.isOpen=!1,t[0].focus())},e.keydown=function(n){27===n.which&&(n.stopPropagation(),e.isOpen=!1,t[0].focus())},e.select=function(t){if("today"===t){var n=new Date;angular.isDate(e.date)?(t=new Date(e.date),t.setFullYear(n.getFullYear(),n.getMonth(),n.getDate())):t=new Date(n.setHours(0,0,0,0))}e.dateSelection(t)},e.close=function(){e.isOpen=!1,t[0].focus()},e.disabled=angular.isDefined(n.disabled)||!1,n.ngDisabled&&_.push(e.$parent.$watch(i(n.ngDisabled),function(t){e.disabled=t})),e.$watch("isOpen",function(n){n?e.disabled?e.isOpen=!1:(e.position=w?s.offset(t):s.position(t),e.position.top=e.position.top+t.prop("offsetHeight"),d(function(){k&&e.$broadcast("uib:datepicker.focus"),r.on("click",b)},0,!1)):r.off("click",b)})}]).directive("uibDatepickerPopup",function(){return{require:["ngModel","uibDatepickerPopup"],controller:"UibDatepickerPopupController",scope:{datepickerOptions:"=?",isOpen:"=?",currentText:"@",clearText:"@",closeText:"@",dateDisabled:"&",customClass:"&"},link:function(e,t,n,a){var i=a[0],r=a[1];r.init(i)}}}).directive("uibDatepickerPopupWrap",function(){return{replace:!0,transclude:!0,templateUrl:function(e,t){return t.templateUrl||"uib/template/datepicker/popup.html"}}}),angular.module("ui.bootstrap.debounce",[]).factory("$$debounce",["$timeout",function(e){return function(t,n){var a;return function(){var i=this,r=Array.prototype.slice.call(arguments);a&&e.cancel(a),a=e(function(){t.apply(i,r)},n)}}}]),angular.module("ui.bootstrap.dropdown",["ui.bootstrap.position"]).constant("uibDropdownConfig",{appendToOpenClass:"uib-dropdown-open",openClass:"open"}).service("uibDropdownService",["$document","$rootScope",function(e,t){var n=null;this.open=function(t){n||(e.on("click",a),e.on("keydown",i)),n&&n!==t&&(n.isOpen=!1),n=t},this.close=function(t){n===t&&(n=null,e.off("click",a),e.off("keydown",i))};var a=function(e){if(n&&!(e&&"disabled"===n.getAutoClose()||e&&3===e.which)){var a=n.getToggleElement();if(!(e&&a&&a[0].contains(e.target))){var i=n.getDropdownElement();e&&"outsideClick"===n.getAutoClose()&&i&&i[0].contains(e.target)||(n.isOpen=!1,t.$$phase||n.$apply())}}},i=function(e){27===e.which?(n.focusToggleElement(),a()):n.isKeynavEnabled()&&-1!==[38,40].indexOf(e.which)&&n.isOpen&&(e.preventDefault(),e.stopPropagation(),n.focusDropdownEntry(e.which))}}]).controller("UibDropdownController",["$scope","$element","$attrs","$parse","uibDropdownConfig","uibDropdownService","$animate","$uibPosition","$document","$compile","$templateRequest",function(e,t,n,a,i,r,o,s,l,u,c){var d,p,m=this,f=e.$new(),h=i.appendToOpenClass,g=i.openClass,b=angular.noop,v=n.onToggle?a(n.onToggle):angular.noop,y=!1,$=null,w=!1,k=l.find("body");t.addClass("dropdown"),this.init=function(){if(n.isOpen&&(p=a(n.isOpen),b=p.assign,e.$watch(p,function(e){f.isOpen=!!e})),angular.isDefined(n.dropdownAppendTo)){var i=a(n.dropdownAppendTo)(f);i&&($=angular.element(i))}y=angular.isDefined(n.dropdownAppendToBody),w=angular.isDefined(n.keyboardNav),y&&!$&&($=k),$&&m.dropdownMenu&&($.append(m.dropdownMenu),t.on("$destroy",function(){m.dropdownMenu.remove()}))},this.toggle=function(e){return f.isOpen=arguments.length?!!e:!f.isOpen},this.isOpen=function(){return f.isOpen},f.getToggleElement=function(){return m.toggleElement},f.getAutoClose=function(){return n.autoClose||"always"},f.getElement=function(){return t},f.isKeynavEnabled=function(){return w},f.focusDropdownEntry=function(e){var n=m.dropdownMenu?angular.element(m.dropdownMenu).find("a"):t.find("ul").eq(0).find("a");switch(e){case 40:angular.isNumber(m.selectedOption)?m.selectedOption=m.selectedOption===n.length-1?m.selectedOption:m.selectedOption+1:m.selectedOption=0;break;case 38:angular.isNumber(m.selectedOption)?m.selectedOption=0===m.selectedOption?0:m.selectedOption-1:m.selectedOption=n.length-1}n[m.selectedOption].focus()},f.getDropdownElement=function(){return m.dropdownMenu},f.focusToggleElement=function(){m.toggleElement&&m.toggleElement[0].focus()},f.$watch("isOpen",function(n,a){if($&&m.dropdownMenu){var i,l,p=s.positionElements(t,m.dropdownMenu,"bottom-left",!0);if(i={top:p.top+"px",display:n?"block":"none"},l=m.dropdownMenu.hasClass("dropdown-menu-right"),l?(i.left="auto",i.right=window.innerWidth-(p.left+t.prop("offsetWidth"))+"px"):(i.left=p.left+"px",i.right="auto"),!y){var w=s.offset($);i.top=p.top-w.top+"px",l?i.right=window.innerWidth-(p.left-w.left+t.prop("offsetWidth"))+"px":i.left=p.left-w.left+"px"}m.dropdownMenu.css(i)}var k=$?$:t;if(o[n?"addClass":"removeClass"](k,$?h:g).then(function(){angular.isDefined(n)&&n!==a&&v(e,{open:!!n})}),n)m.dropdownMenuTemplateUrl&&c(m.dropdownMenuTemplateUrl).then(function(e){d=f.$new(),u(e.trim())(d,function(e){var t=e;m.dropdownMenu.replaceWith(t),m.dropdownMenu=t})}),f.focusToggleElement(),r.open(f);else{if(m.dropdownMenuTemplateUrl){d&&d.$destroy();var D=angular.element('<ul class="dropdown-menu"></ul>');m.dropdownMenu.replaceWith(D),m.dropdownMenu=D}r.close(f),m.selectedOption=null}angular.isFunction(b)&&b(e,n)}),e.$on("$locationChangeSuccess",function(){"disabled"!==f.getAutoClose()&&(f.isOpen=!1)})}]).directive("uibDropdown",function(){return{controller:"UibDropdownController",link:function(e,t,n,a){a.init()}}}).directive("uibDropdownMenu",function(){return{restrict:"A",require:"?^uibDropdown",link:function(e,t,n,a){if(a&&!angular.isDefined(n.dropdownNested)){t.addClass("dropdown-menu");var i=n.templateUrl;i&&(a.dropdownMenuTemplateUrl=i),a.dropdownMenu||(a.dropdownMenu=t)}}}}).directive("uibDropdownToggle",function(){return{require:"?^uibDropdown",link:function(e,t,n,a){if(a){t.addClass("dropdown-toggle"),a.toggleElement=t;var i=function(i){i.preventDefault(),t.hasClass("disabled")||n.disabled||e.$apply(function(){a.toggle()})};t.bind("click",i),t.attr({"aria-haspopup":!0,"aria-expanded":!1}),e.$watch(a.isOpen,function(e){t.attr("aria-expanded",!!e)}),e.$on("$destroy",function(){t.unbind("click",i)})}}}}),angular.module("ui.bootstrap.stackedMap",[]).factory("$$stackedMap",function(){return{createNew:function(){var e=[];return{add:function(t,n){e.push({key:t,value:n})},get:function(t){for(var n=0;n<e.length;n++)if(t===e[n].key)return e[n]},keys:function(){for(var t=[],n=0;n<e.length;n++)t.push(e[n].key);return t},top:function(){return e[e.length-1]},remove:function(t){for(var n=-1,a=0;a<e.length;a++)if(t===e[a].key){n=a;break}return e.splice(n,1)[0]},removeTop:function(){return e.splice(e.length-1,1)[0]},length:function(){return e.length}}}}}),angular.module("ui.bootstrap.modal",["ui.bootstrap.stackedMap"]).factory("$$multiMap",function(){return{createNew:function(){var e={};return{entries:function(){return Object.keys(e).map(function(t){return{key:t,value:e[t]}})},get:function(t){return e[t]},hasKey:function(t){return!!e[t]},keys:function(){return Object.keys(e)},put:function(t,n){e[t]||(e[t]=[]),e[t].push(n)},remove:function(t,n){var a=e[t];if(a){var i=a.indexOf(n);-1!==i&&a.splice(i,1),a.length||delete e[t]}}}}}}).provider("$uibResolve",function(){var e=this;this.resolver=null,this.setResolver=function(e){this.resolver=e},this.$get=["$injector","$q",function(t,n){var a=e.resolver?t.get(e.resolver):null;return{resolve:function(e,i,r,o){if(a)return a.resolve(e,i,r,o);var s=[];return angular.forEach(e,function(e){angular.isFunction(e)||angular.isArray(e)?s.push(n.resolve(t.invoke(e))):angular.isString(e)?s.push(n.resolve(t.get(e))):s.push(n.resolve(e))}),n.all(s).then(function(t){var n={},a=0;return angular.forEach(e,function(e,i){n[i]=t[a++]}),n})}}}]}).directive("uibModalBackdrop",["$animateCss","$injector","$uibModalStack",function(e,t,n){function a(t,a,i){i.modalInClass&&(e(a,{addClass:i.modalInClass}).start(),t.$on(n.NOW_CLOSING_EVENT,function(n,r){var o=r();t.modalOptions.animation?e(a,{removeClass:i.modalInClass}).start().then(o):o()}))}return{replace:!0,templateUrl:"uib/template/modal/backdrop.html",compile:function(e,t){return e.addClass(t.backdropClass),a}}}]).directive("uibModalWindow",["$uibModalStack","$q","$animate","$animateCss","$document",function(e,t,n,a,i){return{scope:{index:"@"},replace:!0,transclude:!0,templateUrl:function(e,t){return t.templateUrl||"uib/template/modal/window.html"},link:function(r,o,s){o.addClass(s.windowClass||""),o.addClass(s.windowTopClass||""),r.size=s.size,r.close=function(t){var n=e.getTop();n&&n.value.backdrop&&"static"!==n.value.backdrop&&t.target===t.currentTarget&&(t.preventDefault(),t.stopPropagation(),e.dismiss(n.key,"backdrop click"))},o.on("click",r.close),r.$isRendered=!0;var l=t.defer();s.$observe("modalRender",function(e){"true"===e&&l.resolve()}),l.promise.then(function(){var l=null;s.modalInClass&&(l=a(o,{addClass:s.modalInClass}).start(),r.$on(e.NOW_CLOSING_EVENT,function(e,t){var i=t();a?a(o,{removeClass:s.modalInClass}).start().then(i):n.removeClass(o,s.modalInClass).then(i)})),t.when(l).then(function(){if(!i[0].activeElement||!o[0].contains(i[0].activeElement)){var e=o[0].querySelector("[autofocus]");e?e.focus():o[0].focus()}});var u=e.getTop();u&&e.modalRendered(u.key)})}}}]).directive("uibModalAnimationClass",function(){return{compile:function(e,t){t.modalAnimation&&e.addClass(t.uibModalAnimationClass)}}}).directive("uibModalTransclude",function(){return{link:function(e,t,n,a,i){i(e.$parent,function(e){t.empty(),t.append(e)})}}}).factory("$uibModalStack",["$animate","$animateCss","$document","$compile","$rootScope","$q","$$multiMap","$$stackedMap",function(e,t,n,a,i,r,o,s){function l(){for(var e=-1,t=y.keys(),n=0;n<t.length;n++)y.get(t[n]).value.backdrop&&(e=n);return e}function u(e,t){var n=y.get(e).value,a=n.appendTo;y.remove(e),p(n.modalDomEl,n.modalScope,function(){var t=n.openedClass||v;$.remove(t,e),a.toggleClass(t,$.hasKey(t)),c(!0)},n.closedDeferred),d(),t&&t.focus?t.focus():a.focus&&a.focus()}function c(e){var t;y.length()>0&&(t=y.top().value,t.modalDomEl.toggleClass(t.windowTopClass||"",e))}function d(){if(h&&-1===l()){var e=g;p(h,g,function(){e=null}),h=void 0,g=void 0}}function p(e,n,a,i){function o(){o.done||(o.done=!0,t(e,{event:"leave"}).start().then(function(){e.remove(),i&&i.resolve()}),n.$destroy(),a&&a())}var s,l=null,u=function(){return s||(s=r.defer(),l=s.promise),function(){s.resolve()}};return n.$broadcast(w.NOW_CLOSING_EVENT,u),r.when(l).then(o)}function m(e){if(e.isDefaultPrevented())return e;var t=y.top();if(t)switch(e.which){case 27:t.value.keyboard&&(e.preventDefault(),i.$apply(function(){w.dismiss(t.key,"escape key press")}));break;case 9:w.loadFocusElementList(t);var n=!1;e.shiftKey?(w.isFocusInFirstItem(e)||w.isModalFocused(e,t))&&(n=w.focusLastFocusableElement()):w.isFocusInLastItem(e)&&(n=w.focusFirstFocusableElement()),n&&(e.preventDefault(),e.stopPropagation())}}function f(e,t,n){return!e.value.modalScope.$broadcast("modal.closing",t,n).defaultPrevented}var h,g,b,v="modal-open",y=s.createNew(),$=o.createNew(),w={NOW_CLOSING_EVENT:"modal.stack.now-closing"},k=0,D="a[href], area[href], input:not([disabled]), button:not([disabled]),select:not([disabled]), textarea:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable=true]";return i.$watch(l,function(e){g&&(g.index=e)}),n.on("keydown",m),i.$on("$destroy",function(){n.off("keydown",m)}),w.open=function(t,r){var o=n[0].activeElement,s=r.openedClass||v;c(!1),y.add(t,{deferred:r.deferred,renderDeferred:r.renderDeferred,closedDeferred:r.closedDeferred,modalScope:r.scope,backdrop:r.backdrop,keyboard:r.keyboard,openedClass:r.openedClass,windowTopClass:r.windowTopClass,animation:r.animation,appendTo:r.appendTo}),$.put(s,t);var u=r.appendTo,d=l();if(!u.length)throw new Error("appendTo element not found. Make sure that the element passed is in DOM.");d>=0&&!h&&(g=i.$new(!0),g.modalOptions=r,g.index=d,h=angular.element('<div uib-modal-backdrop="modal-backdrop"></div>'),h.attr("backdrop-class",r.backdropClass),r.animation&&h.attr("modal-animation","true"),a(h)(g),e.enter(h,u));var p=angular.element('<div uib-modal-window="modal-window"></div>');p.attr({"template-url":r.windowTemplateUrl,"window-class":r.windowClass,"window-top-class":r.windowTopClass,size:r.size,index:y.length()-1,animate:"animate"}).html(r.content),r.animation&&p.attr("modal-animation","true"),e.enter(a(p)(r.scope),u).then(function(){e.addClass(u,s)}),y.top().value.modalDomEl=p,y.top().value.modalOpener=o,w.clearFocusListCache()},w.close=function(e,t){var n=y.get(e);return n&&f(n,t,!0)?(n.value.modalScope.$$uibDestructionScheduled=!0,n.value.deferred.resolve(t),u(e,n.value.modalOpener),!0):!n},w.dismiss=function(e,t){var n=y.get(e);return n&&f(n,t,!1)?(n.value.modalScope.$$uibDestructionScheduled=!0,n.value.deferred.reject(t),u(e,n.value.modalOpener),!0):!n},w.dismissAll=function(e){for(var t=this.getTop();t&&this.dismiss(t.key,e);)t=this.getTop()},w.getTop=function(){return y.top()},w.modalRendered=function(e){var t=y.get(e);t&&t.value.renderDeferred.resolve()},w.focusFirstFocusableElement=function(){return b.length>0?(b[0].focus(),!0):!1},w.focusLastFocusableElement=function(){return b.length>0?(b[b.length-1].focus(),!0):!1},w.isModalFocused=function(e,t){if(e&&t){var n=t.value.modalDomEl;if(n&&n.length)return(e.target||e.srcElement)===n[0]}return!1},w.isFocusInFirstItem=function(e){return b.length>0?(e.target||e.srcElement)===b[0]:!1},w.isFocusInLastItem=function(e){return b.length>0?(e.target||e.srcElement)===b[b.length-1]:!1},w.clearFocusListCache=function(){b=[],k=0},w.loadFocusElementList=function(e){if((void 0===b||!b.length)&&e){var t=e.value.modalDomEl;t&&t.length&&(b=t[0].querySelectorAll(D))}},w}]).provider("$uibModal",function(){var e={options:{animation:!0,backdrop:!0,keyboard:!0},$get:["$rootScope","$q","$document","$templateRequest","$controller","$uibResolve","$uibModalStack",function(t,n,a,i,r,o,s){function l(e){return e.template?n.when(e.template):i(angular.isFunction(e.templateUrl)?e.templateUrl():e.templateUrl)}var u={},c=null;return u.getPromiseChain=function(){return c},u.open=function(i){function u(){return b}var d=n.defer(),p=n.defer(),m=n.defer(),f=n.defer(),h={result:d.promise,opened:p.promise,closed:m.promise,rendered:f.promise,close:function(e){return s.close(h,e)},dismiss:function(e){return s.dismiss(h,e)}};if(i=angular.extend({},e.options,i),i.resolve=i.resolve||{},i.appendTo=i.appendTo||a.find("body").eq(0),!i.template&&!i.templateUrl)throw new Error("One of template or templateUrl options is required.");var g,b=n.all([l(i),o.resolve(i.resolve,{},null,null)]);return g=c=n.all([c]).then(u,u).then(function(e){var n=i.scope||t,a=n.$new();a.$close=h.close,a.$dismiss=h.dismiss,a.$on("$destroy",function(){a.$$uibDestructionScheduled||a.$dismiss("$uibUnscheduledDestruction")});var o,l={};i.controller&&(l.$scope=a,l.$uibModalInstance=h,angular.forEach(e[1],function(e,t){l[t]=e}),o=r(i.controller,l),i.controllerAs&&(i.bindToController&&(o.$close=a.$close,o.$dismiss=a.$dismiss,angular.extend(o,n)),a[i.controllerAs]=o)),s.open(h,{scope:a,deferred:d,renderDeferred:f,closedDeferred:m,content:e[0],animation:i.animation,backdrop:i.backdrop,keyboard:i.keyboard,backdropClass:i.backdropClass,windowTopClass:i.windowTopClass,windowClass:i.windowClass,windowTemplateUrl:i.windowTemplateUrl,size:i.size,openedClass:i.openedClass,appendTo:i.appendTo}),p.resolve(!0)},function(e){p.reject(e),d.reject(e)})["finally"](function(){c===g&&(c=null)}),h},u}]};return e}),angular.module("ui.bootstrap.paging",[]).factory("uibPaging",["$parse",function(e){return{create:function(t,n,a){t.setNumPages=a.numPages?e(a.numPages).assign:angular.noop,t.ngModelCtrl={$setViewValue:angular.noop},t._watchers=[],t.init=function(i,r){t.ngModelCtrl=i,t.config=r,i.$render=function(){t.render()},a.itemsPerPage?t._watchers.push(n.$parent.$watch(e(a.itemsPerPage),function(e){t.itemsPerPage=parseInt(e,10),n.totalPages=t.calculateTotalPages(),t.updatePage()})):t.itemsPerPage=r.itemsPerPage,n.$watch("totalItems",function(e,a){(angular.isDefined(e)||e!==a)&&(n.totalPages=t.calculateTotalPages(),t.updatePage())})},t.calculateTotalPages=function(){var e=t.itemsPerPage<1?1:Math.ceil(n.totalItems/t.itemsPerPage);return Math.max(e||0,1)},t.render=function(){n.page=parseInt(t.ngModelCtrl.$viewValue,10)||1},n.selectPage=function(e,a){a&&a.preventDefault();var i=!n.ngDisabled||!a;i&&n.page!==e&&e>0&&e<=n.totalPages&&(a&&a.target&&a.target.blur(),t.ngModelCtrl.$setViewValue(e),t.ngModelCtrl.$render())},n.getText=function(e){return n[e+"Text"]||t.config[e+"Text"]},n.noPrevious=function(){return 1===n.page},n.noNext=function(){return n.page===n.totalPages},t.updatePage=function(){t.setNumPages(n.$parent,n.totalPages),n.page>n.totalPages?n.selectPage(n.totalPages):t.ngModelCtrl.$render()},n.$on("$destroy",function(){for(;t._watchers.length;)t._watchers.shift()()})}}}]),angular.module("ui.bootstrap.pager",["ui.bootstrap.paging"]).controller("UibPagerController",["$scope","$attrs","uibPaging","uibPagerConfig",function(e,t,n,a){e.align=angular.isDefined(t.align)?e.$parent.$eval(t.align):a.align,n.create(this,e,t)}]).constant("uibPagerConfig",{itemsPerPage:10,previousText:"« Previous",nextText:"Next »",align:!0}).directive("uibPager",["uibPagerConfig",function(e){return{scope:{totalItems:"=",previousText:"@",nextText:"@",ngDisabled:"="},require:["uibPager","?ngModel"],controller:"UibPagerController",controllerAs:"pager",templateUrl:function(e,t){return t.templateUrl||"uib/template/pager/pager.html"},replace:!0,link:function(t,n,a,i){var r=i[0],o=i[1];o&&r.init(o,e)}}}]),angular.module("ui.bootstrap.pagination",["ui.bootstrap.paging"]).controller("UibPaginationController",["$scope","$attrs","$parse","uibPaging","uibPaginationConfig",function(e,t,n,a,i){function r(e,t,n){return{number:e,text:t,active:n}}function o(e,t){var n=[],a=1,i=t,o=angular.isDefined(l)&&t>l;o&&(u?(a=Math.max(e-Math.floor(l/2),1),i=a+l-1,i>t&&(i=t,a=i-l+1)):(a=(Math.ceil(e/l)-1)*l+1,i=Math.min(a+l-1,t)));for(var s=a;i>=s;s++){var p=r(s,s,s===e);n.push(p)}if(o&&l>0&&(!u||c||d)){if(a>1){if(!d||a>3){var m=r(a-1,"...",!1);n.unshift(m)}if(d){if(3===a){var f=r(2,"2",!1);n.unshift(f)}var h=r(1,"1",!1);n.unshift(h)}}if(t>i){if(!d||t-2>i){var g=r(i+1,"...",!1);n.push(g)}if(d){if(i===t-2){var b=r(t-1,t-1,!1);n.push(b)}var v=r(t,t,!1);n.push(v)}}}return n}var s=this,l=angular.isDefined(t.maxSize)?e.$parent.$eval(t.maxSize):i.maxSize,u=angular.isDefined(t.rotate)?e.$parent.$eval(t.rotate):i.rotate,c=angular.isDefined(t.forceEllipses)?e.$parent.$eval(t.forceEllipses):i.forceEllipses,d=angular.isDefined(t.boundaryLinkNumbers)?e.$parent.$eval(t.boundaryLinkNumbers):i.boundaryLinkNumbers;e.boundaryLinks=angular.isDefined(t.boundaryLinks)?e.$parent.$eval(t.boundaryLinks):i.boundaryLinks,e.directionLinks=angular.isDefined(t.directionLinks)?e.$parent.$eval(t.directionLinks):i.directionLinks,a.create(this,e,t),t.maxSize&&s._watchers.push(e.$parent.$watch(n(t.maxSize),function(e){l=parseInt(e,10),s.render()}));var p=this.render;this.render=function(){p(),e.page>0&&e.page<=e.totalPages&&(e.pages=o(e.page,e.totalPages))}}]).constant("uibPaginationConfig",{itemsPerPage:10,boundaryLinks:!1,boundaryLinkNumbers:!1,directionLinks:!0,firstText:"First",previousText:"Previous",nextText:"Next",lastText:"Last",rotate:!0,forceEllipses:!1}).directive("uibPagination",["$parse","uibPaginationConfig",function(e,t){return{scope:{totalItems:"=",firstText:"@",previousText:"@",nextText:"@",lastText:"@",ngDisabled:"="},require:["uibPagination","?ngModel"],controller:"UibPaginationController",controllerAs:"pagination",templateUrl:function(e,t){return t.templateUrl||"uib/template/pagination/pagination.html"},replace:!0,link:function(e,n,a,i){var r=i[0],o=i[1];o&&r.init(o,t)}}}]),angular.module("ui.bootstrap.tooltip",["ui.bootstrap.position","ui.bootstrap.stackedMap"]).provider("$uibTooltip",function(){function e(e){var t=/[A-Z]/g,n="-";return e.replace(t,function(e,t){return(t?n:"")+e.toLowerCase()})}var t={placement:"top",placementClassPrefix:"",animation:!0,popupDelay:0,popupCloseDelay:0,useContentExp:!1},n={mouseenter:"mouseleave",click:"click",outsideClick:"outsideClick",focus:"blur",
-none:""},a={};this.options=function(e){angular.extend(a,e)},this.setTriggers=function(e){angular.extend(n,e)},this.$get=["$window","$compile","$timeout","$document","$uibPosition","$interpolate","$rootScope","$parse","$$stackedMap",function(i,r,o,s,l,u,c,d,p){function m(e){if(27===e.which){var t=f.top();t&&(t.value.close(),f.removeTop(),t=null)}}var f=p.createNew();return s.on("keypress",m),c.$on("$destroy",function(){s.off("keypress",m)}),function(i,c,p,m){function h(e){var t=(e||m.trigger||p).split(" "),a=t.map(function(e){return n[e]||e});return{show:t,hide:a}}m=angular.extend({},t,a,m);var g=e(i),b=u.startSymbol(),v=u.endSymbol(),y="<div "+g+'-popup title="'+b+"title"+v+'" '+(m.useContentExp?'content-exp="contentExp()" ':'content="'+b+"content"+v+'" ')+'placement="'+b+"placement"+v+'" popup-class="'+b+"popupClass"+v+'" animation="animation" is-open="isOpen"origin-scope="origScope" style="visibility: hidden; display: block; top: -9999px; left: -9999px;"></div>';return{compile:function(e,t){var n=r(y);return function(e,t,a,r){function u(){L.isOpen?g():p()}function p(){(!R||e.$eval(a[c+"Enable"]))&&($(),D(),L.popupDelay?A||(A=o(b,L.popupDelay,!1)):b())}function g(){v(),L.popupCloseDelay?_||(_=o(y,L.popupCloseDelay,!1)):y()}function b(){return v(),$(),L.content?(w(),void L.$evalAsync(function(){L.isOpen=!0,x(!0),G()})):angular.noop}function v(){A&&(o.cancel(A),A=null),I&&(o.cancel(I),I=null)}function y(){L&&L.$evalAsync(function(){L&&(L.isOpen=!1,x(!1),L.animation?S||(S=o(k,150,!1)):k())})}function $(){_&&(o.cancel(_),_=null),S&&(o.cancel(S),S=null)}function w(){P||(O=L.$new(),P=n(O,function(e){U?s.find("body").append(e):t.after(e)}),C())}function k(){v(),$(),M(),P&&(P.remove(),P=null),O&&(O.$destroy(),O=null)}function D(){L.title=a[c+"Title"],q?L.content=q(e):L.content=a[i],L.popupClass=a[c+"Class"],L.placement=angular.isDefined(a[c+"Placement"])?a[c+"Placement"]:m.placement;var t=parseInt(a[c+"PopupDelay"],10),n=parseInt(a[c+"PopupCloseDelay"],10);L.popupDelay=isNaN(t)?m.popupDelay:t,L.popupCloseDelay=isNaN(n)?m.popupCloseDelay:n}function x(t){H&&angular.isFunction(H.assign)&&H.assign(e,t)}function C(){V.length=0,q?(V.push(e.$watch(q,function(e){L.content=e,!e&&L.isOpen&&y()})),V.push(O.$watch(function(){F||(F=!0,O.$$postDigest(function(){F=!1,L&&L.isOpen&&G()}))}))):V.push(a.$observe(i,function(e){L.content=e,!e&&L.isOpen?y():G()})),V.push(a.$observe(c+"Title",function(e){L.title=e,L.isOpen&&G()})),V.push(a.$observe(c+"Placement",function(e){L.placement=e?e:m.placement,L.isOpen&&G()}))}function M(){V.length&&(angular.forEach(V,function(e){e()}),V.length=0)}function T(e){L&&L.isOpen&&P&&(t[0].contains(e.target)||P[0].contains(e.target)||g())}function E(){var e=a[c+"Trigger"];z(),N=h(e),"none"!==N.show&&N.show.forEach(function(e,n){"outsideClick"===e?(t.on("click",u),s.on("click",T)):e===N.hide[n]?t.on(e,u):e&&(t.on(e,p),t.on(N.hide[n],g)),t.on("keypress",function(e){27===e.which&&g()})})}var P,O,S,A,_,I,U=angular.isDefined(m.appendToBody)?m.appendToBody:!1,N=h(void 0),R=angular.isDefined(a[c+"Enable"]),L=e.$new(!0),F=!1,H=angular.isDefined(a[c+"IsOpen"])?d(a[c+"IsOpen"]):!1,q=m.useContentExp?d(a[i]):!1,V=[],G=function(){P&&P.html()&&(I||(I=o(function(){P.css({top:0,left:0});var e=l.positionElements(t,P,L.placement,U);P.css({top:e.top+"px",left:e.left+"px",visibility:"visible"}),m.placementClassPrefix&&P.removeClass("top bottom left right"),P.removeClass(m.placementClassPrefix+"top "+m.placementClassPrefix+"top-left "+m.placementClassPrefix+"top-right "+m.placementClassPrefix+"bottom "+m.placementClassPrefix+"bottom-left "+m.placementClassPrefix+"bottom-right "+m.placementClassPrefix+"left "+m.placementClassPrefix+"left-top "+m.placementClassPrefix+"left-bottom "+m.placementClassPrefix+"right "+m.placementClassPrefix+"right-top "+m.placementClassPrefix+"right-bottom");var n=e.placement.split("-");P.addClass(n[0]+" "+m.placementClassPrefix+e.placement),l.positionArrow(P,e.placement),I=null},0,!1)))};L.origScope=e,L.isOpen=!1,f.add(L,{close:y}),L.contentExp=function(){return L.content},a.$observe("disabled",function(e){e&&v(),e&&L.isOpen&&y()}),H&&e.$watch(H,function(e){L&&!e===L.isOpen&&u()});var z=function(){N.show.forEach(function(e){"outsideClick"===e?t.off("click",u):(t.off(e,p),t.off(e,u))}),N.hide.forEach(function(e){"outsideClick"===e?s.off("click",T):t.off(e,g)})};E();var B=e.$eval(a[c+"Animation"]);L.animation=angular.isDefined(B)?!!B:m.animation;var Y,j=c+"AppendToBody";Y=j in a&&void 0===a[j]?!0:e.$eval(a[j]),U=angular.isDefined(Y)?Y:U,e.$on("$destroy",function(){z(),k(),f.remove(L),L=null})}}}}}]}).directive("uibTooltipTemplateTransclude",["$animate","$sce","$compile","$templateRequest",function(e,t,n,a){return{link:function(i,r,o){var s,l,u,c=i.$eval(o.tooltipTemplateTranscludeScope),d=0,p=function(){l&&(l.remove(),l=null),s&&(s.$destroy(),s=null),u&&(e.leave(u).then(function(){l=null}),l=u,u=null)};i.$watch(t.parseAsResourceUrl(o.uibTooltipTemplateTransclude),function(t){var o=++d;t?(a(t,!0).then(function(a){if(o===d){var i=c.$new(),l=a,m=n(l)(i,function(t){p(),e.enter(t,r)});s=i,u=m,s.$emit("$includeContentLoaded",t)}},function(){o===d&&(p(),i.$emit("$includeContentError",t))}),i.$emit("$includeContentRequested",t)):p()}),i.$on("$destroy",p)}}}]).directive("uibTooltipClasses",["$uibPosition",function(e){return{restrict:"A",link:function(t,n,a){if(t.placement){var i=e.parsePlacement(t.placement);n.addClass(i[0])}else n.addClass("top");t.popupClass&&n.addClass(t.popupClass),t.animation()&&n.addClass(a.tooltipAnimationClass)}}}]).directive("uibTooltipPopup",function(){return{replace:!0,scope:{content:"@",placement:"@",popupClass:"@",animation:"&",isOpen:"&"},templateUrl:"uib/template/tooltip/tooltip-popup.html"}}).directive("uibTooltip",["$uibTooltip",function(e){return e("uibTooltip","tooltip","mouseenter")}]).directive("uibTooltipTemplatePopup",function(){return{replace:!0,scope:{contentExp:"&",placement:"@",popupClass:"@",animation:"&",isOpen:"&",originScope:"&"},templateUrl:"uib/template/tooltip/tooltip-template-popup.html"}}).directive("uibTooltipTemplate",["$uibTooltip",function(e){return e("uibTooltipTemplate","tooltip","mouseenter",{useContentExp:!0})}]).directive("uibTooltipHtmlPopup",function(){return{replace:!0,scope:{contentExp:"&",placement:"@",popupClass:"@",animation:"&",isOpen:"&"},templateUrl:"uib/template/tooltip/tooltip-html-popup.html"}}).directive("uibTooltipHtml",["$uibTooltip",function(e){return e("uibTooltipHtml","tooltip","mouseenter",{useContentExp:!0})}]),angular.module("ui.bootstrap.popover",["ui.bootstrap.tooltip"]).directive("uibPopoverTemplatePopup",function(){return{replace:!0,scope:{title:"@",contentExp:"&",placement:"@",popupClass:"@",animation:"&",isOpen:"&",originScope:"&"},templateUrl:"uib/template/popover/popover-template.html"}}).directive("uibPopoverTemplate",["$uibTooltip",function(e){return e("uibPopoverTemplate","popover","click",{useContentExp:!0})}]).directive("uibPopoverHtmlPopup",function(){return{replace:!0,scope:{contentExp:"&",title:"@",placement:"@",popupClass:"@",animation:"&",isOpen:"&"},templateUrl:"uib/template/popover/popover-html.html"}}).directive("uibPopoverHtml",["$uibTooltip",function(e){return e("uibPopoverHtml","popover","click",{useContentExp:!0})}]).directive("uibPopoverPopup",function(){return{replace:!0,scope:{title:"@",content:"@",placement:"@",popupClass:"@",animation:"&",isOpen:"&"},templateUrl:"uib/template/popover/popover.html"}}).directive("uibPopover",["$uibTooltip",function(e){return e("uibPopover","popover","click")}]),angular.module("ui.bootstrap.progressbar",[]).constant("uibProgressConfig",{animate:!0,max:100}).controller("UibProgressController",["$scope","$attrs","uibProgressConfig",function(e,t,n){var a=this,i=angular.isDefined(t.animate)?e.$parent.$eval(t.animate):n.animate;this.bars=[],e.max=angular.isDefined(e.max)?e.max:n.max,this.addBar=function(t,n,r){i||n.css({transition:"none"}),this.bars.push(t),t.max=e.max,t.title=r&&angular.isDefined(r.title)?r.title:"progressbar",t.$watch("value",function(e){t.recalculatePercentage()}),t.recalculatePercentage=function(){var e=a.bars.reduce(function(e,t){return t.percent=+(100*t.value/t.max).toFixed(2),e+t.percent},0);e>100&&(t.percent-=e-100)},t.$on("$destroy",function(){n=null,a.removeBar(t)})},this.removeBar=function(e){this.bars.splice(this.bars.indexOf(e),1),this.bars.forEach(function(e){e.recalculatePercentage()})},e.$watch("max",function(t){a.bars.forEach(function(t){t.max=e.max,t.recalculatePercentage()})})}]).directive("uibProgress",function(){return{replace:!0,transclude:!0,controller:"UibProgressController",require:"uibProgress",scope:{max:"=?"},templateUrl:"uib/template/progressbar/progress.html"}}).directive("uibBar",function(){return{replace:!0,transclude:!0,require:"^uibProgress",scope:{value:"=",type:"@"},templateUrl:"uib/template/progressbar/bar.html",link:function(e,t,n,a){a.addBar(e,t,n)}}}).directive("uibProgressbar",function(){return{replace:!0,transclude:!0,controller:"UibProgressController",scope:{value:"=",max:"=?",type:"@"},templateUrl:"uib/template/progressbar/progressbar.html",link:function(e,t,n,a){a.addBar(e,angular.element(t.children()[0]),{title:n.title})}}}),angular.module("ui.bootstrap.rating",[]).constant("uibRatingConfig",{max:5,stateOn:null,stateOff:null,titles:["one","two","three","four","five"]}).controller("UibRatingController",["$scope","$attrs","uibRatingConfig",function(e,t,n){var a={$setViewValue:angular.noop};this.init=function(i){a=i,a.$render=this.render,a.$formatters.push(function(e){return angular.isNumber(e)&&e<<0!==e&&(e=Math.round(e)),e}),this.stateOn=angular.isDefined(t.stateOn)?e.$parent.$eval(t.stateOn):n.stateOn,this.stateOff=angular.isDefined(t.stateOff)?e.$parent.$eval(t.stateOff):n.stateOff;var r=angular.isDefined(t.titles)?e.$parent.$eval(t.titles):n.titles;this.titles=angular.isArray(r)&&r.length>0?r:n.titles;var o=angular.isDefined(t.ratingStates)?e.$parent.$eval(t.ratingStates):new Array(angular.isDefined(t.max)?e.$parent.$eval(t.max):n.max);e.range=this.buildTemplateObjects(o)},this.buildTemplateObjects=function(e){for(var t=0,n=e.length;n>t;t++)e[t]=angular.extend({index:t},{stateOn:this.stateOn,stateOff:this.stateOff,title:this.getTitle(t)},e[t]);return e},this.getTitle=function(e){return e>=this.titles.length?e+1:this.titles[e]},e.rate=function(t){!e.readonly&&t>=0&&t<=e.range.length&&(a.$setViewValue(a.$viewValue===t?0:t),a.$render())},e.enter=function(t){e.readonly||(e.value=t),e.onHover({value:t})},e.reset=function(){e.value=a.$viewValue,e.onLeave()},e.onKeydown=function(t){/(37|38|39|40)/.test(t.which)&&(t.preventDefault(),t.stopPropagation(),e.rate(e.value+(38===t.which||39===t.which?1:-1)))},this.render=function(){e.value=a.$viewValue}}]).directive("uibRating",function(){return{require:["uibRating","ngModel"],scope:{readonly:"=?",onHover:"&",onLeave:"&"},controller:"UibRatingController",templateUrl:"uib/template/rating/rating.html",replace:!0,link:function(e,t,n,a){var i=a[0],r=a[1];i.init(r)}}}),angular.module("ui.bootstrap.tabs",[]).controller("UibTabsetController",["$scope",function(e){var t=this,n=t.tabs=e.tabs=[];t.select=function(e){angular.forEach(n,function(t){t.active&&t!==e&&(t.active=!1,t.onDeselect(),e.selectCalled=!1)}),e.active=!0,e.selectCalled||(e.onSelect(),e.selectCalled=!0)},t.addTab=function(e){n.push(e),1===n.length&&e.active!==!1?e.active=!0:e.active?t.select(e):e.active=!1},t.removeTab=function(e){var i=n.indexOf(e);if(e.active&&n.length>1&&!a){var r=i===n.length-1?i-1:i+1;t.select(n[r])}n.splice(i,1)};var a;e.$on("$destroy",function(){a=!0})}]).directive("uibTabset",function(){return{transclude:!0,replace:!0,scope:{type:"@"},controller:"UibTabsetController",templateUrl:"uib/template/tabs/tabset.html",link:function(e,t,n){e.vertical=angular.isDefined(n.vertical)?e.$parent.$eval(n.vertical):!1,e.justified=angular.isDefined(n.justified)?e.$parent.$eval(n.justified):!1}}}).directive("uibTab",["$parse",function(e){return{require:"^uibTabset",replace:!0,templateUrl:"uib/template/tabs/tab.html",transclude:!0,scope:{active:"=?",heading:"@",onSelect:"&select",onDeselect:"&deselect"},controller:function(){},controllerAs:"tab",link:function(t,n,a,i,r){t.$watch("active",function(e){e&&i.select(t)}),t.disabled=!1,a.disable&&t.$parent.$watch(e(a.disable),function(e){t.disabled=!!e}),t.select=function(){t.disabled||(t.active=!0)},i.addTab(t),t.$on("$destroy",function(){i.removeTab(t)}),t.$transcludeFn=r}}}]).directive("uibTabHeadingTransclude",function(){return{restrict:"A",require:"^uibTab",link:function(e,t){e.$watch("headingElement",function(e){e&&(t.html(""),t.append(e))})}}}).directive("uibTabContentTransclude",function(){function e(e){return e.tagName&&(e.hasAttribute("uib-tab-heading")||e.hasAttribute("data-uib-tab-heading")||e.hasAttribute("x-uib-tab-heading")||"uib-tab-heading"===e.tagName.toLowerCase()||"data-uib-tab-heading"===e.tagName.toLowerCase()||"x-uib-tab-heading"===e.tagName.toLowerCase())}return{restrict:"A",require:"^uibTabset",link:function(t,n,a){var i=t.$eval(a.uibTabContentTransclude);i.$transcludeFn(i.$parent,function(t){angular.forEach(t,function(t){e(t)?i.headingElement=t:n.append(t)})})}}}),angular.module("ui.bootstrap.timepicker",[]).constant("uibTimepickerConfig",{hourStep:1,minuteStep:1,secondStep:1,showMeridian:!0,showSeconds:!1,meridians:null,readonlyInput:!1,mousewheel:!0,arrowkeys:!0,showSpinners:!0,templateUrl:"uib/template/timepicker/timepicker.html"}).controller("UibTimepickerController",["$scope","$element","$attrs","$parse","$log","$locale","uibTimepickerConfig",function(e,t,n,a,i,r,o){function s(){var t=+e.hours,n=e.showMeridian?t>0&&13>t:t>=0&&24>t;return n?(e.showMeridian&&(12===t&&(t=0),e.meridian===$[1]&&(t+=12)),t):void 0}function l(){var t=+e.minutes;return t>=0&&60>t?t:void 0}function u(){var t=+e.seconds;return t>=0&&60>t?t:void 0}function c(e){return null===e?"":angular.isDefined(e)&&e.toString().length<2?"0"+e:e.toString()}function d(e){p(),y.$setViewValue(new Date(b)),m(e)}function p(){y.$setValidity("time",!0),e.invalidHours=!1,e.invalidMinutes=!1,e.invalidSeconds=!1}function m(t){if(y.$modelValue){var n=b.getHours(),a=b.getMinutes(),i=b.getSeconds();e.showMeridian&&(n=0===n||12===n?12:n%12),e.hours="h"===t?n:c(n),"m"!==t&&(e.minutes=c(a)),e.meridian=b.getHours()<12?$[0]:$[1],"s"!==t&&(e.seconds=c(i)),e.meridian=b.getHours()<12?$[0]:$[1]}else e.hours=null,e.minutes=null,e.seconds=null,e.meridian=$[0]}function f(e){b=g(b,e),d()}function h(e,t){return g(e,60*t)}function g(e,t){var n=new Date(e.getTime()+1e3*t),a=new Date(e);return a.setHours(n.getHours(),n.getMinutes(),n.getSeconds()),a}var b=new Date,v=[],y={$setViewValue:angular.noop},$=angular.isDefined(n.meridians)?e.$parent.$eval(n.meridians):o.meridians||r.DATETIME_FORMATS.AMPMS;e.tabindex=angular.isDefined(n.tabindex)?n.tabindex:0,t.removeAttr("tabindex"),this.init=function(t,a){y=t,y.$render=this.render,y.$formatters.unshift(function(e){return e?new Date(e):null});var i=a.eq(0),r=a.eq(1),s=a.eq(2),l=angular.isDefined(n.mousewheel)?e.$parent.$eval(n.mousewheel):o.mousewheel;l&&this.setupMousewheelEvents(i,r,s);var u=angular.isDefined(n.arrowkeys)?e.$parent.$eval(n.arrowkeys):o.arrowkeys;u&&this.setupArrowkeyEvents(i,r,s),e.readonlyInput=angular.isDefined(n.readonlyInput)?e.$parent.$eval(n.readonlyInput):o.readonlyInput,this.setupInputEvents(i,r,s)};var w=o.hourStep;n.hourStep&&v.push(e.$parent.$watch(a(n.hourStep),function(e){w=+e}));var k=o.minuteStep;n.minuteStep&&v.push(e.$parent.$watch(a(n.minuteStep),function(e){k=+e}));var D;v.push(e.$parent.$watch(a(n.min),function(e){var t=new Date(e);D=isNaN(t)?void 0:t}));var x;v.push(e.$parent.$watch(a(n.max),function(e){var t=new Date(e);x=isNaN(t)?void 0:t}));var C=!1;n.ngDisabled&&v.push(e.$parent.$watch(a(n.ngDisabled),function(e){C=e})),e.noIncrementHours=function(){var e=h(b,60*w);return C||e>x||b>e&&D>e},e.noDecrementHours=function(){var e=h(b,60*-w);return C||D>e||e>b&&e>x},e.noIncrementMinutes=function(){var e=h(b,k);return C||e>x||b>e&&D>e},e.noDecrementMinutes=function(){var e=h(b,-k);return C||D>e||e>b&&e>x},e.noIncrementSeconds=function(){var e=g(b,M);return C||e>x||b>e&&D>e},e.noDecrementSeconds=function(){var e=g(b,-M);return C||D>e||e>b&&e>x},e.noToggleMeridian=function(){return b.getHours()<12?C||h(b,720)>x:C||h(b,-720)<D};var M=o.secondStep;n.secondStep&&v.push(e.$parent.$watch(a(n.secondStep),function(e){M=+e})),e.showSeconds=o.showSeconds,n.showSeconds&&v.push(e.$parent.$watch(a(n.showSeconds),function(t){e.showSeconds=!!t})),e.showMeridian=o.showMeridian,n.showMeridian&&v.push(e.$parent.$watch(a(n.showMeridian),function(t){if(e.showMeridian=!!t,y.$error.time){var n=s(),a=l();angular.isDefined(n)&&angular.isDefined(a)&&(b.setHours(n),d())}else m()})),this.setupMousewheelEvents=function(t,n,a){var i=function(e){e.originalEvent&&(e=e.originalEvent);var t=e.wheelDelta?e.wheelDelta:-e.deltaY;return e.detail||t>0};t.bind("mousewheel wheel",function(t){C||e.$apply(i(t)?e.incrementHours():e.decrementHours()),t.preventDefault()}),n.bind("mousewheel wheel",function(t){C||e.$apply(i(t)?e.incrementMinutes():e.decrementMinutes()),t.preventDefault()}),a.bind("mousewheel wheel",function(t){C||e.$apply(i(t)?e.incrementSeconds():e.decrementSeconds()),t.preventDefault()})},this.setupArrowkeyEvents=function(t,n,a){t.bind("keydown",function(t){C||(38===t.which?(t.preventDefault(),e.incrementHours(),e.$apply()):40===t.which&&(t.preventDefault(),e.decrementHours(),e.$apply()))}),n.bind("keydown",function(t){C||(38===t.which?(t.preventDefault(),e.incrementMinutes(),e.$apply()):40===t.which&&(t.preventDefault(),e.decrementMinutes(),e.$apply()))}),a.bind("keydown",function(t){C||(38===t.which?(t.preventDefault(),e.incrementSeconds(),e.$apply()):40===t.which&&(t.preventDefault(),e.decrementSeconds(),e.$apply()))})},this.setupInputEvents=function(t,n,a){if(e.readonlyInput)return e.updateHours=angular.noop,e.updateMinutes=angular.noop,void(e.updateSeconds=angular.noop);var i=function(t,n,a){y.$setViewValue(null),y.$setValidity("time",!1),angular.isDefined(t)&&(e.invalidHours=t),angular.isDefined(n)&&(e.invalidMinutes=n),angular.isDefined(a)&&(e.invalidSeconds=a)};e.updateHours=function(){var e=s(),t=l();y.$setDirty(),angular.isDefined(e)&&angular.isDefined(t)?(b.setHours(e),b.setMinutes(t),D>b||b>x?i(!0):d("h")):i(!0)},t.bind("blur",function(t){y.$setTouched(),null===e.hours||""===e.hours?i(!0):!e.invalidHours&&e.hours<10&&e.$apply(function(){e.hours=c(e.hours)})}),e.updateMinutes=function(){var e=l(),t=s();y.$setDirty(),angular.isDefined(e)&&angular.isDefined(t)?(b.setHours(t),b.setMinutes(e),D>b||b>x?i(void 0,!0):d("m")):i(void 0,!0)},n.bind("blur",function(t){y.$setTouched(),null===e.minutes?i(void 0,!0):!e.invalidMinutes&&e.minutes<10&&e.$apply(function(){e.minutes=c(e.minutes)})}),e.updateSeconds=function(){var e=u();y.$setDirty(),angular.isDefined(e)?(b.setSeconds(e),d("s")):i(void 0,void 0,!0)},a.bind("blur",function(t){!e.invalidSeconds&&e.seconds<10&&e.$apply(function(){e.seconds=c(e.seconds)})})},this.render=function(){var t=y.$viewValue;isNaN(t)?(y.$setValidity("time",!1),i.error('Timepicker directive: "ng-model" value must be a Date object, a number of milliseconds since 01.01.1970 or a string representing an RFC2822 or ISO 8601 date.')):(t&&(b=t),D>b||b>x?(y.$setValidity("time",!1),e.invalidHours=!0,e.invalidMinutes=!0):p(),m())},e.showSpinners=angular.isDefined(n.showSpinners)?e.$parent.$eval(n.showSpinners):o.showSpinners,e.incrementHours=function(){e.noIncrementHours()||f(60*w*60)},e.decrementHours=function(){e.noDecrementHours()||f(60*-w*60)},e.incrementMinutes=function(){e.noIncrementMinutes()||f(60*k)},e.decrementMinutes=function(){e.noDecrementMinutes()||f(60*-k)},e.incrementSeconds=function(){e.noIncrementSeconds()||f(M)},e.decrementSeconds=function(){e.noDecrementSeconds()||f(-M)},e.toggleMeridian=function(){var t=l(),n=s();e.noToggleMeridian()||(angular.isDefined(t)&&angular.isDefined(n)?f(720*(b.getHours()<12?60:-60)):e.meridian=e.meridian===$[0]?$[1]:$[0])},e.blur=function(){y.$setTouched()},e.$on("$destroy",function(){for(;v.length;)v.shift()()})}]).directive("uibTimepicker",["uibTimepickerConfig",function(e){return{require:["uibTimepicker","?^ngModel"],controller:"UibTimepickerController",controllerAs:"timepicker",replace:!0,scope:{},templateUrl:function(t,n){return n.templateUrl||e.templateUrl},link:function(e,t,n,a){var i=a[0],r=a[1];r&&i.init(r,t.find("input"))}}}]),angular.module("ui.bootstrap.typeahead",["ui.bootstrap.debounce","ui.bootstrap.position"]).factory("uibTypeaheadParser",["$parse",function(e){var t=/^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w\d]*))\s+in\s+([\s\S]+?)$/;return{parse:function(n){var a=n.match(t);if(!a)throw new Error('Expected typeahead specification in form of "_modelValue_ (as _label_)? for _item_ in _collection_" but got "'+n+'".');return{itemName:a[3],source:e(a[4]),viewMapper:e(a[2]||a[1]),modelMapper:e(a[1])}}}}]).controller("UibTypeaheadController",["$scope","$element","$attrs","$compile","$parse","$q","$timeout","$document","$window","$rootScope","$$debounce","$uibPosition","uibTypeaheadParser",function(e,t,n,a,i,r,o,s,l,u,c,d,p){function m(){F.moveInProgress||(F.moveInProgress=!0,F.$digest()),J()}function f(){F.position=P?d.offset(t):d.position(t),F.position.top+=t.prop("offsetHeight")}var h,g,b=[9,13,27,38,40],v=200,y=e.$eval(n.typeaheadMinLength);y||0===y||(y=1);var $=e.$eval(n.typeaheadWaitMs)||0,w=e.$eval(n.typeaheadEditable)!==!1;e.$watch(n.typeaheadEditable,function(e){w=e!==!1});var k,D,x=i(n.typeaheadLoading).assign||angular.noop,C=i(n.typeaheadOnSelect),M=angular.isDefined(n.typeaheadSelectOnBlur)?e.$eval(n.typeaheadSelectOnBlur):!1,T=i(n.typeaheadNoResults).assign||angular.noop,E=n.typeaheadInputFormatter?i(n.typeaheadInputFormatter):void 0,P=n.typeaheadAppendToBody?e.$eval(n.typeaheadAppendToBody):!1,O=n.typeaheadAppendTo?e.$eval(n.typeaheadAppendTo):null,S=e.$eval(n.typeaheadFocusFirst)!==!1,A=n.typeaheadSelectOnExact?e.$eval(n.typeaheadSelectOnExact):!1,_=i(n.typeaheadIsOpen).assign||angular.noop,I=e.$eval(n.typeaheadShowHint)||!1,U=i(n.ngModel),N=i(n.ngModel+"($$$p)"),R=function(t,n){return angular.isFunction(U(e))&&g&&g.$options&&g.$options.getterSetter?N(t,{$$$p:n}):U.assign(t,n)},L=p.parse(n.uibTypeahead),F=e.$new(),H=e.$on("$destroy",function(){F.$destroy()});F.$on("$destroy",H);var q="typeahead-"+F.$id+"-"+Math.floor(1e4*Math.random());t.attr({"aria-autocomplete":"list","aria-expanded":!1,"aria-owns":q});var V,G;I&&(V=angular.element("<div></div>"),V.css("position","relative"),t.after(V),G=t.clone(),G.attr("placeholder",""),G.val(""),G.css({position:"absolute",top:"0px",left:"0px","border-color":"transparent","box-shadow":"none",opacity:1,background:"none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255)",color:"#999"}),t.css({position:"relative","vertical-align":"top","background-color":"transparent"}),V.append(G),G.after(t));var z=angular.element("<div uib-typeahead-popup></div>");z.attr({id:q,matches:"matches",active:"activeIdx",select:"select(activeIdx, evt)","move-in-progress":"moveInProgress",query:"query",position:"position","assign-is-open":"assignIsOpen(isOpen)",debounce:"debounceUpdate"}),angular.isDefined(n.typeaheadTemplateUrl)&&z.attr("template-url",n.typeaheadTemplateUrl),angular.isDefined(n.typeaheadPopupTemplateUrl)&&z.attr("popup-template-url",n.typeaheadPopupTemplateUrl);var B=function(){I&&G.val("")},Y=function(){F.matches=[],F.activeIdx=-1,t.attr("aria-expanded",!1),B()},j=function(e){return q+"-option-"+e};F.$watch("activeIdx",function(e){0>e?t.removeAttr("aria-activedescendant"):t.attr("aria-activedescendant",j(e))});var W=function(e,t){return F.matches.length>t&&e?e.toUpperCase()===F.matches[t].label.toUpperCase():!1},K=function(n,a){var i={$viewValue:n};x(e,!0),T(e,!1),r.when(L.source(e,i)).then(function(r){var o=n===h.$viewValue;if(o&&k)if(r&&r.length>0){F.activeIdx=S?0:-1,T(e,!1),F.matches.length=0;for(var s=0;s<r.length;s++)i[L.itemName]=r[s],F.matches.push({id:j(s),label:L.viewMapper(F,i),model:r[s]});if(F.query=n,f(),t.attr("aria-expanded",!0),A&&1===F.matches.length&&W(n,0)&&(angular.isNumber(F.debounceUpdate)||angular.isObject(F.debounceUpdate)?c(function(){F.select(0,a)},angular.isNumber(F.debounceUpdate)?F.debounceUpdate:F.debounceUpdate["default"]):F.select(0,a)),I){var l=F.matches[0].label;angular.isString(n)&&n.length>0&&l.slice(0,n.length).toUpperCase()===n.toUpperCase()?G.val(n+l.slice(n.length)):G.val("")}}else Y(),T(e,!0);o&&x(e,!1)},function(){Y(),x(e,!1),T(e,!0)})};P&&(angular.element(l).on("resize",m),s.find("body").on("scroll",m));var J=c(function(){F.matches.length&&f(),F.moveInProgress=!1},v);F.moveInProgress=!1,F.query=void 0;var Z,X=function(e){Z=o(function(){K(e)},$)},Q=function(){Z&&o.cancel(Z)};Y(),F.assignIsOpen=function(t){_(e,t)},F.select=function(a,i){var r,s,l={};D=!0,l[L.itemName]=s=F.matches[a].model,r=L.modelMapper(e,l),R(e,r),h.$setValidity("editable",!0),h.$setValidity("parse",!0),C(e,{$item:s,$model:r,$label:L.viewMapper(e,l),$event:i}),Y(),F.$eval(n.typeaheadFocusOnSelect)!==!1&&o(function(){t[0].focus()},0,!1)},t.on("keydown",function(e){if(0!==F.matches.length&&-1!==b.indexOf(e.which)){if(-1===F.activeIdx&&(9===e.which||13===e.which))return Y(),void F.$digest();e.preventDefault();var t;switch(e.which){case 9:case 13:F.$apply(function(){angular.isNumber(F.debounceUpdate)||angular.isObject(F.debounceUpdate)?c(function(){F.select(F.activeIdx,e)},angular.isNumber(F.debounceUpdate)?F.debounceUpdate:F.debounceUpdate["default"]):F.select(F.activeIdx,e)});break;case 27:e.stopPropagation(),Y(),F.$digest();break;case 38:F.activeIdx=(F.activeIdx>0?F.activeIdx:F.matches.length)-1,F.$digest(),t=z.find("li")[F.activeIdx],t.parentNode.scrollTop=t.offsetTop;break;case 40:F.activeIdx=(F.activeIdx+1)%F.matches.length,F.$digest(),t=z.find("li")[F.activeIdx],t.parentNode.scrollTop=t.offsetTop}}}),t.bind("focus",function(e){k=!0,0!==y||h.$viewValue||o(function(){K(h.$viewValue,e)},0)}),t.bind("blur",function(e){M&&F.matches.length&&-1!==F.activeIdx&&!D&&(D=!0,F.$apply(function(){angular.isObject(F.debounceUpdate)&&angular.isNumber(F.debounceUpdate.blur)?c(function(){F.select(F.activeIdx,e)},F.debounceUpdate.blur):F.select(F.activeIdx,e)})),!w&&h.$error.editable&&(h.$viewValue="",t.val("")),k=!1,D=!1});var ee=function(e){t[0]!==e.target&&3!==e.which&&0!==F.matches.length&&(Y(),u.$$phase||F.$digest())};s.on("click",ee),e.$on("$destroy",function(){s.off("click",ee),(P||O)&&te.remove(),P&&(angular.element(l).off("resize",m),s.find("body").off("scroll",m)),z.remove(),I&&V.remove()});var te=a(z)(F);P?s.find("body").append(te):O?angular.element(O).eq(0).append(te):t.after(te),this.init=function(t,n){h=t,g=n,F.debounceUpdate=h.$options&&i(h.$options.debounce)(e),h.$parsers.unshift(function(t){return k=!0,0===y||t&&t.length>=y?$>0?(Q(),X(t)):K(t):(x(e,!1),Q(),Y()),w?t:t?void h.$setValidity("editable",!1):(h.$setValidity("editable",!0),null)}),h.$formatters.push(function(t){var n,a,i={};return w||h.$setValidity("editable",!0),E?(i.$model=t,E(e,i)):(i[L.itemName]=t,n=L.viewMapper(e,i),i[L.itemName]=void 0,a=L.viewMapper(e,i),n!==a?n:t)})}}]).directive("uibTypeahead",function(){return{controller:"UibTypeaheadController",require:["ngModel","^?ngModelOptions","uibTypeahead"],link:function(e,t,n,a){a[2].init(a[0],a[1])}}}).directive("uibTypeaheadPopup",["$$debounce",function(e){return{scope:{matches:"=",query:"=",active:"=",position:"&",moveInProgress:"=",select:"&",assignIsOpen:"&",debounce:"&"},replace:!0,templateUrl:function(e,t){return t.popupTemplateUrl||"uib/template/typeahead/typeahead-popup.html"},link:function(t,n,a){t.templateUrl=a.templateUrl,t.isOpen=function(){var e=t.matches.length>0;return t.assignIsOpen({isOpen:e}),e},t.isActive=function(e){return t.active===e},t.selectActive=function(e){t.active=e},t.selectMatch=function(n,a){var i=t.debounce();angular.isNumber(i)||angular.isObject(i)?e(function(){t.select({activeIdx:n,evt:a})},angular.isNumber(i)?i:i["default"]):t.select({activeIdx:n,evt:a})}}}}]).directive("uibTypeaheadMatch",["$templateRequest","$compile","$parse",function(e,t,n){return{scope:{index:"=",match:"=",query:"="},link:function(a,i,r){var o=n(r.templateUrl)(a.$parent)||"uib/template/typeahead/typeahead-match.html";e(o).then(function(e){var n=angular.element(e.trim());i.replaceWith(n),t(n)(a)})}}}]).filter("uibTypeaheadHighlight",["$sce","$injector","$log",function(e,t,n){function a(e){return e.replace(/([.?*+^$[\]\\(){}|-])/g,"\\$1")}function i(e){return/<.*>/g.test(e)}var r;return r=t.has("$sanitize"),function(t,o){return!r&&i(t)&&n.warn("Unsafe use of typeahead please use ngSanitize"),t=o?(""+t).replace(new RegExp(a(o),"gi"),"<strong>$&</strong>"):t,r||(t=e.trustAsHtml(t)),t}}]),angular.module("uib/template/accordion/accordion-group.html",[]).run(["$templateCache",function(e){e.put("uib/template/accordion/accordion-group.html",'<div class="panel" ng-class="panelClass || \'panel-default\'">\n  <div role="tab" id="{{::headingId}}" aria-selected="{{isOpen}}" class="panel-heading" ng-keypress="toggleOpen($event)">\n    <h4 class="panel-title">\n      <a role="button" data-toggle="collapse" href aria-expanded="{{isOpen}}" aria-controls="{{::panelId}}" tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" uib-accordion-transclude="heading"><span ng-class="{\'text-muted\': isDisabled}">{{heading}}</span></a>\n    </h4>\n  </div>\n  <div id="{{::panelId}}" aria-labelledby="{{::headingId}}" aria-hidden="{{!isOpen}}" role="tabpanel" class="panel-collapse collapse" uib-collapse="!isOpen">\n    <div class="panel-body" ng-transclude></div>\n  </div>\n</div>\n')}]),angular.module("uib/template/accordion/accordion.html",[]).run(["$templateCache",function(e){e.put("uib/template/accordion/accordion.html",'<div role="tablist" class="panel-group" ng-transclude></div>')}]),angular.module("uib/template/alert/alert.html",[]).run(["$templateCache",function(e){e.put("uib/template/alert/alert.html",'<div class="alert" ng-class="[\'alert-\' + (type || \'warning\'), closeable ? \'alert-dismissible\' : null]" role="alert">\n    <button ng-show="closeable" type="button" class="close" ng-click="close({$event: $event})">\n        <span aria-hidden="true">&times;</span>\n        <span class="sr-only">Close</span>\n    </button>\n    <div ng-transclude></div>\n</div>\n')}]),angular.module("uib/template/carousel/carousel.html",[]).run(["$templateCache",function(e){e.put("uib/template/carousel/carousel.html",'<div ng-mouseenter="pause()" ng-mouseleave="play()" class="carousel" ng-swipe-right="prev()" ng-swipe-left="next()">\n  <div class="carousel-inner" ng-transclude></div>\n  <a role="button" href class="left carousel-control" ng-click="prev()" ng-show="slides.length > 1">\n    <span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>\n    <span class="sr-only">previous</span>\n  </a>\n  <a role="button" href class="right carousel-control" ng-click="next()" ng-show="slides.length > 1">\n    <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>\n    <span class="sr-only">next</span>\n  </a>\n  <ol class="carousel-indicators" ng-show="slides.length > 1">\n    <li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-class="{ active: isActive(slide) }" ng-click="select(slide)">\n      <span class="sr-only">slide {{ $index + 1 }} of {{ slides.length }}<span ng-if="isActive(slide)">, currently active</span></span>\n    </li>\n  </ol>\n</div>')}]),angular.module("uib/template/carousel/slide.html",[]).run(["$templateCache",function(e){e.put("uib/template/carousel/slide.html",'<div ng-class="{\n    \'active\': active\n  }" class="item text-center" ng-transclude></div>\n')}]),angular.module("uib/template/datepicker/datepicker.html",[]).run(["$templateCache",function(e){e.put("uib/template/datepicker/datepicker.html",'<div class="uib-datepicker" ng-switch="datepickerMode" role="application" ng-keydown="keydown($event)">\n  <uib-daypicker ng-switch-when="day" tabindex="0"></uib-daypicker>\n  <uib-monthpicker ng-switch-when="month" tabindex="0"></uib-monthpicker>\n  <uib-yearpicker ng-switch-when="year" tabindex="0"></uib-yearpicker>\n</div>');
-}]),angular.module("uib/template/datepicker/day.html",[]).run(["$templateCache",function(e){e.put("uib/template/datepicker/day.html",'<table class="uib-daypicker" role="grid" aria-labelledby="{{::uniqueId}}-title" aria-activedescendant="{{activeDateId}}">\n  <thead>\n    <tr>\n      <th><button type="button" class="btn btn-default btn-sm pull-left uib-left" ng-click="move(-1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-left"></i></button></th>\n      <th colspan="{{::5 + showWeeks}}"><button id="{{::uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm uib-title" ng-click="toggleMode()" ng-disabled="datepickerMode === maxMode" tabindex="-1"><strong>{{title}}</strong></button></th>\n      <th><button type="button" class="btn btn-default btn-sm pull-right uib-right" ng-click="move(1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-right"></i></button></th>\n    </tr>\n    <tr>\n      <th ng-if="showWeeks" class="text-center"></th>\n      <th ng-repeat="label in ::labels track by $index" class="text-center"><small aria-label="{{::label.full}}">{{::label.abbr}}</small></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr class="uib-weeks" ng-repeat="row in rows track by $index">\n      <td ng-if="showWeeks" class="text-center h6"><em>{{ weekNumbers[$index] }}</em></td>\n      <td ng-repeat="dt in row" class="uib-day text-center" role="gridcell"\n        id="{{::dt.uid}}"\n        ng-class="::dt.customClass">\n        <button type="button" class="btn btn-default btn-sm"\n          uib-is-class="\n            \'btn-info\' for selectedDt,\n            \'active\' for activeDt\n            on dt"\n          ng-click="select(dt.date)"\n          ng-disabled="::dt.disabled"\n          tabindex="-1"><span ng-class="::{\'text-muted\': dt.secondary, \'text-info\': dt.current}">{{::dt.label}}</span></button>\n      </td>\n    </tr>\n  </tbody>\n</table>\n')}]),angular.module("uib/template/datepicker/month.html",[]).run(["$templateCache",function(e){e.put("uib/template/datepicker/month.html",'<table class="uib-monthpicker" role="grid" aria-labelledby="{{::uniqueId}}-title" aria-activedescendant="{{activeDateId}}">\n  <thead>\n    <tr>\n      <th><button type="button" class="btn btn-default btn-sm pull-left uib-left" ng-click="move(-1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-left"></i></button></th>\n      <th><button id="{{::uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm uib-title" ng-click="toggleMode()" ng-disabled="datepickerMode === maxMode" tabindex="-1"><strong>{{title}}</strong></button></th>\n      <th><button type="button" class="btn btn-default btn-sm pull-right uib-right" ng-click="move(1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-right"></i></button></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr class="uib-months" ng-repeat="row in rows track by $index">\n      <td ng-repeat="dt in row" class="uib-month text-center" role="gridcell"\n        id="{{::dt.uid}}"\n        ng-class="::dt.customClass">\n        <button type="button" class="btn btn-default"\n          uib-is-class="\n            \'btn-info\' for selectedDt,\n            \'active\' for activeDt\n            on dt"\n          ng-click="select(dt.date)"\n          ng-disabled="::dt.disabled"\n          tabindex="-1"><span ng-class="::{\'text-info\': dt.current}">{{::dt.label}}</span></button>\n      </td>\n    </tr>\n  </tbody>\n</table>\n')}]),angular.module("uib/template/datepicker/popup.html",[]).run(["$templateCache",function(e){e.put("uib/template/datepicker/popup.html",'<div>\n  <ul class="uib-datepicker-popup dropdown-menu" dropdown-nested ng-if="isOpen" ng-style="{top: position.top+\'px\', left: position.left+\'px\'}" ng-keydown="keydown($event)" ng-click="$event.stopPropagation()">\n    <li ng-transclude></li>\n    <li ng-if="showButtonBar" class="uib-button-bar">\n    <span class="btn-group pull-left">\n      <button type="button" class="btn btn-sm btn-info uib-datepicker-current" ng-click="select(\'today\')" ng-disabled="isDisabled(\'today\')">{{ getText(\'current\') }}</button>\n      <button type="button" class="btn btn-sm btn-danger uib-clear" ng-click="select(null)">{{ getText(\'clear\') }}</button>\n    </span>\n      <button type="button" class="btn btn-sm btn-success pull-right uib-close" ng-click="close()">{{ getText(\'close\') }}</button>\n    </li>\n  </ul>\n</div>\n')}]),angular.module("uib/template/datepicker/year.html",[]).run(["$templateCache",function(e){e.put("uib/template/datepicker/year.html",'<table class="uib-yearpicker" role="grid" aria-labelledby="{{::uniqueId}}-title" aria-activedescendant="{{activeDateId}}">\n  <thead>\n    <tr>\n      <th><button type="button" class="btn btn-default btn-sm pull-left uib-left" ng-click="move(-1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-left"></i></button></th>\n      <th colspan="{{::columns - 2}}"><button id="{{::uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm uib-title" ng-click="toggleMode()" ng-disabled="datepickerMode === maxMode" tabindex="-1"><strong>{{title}}</strong></button></th>\n      <th><button type="button" class="btn btn-default btn-sm pull-right uib-right" ng-click="move(1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-right"></i></button></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr class="uib-years" ng-repeat="row in rows track by $index">\n      <td ng-repeat="dt in row" class="uib-year text-center" role="gridcell"\n        id="{{::dt.uid}}"\n        ng-class="::dt.customClass">\n        <button type="button" class="btn btn-default"\n          uib-is-class="\n            \'btn-info\' for selectedDt,\n            \'active\' for activeDt\n            on dt"\n          ng-click="select(dt.date)"\n          ng-disabled="::dt.disabled"\n          tabindex="-1"><span ng-class="::{\'text-info\': dt.current}">{{::dt.label}}</span></button>\n      </td>\n    </tr>\n  </tbody>\n</table>\n')}]),angular.module("uib/template/modal/backdrop.html",[]).run(["$templateCache",function(e){e.put("uib/template/modal/backdrop.html",'<div class="modal-backdrop"\n     uib-modal-animation-class="fade"\n     modal-in-class="in"\n     ng-style="{\'z-index\': 1040 + (index && 1 || 0) + index*10}"\n></div>\n')}]),angular.module("uib/template/modal/window.html",[]).run(["$templateCache",function(e){e.put("uib/template/modal/window.html",'<div modal-render="{{$isRendered}}" tabindex="-1" role="dialog" class="modal"\n    uib-modal-animation-class="fade"\n    modal-in-class="in"\n    ng-style="{\'z-index\': 1050 + index*10, display: \'block\'}">\n    <div class="modal-dialog {{size ? \'modal-\' + size : \'\'}}"><div class="modal-content" uib-modal-transclude></div></div>\n</div>\n')}]),angular.module("uib/template/pager/pager.html",[]).run(["$templateCache",function(e){e.put("uib/template/pager/pager.html",'<ul class="pager">\n  <li ng-class="{disabled: noPrevious()||ngDisabled, previous: align}"><a href ng-click="selectPage(page - 1, $event)">{{::getText(\'previous\')}}</a></li>\n  <li ng-class="{disabled: noNext()||ngDisabled, next: align}"><a href ng-click="selectPage(page + 1, $event)">{{::getText(\'next\')}}</a></li>\n</ul>\n')}]),angular.module("uib/template/pagination/pagination.html",[]).run(["$templateCache",function(e){e.put("uib/template/pagination/pagination.html",'<ul class="pagination">\n  <li ng-if="::boundaryLinks" ng-class="{disabled: noPrevious()||ngDisabled}" class="pagination-first"><a href ng-click="selectPage(1, $event)">{{::getText(\'first\')}}</a></li>\n  <li ng-if="::directionLinks" ng-class="{disabled: noPrevious()||ngDisabled}" class="pagination-prev"><a href ng-click="selectPage(page - 1, $event)">{{::getText(\'previous\')}}</a></li>\n  <li ng-repeat="page in pages track by $index" ng-class="{active: page.active,disabled: ngDisabled&&!page.active}" class="pagination-page"><a href ng-click="selectPage(page.number, $event)">{{page.text}}</a></li>\n  <li ng-if="::directionLinks" ng-class="{disabled: noNext()||ngDisabled}" class="pagination-next"><a href ng-click="selectPage(page + 1, $event)">{{::getText(\'next\')}}</a></li>\n  <li ng-if="::boundaryLinks" ng-class="{disabled: noNext()||ngDisabled}" class="pagination-last"><a href ng-click="selectPage(totalPages, $event)">{{::getText(\'last\')}}</a></li>\n</ul>\n')}]),angular.module("uib/template/tooltip/tooltip-html-popup.html",[]).run(["$templateCache",function(e){e.put("uib/template/tooltip/tooltip-html-popup.html",'<div class="tooltip"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="tooltip-arrow"></div>\n  <div class="tooltip-inner" ng-bind-html="contentExp()"></div>\n</div>\n')}]),angular.module("uib/template/tooltip/tooltip-popup.html",[]).run(["$templateCache",function(e){e.put("uib/template/tooltip/tooltip-popup.html",'<div class="tooltip"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="tooltip-arrow"></div>\n  <div class="tooltip-inner" ng-bind="content"></div>\n</div>\n')}]),angular.module("uib/template/tooltip/tooltip-template-popup.html",[]).run(["$templateCache",function(e){e.put("uib/template/tooltip/tooltip-template-popup.html",'<div class="tooltip"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="tooltip-arrow"></div>\n  <div class="tooltip-inner"\n    uib-tooltip-template-transclude="contentExp()"\n    tooltip-template-transclude-scope="originScope()"></div>\n</div>\n')}]),angular.module("uib/template/popover/popover-html.html",[]).run(["$templateCache",function(e){e.put("uib/template/popover/popover-html.html",'<div class="popover"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="arrow"></div>\n\n  <div class="popover-inner">\n      <h3 class="popover-title" ng-bind="title" ng-if="title"></h3>\n      <div class="popover-content" ng-bind-html="contentExp()"></div>\n  </div>\n</div>\n')}]),angular.module("uib/template/popover/popover-template.html",[]).run(["$templateCache",function(e){e.put("uib/template/popover/popover-template.html",'<div class="popover"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="arrow"></div>\n\n  <div class="popover-inner">\n      <h3 class="popover-title" ng-bind="title" ng-if="title"></h3>\n      <div class="popover-content"\n        uib-tooltip-template-transclude="contentExp()"\n        tooltip-template-transclude-scope="originScope()"></div>\n  </div>\n</div>\n')}]),angular.module("uib/template/popover/popover.html",[]).run(["$templateCache",function(e){e.put("uib/template/popover/popover.html",'<div class="popover"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="arrow"></div>\n\n  <div class="popover-inner">\n      <h3 class="popover-title" ng-bind="title" ng-if="title"></h3>\n      <div class="popover-content" ng-bind="content"></div>\n  </div>\n</div>\n')}]),angular.module("uib/template/progressbar/bar.html",[]).run(["$templateCache",function(e){e.put("uib/template/progressbar/bar.html",'<div class="progress-bar" ng-class="type && \'progress-bar-\' + type" role="progressbar" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="{{max}}" ng-style="{width: (percent < 100 ? percent : 100) + \'%\'}" aria-valuetext="{{percent | number:0}}%" aria-labelledby="{{::title}}" ng-transclude></div>\n')}]),angular.module("uib/template/progressbar/progress.html",[]).run(["$templateCache",function(e){e.put("uib/template/progressbar/progress.html",'<div class="progress" ng-transclude aria-labelledby="{{::title}}"></div>')}]),angular.module("uib/template/progressbar/progressbar.html",[]).run(["$templateCache",function(e){e.put("uib/template/progressbar/progressbar.html",'<div class="progress">\n  <div class="progress-bar" ng-class="type && \'progress-bar-\' + type" role="progressbar" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="{{max}}" ng-style="{width: (percent < 100 ? percent : 100) + \'%\'}" aria-valuetext="{{percent | number:0}}%" aria-labelledby="{{::title}}" ng-transclude></div>\n</div>\n')}]),angular.module("uib/template/rating/rating.html",[]).run(["$templateCache",function(e){e.put("uib/template/rating/rating.html",'<span ng-mouseleave="reset()" ng-keydown="onKeydown($event)" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="{{range.length}}" aria-valuenow="{{value}}">\n    <span ng-repeat-start="r in range track by $index" class="sr-only">({{ $index < value ? \'*\' : \' \' }})</span>\n    <i ng-repeat-end ng-mouseenter="enter($index + 1)" ng-click="rate($index + 1)" class="glyphicon" ng-class="$index < value && (r.stateOn || \'glyphicon-star\') || (r.stateOff || \'glyphicon-star-empty\')" ng-attr-title="{{r.title}}" aria-valuetext="{{r.title}}"></i>\n</span>\n')}]),angular.module("uib/template/tabs/tab.html",[]).run(["$templateCache",function(e){e.put("uib/template/tabs/tab.html",'<li ng-class="{active: active, disabled: disabled}" class="uib-tab">\n  <a href ng-click="select()" uib-tab-heading-transclude>{{heading}}</a>\n</li>\n')}]),angular.module("uib/template/tabs/tabset.html",[]).run(["$templateCache",function(e){e.put("uib/template/tabs/tabset.html",'<div>\n  <ul class="nav nav-{{type || \'tabs\'}}" ng-class="{\'nav-stacked\': vertical, \'nav-justified\': justified}" ng-transclude></ul>\n  <div class="tab-content">\n    <div class="tab-pane" \n         ng-repeat="tab in tabs" \n         ng-class="{active: tab.active}"\n         uib-tab-content-transclude="tab">\n    </div>\n  </div>\n</div>\n')}]),angular.module("uib/template/timepicker/timepicker.html",[]).run(["$templateCache",function(e){e.put("uib/template/timepicker/timepicker.html",'<table class="uib-timepicker">\n  <tbody>\n    <tr class="text-center" ng-show="::showSpinners">\n      <td class="uib-increment hours"><a ng-click="incrementHours()" ng-class="{disabled: noIncrementHours()}" class="btn btn-link" ng-disabled="noIncrementHours()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-up"></span></a></td>\n      <td>&nbsp;</td>\n      <td class="uib-increment minutes"><a ng-click="incrementMinutes()" ng-class="{disabled: noIncrementMinutes()}" class="btn btn-link" ng-disabled="noIncrementMinutes()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-up"></span></a></td>\n      <td ng-show="showSeconds">&nbsp;</td>\n      <td ng-show="showSeconds" class="uib-increment seconds"><a ng-click="incrementSeconds()" ng-class="{disabled: noIncrementSeconds()}" class="btn btn-link" ng-disabled="noIncrementSeconds()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-up"></span></a></td>\n      <td ng-show="showMeridian"></td>\n    </tr>\n    <tr>\n      <td class="form-group uib-time hours" ng-class="{\'has-error\': invalidHours}">\n        <input style="width:50px;" type="text" placeholder="HH" ng-model="hours" ng-change="updateHours()" class="form-control text-center" ng-readonly="::readonlyInput" maxlength="2" tabindex="{{::tabindex}}" ng-disabled="noIncrementHours()" ng-blur="blur()">\n      </td>\n      <td class="uib-separator">:</td>\n      <td class="form-group uib-time minutes" ng-class="{\'has-error\': invalidMinutes}">\n        <input style="width:50px;" type="text" placeholder="MM" ng-model="minutes" ng-change="updateMinutes()" class="form-control text-center" ng-readonly="::readonlyInput" maxlength="2" tabindex="{{::tabindex}}" ng-disabled="noIncrementMinutes()" ng-blur="blur()">\n      </td>\n      <td ng-show="showSeconds" class="uib-separator">:</td>\n      <td class="form-group uib-time seconds" ng-class="{\'has-error\': invalidSeconds}" ng-show="showSeconds">\n        <input style="width:50px;" type="text" placeholder="SS" ng-model="seconds" ng-change="updateSeconds()" class="form-control text-center" ng-readonly="readonlyInput" maxlength="2" tabindex="{{::tabindex}}" ng-disabled="noIncrementSeconds()" ng-blur="blur()">\n      </td>\n      <td ng-show="showMeridian" class="uib-time am-pm"><button type="button" ng-class="{disabled: noToggleMeridian()}" class="btn btn-default text-center" ng-click="toggleMeridian()" ng-disabled="noToggleMeridian()" tabindex="{{::tabindex}}">{{meridian}}</button></td>\n    </tr>\n    <tr class="text-center" ng-show="::showSpinners">\n      <td class="uib-decrement hours"><a ng-click="decrementHours()" ng-class="{disabled: noDecrementHours()}" class="btn btn-link" ng-disabled="noDecrementHours()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-down"></span></a></td>\n      <td>&nbsp;</td>\n      <td class="uib-decrement minutes"><a ng-click="decrementMinutes()" ng-class="{disabled: noDecrementMinutes()}" class="btn btn-link" ng-disabled="noDecrementMinutes()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-down"></span></a></td>\n      <td ng-show="showSeconds">&nbsp;</td>\n      <td ng-show="showSeconds" class="uib-decrement seconds"><a ng-click="decrementSeconds()" ng-class="{disabled: noDecrementSeconds()}" class="btn btn-link" ng-disabled="noDecrementSeconds()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-down"></span></a></td>\n      <td ng-show="showMeridian"></td>\n    </tr>\n  </tbody>\n</table>\n')}]),angular.module("uib/template/typeahead/typeahead-match.html",[]).run(["$templateCache",function(e){e.put("uib/template/typeahead/typeahead-match.html",'<a href\n   tabindex="-1"\n   ng-bind-html="match.label | uibTypeaheadHighlight:query"\n   ng-attr-title="{{match.label}}"></a>\n')}]),angular.module("uib/template/typeahead/typeahead-popup.html",[]).run(["$templateCache",function(e){e.put("uib/template/typeahead/typeahead-popup.html",'<ul class="dropdown-menu" ng-show="isOpen() && !moveInProgress" ng-style="{top: position().top+\'px\', left: position().left+\'px\'}" role="listbox" aria-hidden="{{!isOpen()}}">\n    <li ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index, $event)" role="option" id="{{::match.id}}">\n        <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>\n    </li>\n</ul>\n')}]),angular.module("ui.bootstrap.carousel").run(function(){!angular.$$csp().noInlineStyle&&angular.element(document).find("head").prepend('<style type="text/css">.ng-animate.item:not(.left):not(.right){-webkit-transition:0s ease-in-out left;transition:0s ease-in-out left}</style>')}),angular.module("ui.bootstrap.datepicker").run(function(){!angular.$$csp().noInlineStyle&&angular.element(document).find("head").prepend('<style type="text/css">.uib-datepicker .uib-title{width:100%;}.uib-day button,.uib-month button,.uib-year button{min-width:100%;}.uib-datepicker-popup.dropdown-menu{display:block;}.uib-button-bar{padding:10px 9px 2px;}</style>')}),angular.module("ui.bootstrap.timepicker").run(function(){!angular.$$csp().noInlineStyle&&angular.element(document).find("head").prepend('<style type="text/css">.uib-time input{width:50px;}</style>')}),angular.module("ui.bootstrap.typeahead").run(function(){!angular.$$csp().noInlineStyle&&angular.element(document).find("head").prepend('<style type="text/css">[uib-typeahead-popup].dropdown-menu{display:block;}</style>')});var HEADERS={},headerss={Authorization:"dfsdfsdfsfs"},APP_URL={login:API_ENGINE_URL+"authenticate",userbytoken:API_ENGINE_URL+"user-by-token",signup:API_ENGINE_URL+"users",update:API_ENGINE_URL+"users","delete":API_ENGINE_URL+"users",get_me:API_ENGINE_URL+"me",order_item:API_ENGINE_URL+"orders",order_read:API_ENGINE_URL+"orders/:id",order_update:API_ENGINE_URL+"orders/:id",order_delete:API_ENGINE_URL+"orders/:id",order_history:API_ENGINE_URL+"orders",read_item:API_ENGINE_URL+"items/:id",get_category_items:API_ENGINE_URL+"category/:id/items",get_all_category:API_ENGINE_URL+"category",change_password:API_ENGINE_URL+"changepassword/:id",forgot_password:API_ENGINE_URL+"resetpassword",item_children:API_ENGINE_URL+"item-children",address_by_userid:API_ENGINE_URL+"address/user/:id",address_remove:API_ENGINE_URL+"address/remove",get_children:API_ENGINE_URL+"children/:parent_id",admin_order_history:API_ENGINE_URL+"admin/orders",admin_order_details:API_ENGINE_URL+"admin/order-details/:id",add_item:API_ENGINE_URL+"admin/items",update_item:API_ENGINE_URL+"admin/items",delete_item:API_ENGINE_URL+"admin/items/:id",update_order:API_ENGINE_URL+"admin/orders",order_address:API_ENGINE_URL+"admin/order-address/:id"};APP_LOCALITY=["Kahilpara","Lokhra Rd","Maligaon","Zoo Road","Bhetapara","VIP Road","Bikash Nagar","Dhirenpara","Lankeshwar","Beltola","Jalukbari","Dharapur","Lokhra","Panjabari Bus Stand","Hatigaon","Ganeshguri","Dispur","Rehabari","GS Road","Adabari","Lal Ganesh","Geetanagar","Garchuk","Azara","Pandu","Borbari","Survey","Rukmini Gaon","Jayanagar","Pator Kuchi","Pragjyotish Nagar","Amingaon","Janakpur","Ulubari","Chandmari","Bharalumukh","Birubari","Machkhowa","9th Mile","Khanapara","Nalapara","Silpukhuri","Christian Basti","Navagraha Rd","Tripura Rd","Tarun Nagar"],APP_LOCALITY=APP_LOCALITY.sort();var mainApp=angular.module("mainApp",["ngRoute","ngResource","ngCookies","ngMessages","checklist-model","ngSanitize","ngCart","ngAnimate","ui.bootstrap","ui.router","angularUtils.directives.uiBreadcrumbs","snap"]),isPublicRoute=function(e){return publicPathArray=["/signup","/login","/forgot-password","/auth/facebook","/auth-token","/about-us"],location.href.indexOf("auth-token")>-1?!0:publicPathArray.indexOf(e)>-1};mainApp.run(["$rootScope","$location","AuthFactory","$cookies",function(e,t,n,a){e.show_loader=0,e.enquiry_made={};var i=[];e.statusList=["new","processing","completed"],e.$on("$routeChangeSuccess",function(){i.push(t.$$path)}),e.back=function(){var e=i.length>1?i.splice(-2)[0]:"/";t.path(e)},e.$on("$stateChangeStart",function(a){n.syncCookieUser(),console.log(t.path()),n.isLoggedIn()||isPublicRoute(t.path())?(n.isLoggedIn()&&"/login"==t.path()&&t.path("/"),console.log("ALLOW"),e.$emit("syncEnquiryMade")):(console.log("DENY"),t.path("/login"))})}]),mainApp.controller("orderItemCtrl",["$scope","$rootScope","AddressFactory","OrderFactory","$cookies","$location","ngCart","$stateParams",function(e,t,n,a,i,r,o,s){if(t.$on("addToCartEnquiry",function(e,n){if(console.log(i.get("enquiry_made")),void 0==i.get("enquiry_made")){var a={items:{}};a.items[n.id]=n}else{var a=JSON.parse(i.get("enquiry_made"));a.items?a.items[n.id]=n:(a.items={},a.items[n.id]=n)}i.put("enquiry_made",JSON.stringify(a)),t.$emit("syncEnquiryMade")}),e.removeFromEnquiryCart=function(){},t.$on("addEnquiryDetails",function(e,n){i.get("enquiry_made");if(null!=i.get("enquiry_made"))var a=JSON.parse(i.get("enquiry_made"));else var a={};angular.forEach(n,function(e,t){a[t]=e}),i.put("enquiry_made",JSON.stringify(a)),t.$emit("syncEnquiryMade")}),t.$on("syncEnquiryMade",function(){var e=null;i.get("enquiry_made")&&(e=JSON.parse(i.get("enquiry_made"))),t.enquiry_made=e,console.log(t.enquiry_made)}),t.$on("emptyCart",function(){o.empty(),i.put("enquiry_made",JSON.stringify({})),t.$emit("syncEnquiryMade")}),t.enquiry_made&&t.enquiry_made.address_id){var l=n.get({id:t.enquiry_made.address_id}).$promise;l.then(function(t){t.error?e.errorMessage=t.error:(e.errorMessage="",e.address=t)})}e.enquiry_made=t.enquiry_made,t.formatDate=function(e){return new Date(e).toISOString()},e.checkout=function(){var n={};n.address_id=e.enquiry_made.address_id,n.pickup_date=e.enquiry_made.pickup_date,n.pickup_time=e.enquiry_made.pickup_time,n.items=o.getItems();var i=a.placeOrder(n).$promise;i.then(function(e){swal("Order placed!","Our team will contact you soon!"),t.$emit("emptyCart"),r.path("/order-summary/"+e.id)})},e.orderHistory={},e.oneAtATime=!0,e.status={isFirstOpen:!0,isFirstDisabled:!1},e.getTotal=function(e,t){return e*t},e.statusClass=STATUS_COLORS,e.lengthOfOrder=0,e.getOrderHistory=function(){var t=a.getOrderHistory().$promise;t.then(function(t){angular.forEach(t,function(t){e.orderHistory[t.order_id]?(e.orderHistory[t.order_id].items.push(t),e.orderHistory[t.order_id].total_amnt=e.getTotal(t.quantity,t.price)+e.orderHistory[t.order_id].total_amnt):e.orderHistory[t.order_id]={total_amnt:e.getTotal(t.quantity,t.price),items:[t],order_date:t.order_date,status:t.status,pickup_date:t.pickup_date}}),e.lengthOfOrder=Object.keys(e.orderHistory).length,console.log(e.lengthOfOrder)})},e.orderSummary={},e.orderSummaryTotal=0,e.getMyOrderSummary=function(t){var n=a.getMyOrderSummary({id:t}).$promise;n.then(function(t){e.orderSummary=t,angular.forEach(t,function(t){e.orderSummaryTotal+=e.getTotal(t.quantity,t.price)}),console.log("#############################"),console.log(e.orderSummaryTotal)})},"/orders"==r.path()&&e.getOrderHistory();r.path();s.order_id&&e.getMyOrderSummary(s.order_id)}]),mainApp.factory("AuthFactory",["$resource","$rootScope","$cookies","$location",function(e,t,n,a){return{setAuthorizationHeader:function(){HEADERS={Authorization:"Bearer "+t.user.token}},setAuthorizationHeaderSocial:function(e){HEADERS={Authorization:"Bearer "+e}},resetAuthorizationHeader:function(){HEADERS=null},setUser:function(e){t.user=e,n.put("user",JSON.stringify(e)),this.setAuthorizationHeader()},syncCookieUser:function(){var e=n.get("user");e&&(t.user=JSON.parse(e),console.log(JSON.stringify(t.user)),console.log(t.user),this.setAuthorizationHeader())},getUser:function(){return t.user},logout:function(){t.user=void 0,this.resetAuthorizationHeader(),n.remove("user"),t.$emit("emptyCart"),console.log("LOGGED OUT")},isLoggedIn:function(){return console.log(this.getUser()),!!this.getUser()},login:function(t,n,a){var i=this,r=e(APP_URL.login,{},{login:{method:"POST"}}),o=r.login({email:t,password:n}).$promise;o.then(function(e){e.token&&(console.log(e.token),e.user.token=e.token,i.setUser(e.user),a(null))},function(e){console.log(e),a(e)})},loginWithToken:function(t,n){var a=this;a.setAuthorizationHeaderSocial(t);var i=e(APP_URL.userbytoken,{},{query:{method:"GET",headers:HEADERS,isArray:!1}}),r=i.query({token:t}).$promise;r.then(function(e){e&&(console.log(t),e.token=t,a.setUser(e),n(null))},function(e){console.log(e),n(e)})}}}]),mainApp.factory("ItemFactory",["$resource","$rootScope","$cookies",function(e,t,n){return e(API_ENGINE_URL+"users/:id",{},{getChildren:{method:"GET",headers:HEADERS,params:{parent_id:"@parent_id"},url:APP_URL.get_children,isArray:!0},save:{method:"POST",headers:HEADERS,url:APP_URL.add_item},update:{method:"PUT",headers:HEADERS,url:APP_URL.update_item}})}]),mainApp.config(function(e){e.state("login",{url:"/login",views:{"":{templateUrl:"app/users/login-partial.html",controller:"loginCtrl"}},data:{displayName:""}})}),mainApp.controller("loginCtrl",["$scope","AuthFactory","$location","ItemFactory","$routeParams","$state","$rootScope",function(e,t,n,a,i,r,o){e.user={},e.facebookLoginLink=LOGIN_FACEBOOK_LINK,e.submit=function(){t.login(e.user.email,e.user.password,function(t){if(t)401==t.status&&(e.errorMessage="Login failed");else{if("admin"==o.user.role)return void r.go("admin_orders");n.path("/")}})},e.logout=function(){t.logout(),n.path("/login")},i.token&&t.loginWithToken(i.token,function(t){t?401==t.status&&(e.errorMessage="Login failed"):n.path("/")})}]).directive("login",function(){return{restrict:"E",template:'<div style="margin-top:16px;" ng-show="$root.user.email"  class="dropdown nav navbar-nav navbar-right"\n     role="menu" aria-labelledby="menu1">\n<a data-target="#" href="" data-toggle="dropdown" class="dropdown-toggle">{{$root.user.email}}<b class="caret"></b></a><ul class="dropdown-menu"><li><a href="#/my-info">My info</a></li><li><a href="" ng-click="logout();">Logout</a></li></ul></div>'}}),mainApp.controller("signupCtrl",["$scope","UserFactory","$location",function(e,t,n){e.user={},e.submit=function(a){if(e.errorMessage="",a){var i=t.save(e.user).$promise;i.then(function(t){t.error?e.errorMessage=t.error:(swal("Awesome! You have created your account!"),e.errorMessage="",n.path("#/"))})}}}]),mainApp.factory("UserFactory",["$resource","$rootScope","$cookies",function(e,t,n){return e(API_ENGINE_URL+"users/:id",{},{get:{method:"GET",headers:HEADERS},getMe:{method:"GET",headers:HEADERS,url:APP_URL.get_me},save:{method:"POST",headers:HEADERS},update:{method:"PUT",headers:HEADERS},changePassword:{method:"PUT",headers:HEADERS,url:APP_URL.change_password},forgotPassword:{method:"POST",headers:HEADERS,url:APP_URL.forgot_password}})}]),mainApp.factory("AddressFactory",["$resource","$rootScope","$cookies",function(e,t,n){return e(API_ENGINE_URL+"address/:id",{},{get:{method:"GET",headers:HEADERS,params:{id:"@id"}},"delete":{method:"POST",headers:HEADERS,url:APP_URL.address_remove},save:{method:"POST",headers:HEADERS},update:{method:"PUT",headers:HEADERS},getAddressByUser:{method:"GET",params:{id:"@id"},url:APP_URL.address_by_userid,isArray:!0}})}]),mainApp.config(function(e){e.state("Products",{url:"/",views:{"":{templateUrl:"app/items/all-products.html",controller:"itemCtrl"}},data:{displayName:"Home"}})}),mainApp.controller("userCtrl",["$scope","UserFactory","$routeParams","OrderFactory","$location",function(e,t,n,a,i){e.user={},e.get=function(){e.errorMessage="";var n=t.getMe().$promise;n.then(function(t){t.error?e.errorMessage=t.error:(e.errorMessage="",e.user=t)})},e.update=function(){e.errorMessage="",console.log(e.user);var n=t.update(e.user).$promise;n.then(function(t){t.error?e.errorMessage=t.error:e.errorMessage=""})},e.passwordObject={},e.changePassword=function(){if(e.passwordObject.id=n.id,e.passwordObject.new_password!=e.passwordObject.reenter_new_password)return e.errorMessage="renenter password mismatch",!1;console.log(e.passwordObject);var a=t.changePassword(e.passwordObject).$promise;a.then(function(t){t.error?e.errorMessage=t.error:e.errorMessage=""})},e.user={},e.submitForgotPassword=function(){var n=t.forgotPassword(e.user).$promise;n.then(function(t){t.error?e.errorMessage=t.error:(e.errorMessage="",e.successMessage=t.message)})},e.$watch("$viewContentLoaded",function(){"/my-info"==i.path()&&e.get()})}]),mainApp.factory("httpinterceptor",["$q","$location","$rootScope","$cookies",function(e,t,n,a){return{request:function(e){return HEADERS&&(e.headers.Authorization=HEADERS.Authorization),n.show_loader++,e},response:function(a){return n.show_loader--,401===a.status&&t.path("/"),a||e.when(a)},responseError:function(i){return 500==i.status&&(n.show_loader--,swal({title:"Something went wrong",text:"Please relogin",type:"warning"}),t.path("/")),401===i.status?(console.log("Response Error 401",i),n.user=void 0,a.remove("user"),HEADERS=null,t.path("/")):console.log(i),e.reject(i)}}}]).config(["$httpProvider",function(e){e.interceptors.push("httpinterceptor")}]),mainApp.controller("addressCtrl",["$scope","AddressFactory","$stateParams","$rootScope","$location",function(e,t,n,a,i){for(e.address={},e.get=function(){e.errorMessage="";var a=t.get({id:n.id}).$promise;a.then(function(t){t.error?e.errorMessage=t.error:(e.errorMessage="",e.address=t)})},e.getAddressList=function(){var n=t.getAddressByUser({id:a.user.id}).$promise;n.then(function(t){e.addressList=t,t[0]&&(e.enquiry.address_id=t[0].id),0==e.addressList.length?(e.setMode("create_address"),console.log(e.addressList.length)):i.path().indexOf("edit")>-1?(console.log("EDIT MODE"),e.setMode("create_address")):e.setMode("")})},e.setMode=function(t){e.mode=t},e.areaList=APP_LOCALITY,e.getAddressList(),e.addressMode="",e.save=function(i){if(!i)return void(e.errorMessage="Form fields incorrect");if(e.address.user_id=a.user.id,e.address.state="Assam",e.address.city="Guwahati",e.errorMessage="",n.id){e.address.id=n.id;var r=t.update(e.address).$promise}else var r=t.save(e.address).$promise;r.then(function(t){t.error?e.errorMessage=t.error:(e.errorMessage="",
-e.getAddressList(),e.address=t,swal("Address saved!"),n.id?a.back():e.enquiry.address_id=t.id)})},e["delete"]=function(n){swal({title:"Are you sure?",text:"You will not be able to recover!",type:"warning",showCancelButton:!0,confirmButtonColor:"#DD6B55",confirmButtonText:"Yes, delete it!",closeOnConfirm:!1},function(){e.errorMessage="";var a=t["delete"]({id:n}).$promise;a.then(function(t){t.error?e.errorMessage=t.error:(swal("Delete successful!"),e.getAddressList())})})},e.availableTimeList=[],u=8;20>u;u++)12>u?u+1==12?e.availableTimeList.push({key:u,val:u+":00 am  - "+(u+1)+":00 pm"}):e.availableTimeList.push({key:u,val:u+":00 am  - "+(u+1)+":00 am"}):12==u?e.availableTimeList.push({key:u,val:u+":00 pm - 1:00 pm"}):e.availableTimeList.push({key:u,val:u-12+":00 pm - "+(u-11)+":00 pm"});e.order={};var r={dry_wash:1,wash_iron:2};if(n.service_type){var o=n.service_type.split("="),s=[];if(o[1]){for(var l=o[1].split(","),u=0;u<l.length;u++)s.push(r[[l[u]]]);e.order.items=s}}else e.mode="create_address";e.enquiry={},a.enquiry_made&&(e.enquiry=a.enquiry_made),e.enquiry.updated_by=a.user.id,e.placeEnquiry=function(){e.enquiry.address_id?(a.$emit("addEnquiryDetails",{address_id:e.enquiry.address_id,pickup_date:e.enquiry.pickup_date,pickup_time:e.enquiry.pickup_time}),i.path("/order-preview")):e.errorMessage="Please select an address"},e.update=function(){e.errorMessage="",console.log(e.address);var n=t.update(e.address).$promise;n.then(function(t){t.error?e.errorMessage=t.error:e.errorMessage=""})},e.$watch("$viewContentLoaded",function(){n.id&&e.get()})}]).directive("addressform",function(){return{restrict:"E",templateUrl:"app/users/address-save.html"}}).directive("jqdatepicker",function(){return{restrict:"A",require:"ngModel",link:function(e,t,n,a){$(t).datepicker({dateFormat:"dd/mm/yy",minDate:0,onSelect:function(t){e.enquiry.pickup_date=t,e.$apply()}})}}}),mainApp.controller("itemCtrl",["$scope","ItemFactory","$stateParams","$rootScope","$location",function(e,t,n,a,i){e.html="",e.helloWorld="Hellow world",e.childrenList="",e.getChildren=function(n){var a=t.getChildren({parent_id:n}).$promise;a.then(function(t){e.categoryList=t,console.log("SADAD")})},e.getChildren(1),e.$watch("$viewContentLoaded",function(){e.getChildren(1)})}]).directive("itemlist",function(e){return{restrict:"A",replace:!0,link:function(t,n,a){t.$watch(a.itemlist,function(a){n.html(a),e(n.contents())(t)})}}}),mainApp.config(function(e){e.state("laundry",{url:"/service/Laundry/:id",views:{"":{templateUrl:"app/services/laundry/laundry.html",controller:"laundryCtrl"}},data:{displayName:"Laundry"}})}),mainApp.controller("laundryCtrl",["$scope","ItemFactory","$stateParams","$rootScope","$location","ngCart","ngCartItem",function(e,t,n,a,i,r,o){e.laundryServiceTypes={},e.laundryServiceNames={},e.now_showing="service_types",e.getChildren=function(e,n){if(void 0!=e){var a=t.getChildren({parent_id:e}).$promise;a.then(function(e){n(e)})}},e.clothPrices={},e.clothItems=null,e.showClothPriceList=function(t,n){return e.clothPrices[t]?void(e.clothItems=e.clothPrices[t]):void e.getChildren(t,function(a){var i=n,r=[];angular.forEach(a,function(e,t){r.push(e)}),e.clothPrices[t]={name:i,items:r},e.clothItems=e.clothPrices[t]})},e.enquiry={},e.showServices=function(){e.now_showing="service_types"},e.addCartLaundry=function(){angular.forEach(e.enquiry.items,function(t,n){a.$emit("addToCartEnquiry",{id:t,name:e.laundryServiceNames[t]})}),i.path("/address")},e.showAddressDetails=function(){return 0==r.getTotalItems()?(e.errorMessage="No items added!",!1):void i.path("/address")},e.$watch("$stateChangeStart",function(){e.getChildren(n.id,function(t){e.laundryServiceTypes=t;var n=!0;angular.forEach(e.laundryServiceTypes,function(t,a){n&&(n=!1,e.showClothPriceList(t.id,t.name)),e.laundryServiceNames[t.id]=t.name}),e.showClothPriceList()})})}]).directive("laundryprices",function(){return{restrict:"E",templateUrl:"app/services/laundry/laundry-prices.html"}}),mainApp.factory("OrderFactory",["$resource",function(e){return e(APP_URL.order_item,{},{get:{method:"GET",headers:HEADERS,params:{category_id:"@category_id",id:"@id"},isArray:!0},placeOrder:{method:"POST",params:{}},getOrderHistory:{method:"GET",params:{},url:APP_URL.order_history,isArray:!0},adminOrderHistory:{method:"POST",params:{},url:APP_URL.admin_order_history,isArray:!0},adminGetOrderDetails:{method:"GET",params:{id:"@id"},url:APP_URL.admin_order_details,isArray:!0},updateOrder:{method:"PUT",params:{},url:APP_URL.update_order},getMyOrderSummary:{method:"GET",params:{},url:APP_URL.order_read,isArray:!0},getOrderAddress:{method:"GET",params:{},url:APP_URL.order_address}})}]);var sortingOrder="name";mainApp.config(["$routeProvider",function(e){e.when("/admin/orders",{templateUrl:"app/admin/admin-orders.html",controller:"userCtrl"}),e.when("/admin/category",{templateUrl:"app/admin/admin-category.html",controller:"adminCtrl"})}]),mainApp.controller("adminCtrl",["$scope","OrderFactory","$location","$filter","ItemFactory",function(e,t,n,a,i){e.status_colors=STATUS_COLORS,e.show_order_list=!0,e.generateData=function(){var n=t.adminOrderHistory().$promise;n.then(function(t){e.items=t,e.search()})},e.sortingOrder=sortingOrder,e.pageSizes=[5,10,25,50],e.reverse=!1,e.filteredItems=[],e.groupedItems=[],e.itemsPerPage=10,e.pagedItems=[],e.currentPage=0;var r=function(e,t){return t?-1!==e.toLowerCase().indexOf(t.toLowerCase()):!0};e.search=function(){e.filteredItems=a("filter")(e.items,function(t){for(var n in t)if(r(t[n],e.query))return!0;return!1}),""!==e.sortingOrder&&(e.filteredItems=a("orderBy")(e.filteredItems,e.sortingOrder,e.reverse)),e.currentPage=0,e.groupToPages()},e.perPage=function(){e.groupToPages()},e.groupToPages=function(){e.pagedItems=[];for(var t=0;t<e.filteredItems.length;t++)t%e.itemsPerPage===0?e.pagedItems[Math.floor(t/e.itemsPerPage)]=[e.filteredItems[t]]:e.pagedItems[Math.floor(t/e.itemsPerPage)].push(e.filteredItems[t])},e.deleteItem=function(t){var n=e.pagedItems[e.currentPage][t],a=e.items.indexOf(n);return e.items.splice(a,1),e.search(),!1},e.range=function(e,t){var n=[];t||(t=e,e=0);for(var a=e;t>a;a++)n.push(a);return n},e.prevPage=function(){e.currentPage>0&&e.currentPage--},e.nextPage=function(){e.currentPage<e.pagedItems.length-1&&e.currentPage++},e.setPage=function(){e.currentPage=this.n},e.generateData(),e.sort_by=function(t){e.sortingOrder==t&&(e.reverse=!e.reverse),e.sortingOrder=t},e.orderDetails={items:[]},e.showOrderDetails=function(n){e.orderAddressHistory(n),e.orderDetails.items=[];var a=t.adminGetOrderDetails({id:n}).$promise;a.then(function(t){var n=0;angular.forEach(t,function(t){e.orderDetails.status||(e.orderDetails.status=t.status,e.orderDetails.order_id=t.order_id),e.orderDetails.items.push(t),n+=t.price*t.quantity}),e.orderDetails.total_amount=n,e.show_order_list=!1})},e.getCategories=function(e){},e.deleteNode=function(e){e.nodes=[]},e.addNode=function(e){var t=e.nodes.length+1,n=e.name+"-"+t;e.nodes.push({name:n,nodes:[]})},e.displayTree=function(e){var t=i.getChildren({parent_id:e.id}).$promise;t.then(function(t){t&&(e.nodes=t)})},e.tree=[{name:"ServEaseMe",id:1,nodes:[]}],"/admin/category"==n.path()&&e.displayTree(e.tree[0]),e.itemCategory={},e.saveNodeMode=!1,e.showEditNode=function(t){e.itemCategory=t,e.saveNodeMode=!0},e.showAddNode=function(t){e.itemCategory={},e.itemCategory.parent_id=t.id,e.saveNodeMode=!0},e.saveNodeItem=function(){if(e.itemCategory.id)var t=i.update(e.itemCategory).$promise;else var t=i.save(e.itemCategory).$promise;t.then(function(t){e.saveNodeMode=!1})},e.cancelSave=function(){e.saveNodeMode=!1},e.showOrderList=function(){e.show_order_list=!0},e.updateOrder=function(n,a){swal({title:"Are you sure?",text:"You want to update!",type:"warning",showCancelButton:!0,confirmButtonColor:"#DD6B55",confirmButtonText:"Yes",closeOnConfirm:!1},function(){var n=t.updateOrder({id:e.orderDetails.order_id,status:e.orderDetails.status}).$promise;n.then(function(t){t&&(swal("Done!"),e.show_order_list=!0,e.generateData())})})},e.address={},e.orderAddressHistory=function(n){var a=t.getOrderAddress({id:n}).$promise;a.then(function(t){t&&(e.address=t)})}}]),mainApp.controller("driverCtrl",["$scope","ItemFactory","$stateParams","$rootScope","$location","ngCart","ngCartItem",function(e,t,n,a,i,r,o){e.now_showing="service_types",e.dirverItems=[],e.enquiry={},e.showServices=function(){e.now_showing="service_types"},e.addCartDriver=function(){angular.forEach(e.enquiry.items,function(t,n){a.$emit("addToCartEnquiry",{id:t,name:e.laundryServiceNames[t]})}),i.path("/address")},e.showAddressDetails=function(){return 0==r.getTotalItems()?(e.errorMessage="No items added!",!1):void i.path("/address")},e.$watch("$viewContentLoaded",function(){var a=t.getChildren({parent_id:n.id}).$promise;a.then(function(t){e.dirverItems=t})})}]).directive("laundryprices",function(){return{restrict:"E",templateUrl:"app/services/laundry/laundry-prices.html"}});
+/**
+ * Checklist-model
+ * AngularJS directive for list of checkboxes
+ * https://github.com/vitalets/checklist-model
+ * License: MIT http://opensource.org/licenses/MIT
+ */
+
+angular.module('checklist-model', [])
+.directive('checklistModel', ['$parse', '$compile', function($parse, $compile) {
+  // contains
+  function contains(arr, item, comparator) {
+    if (angular.isArray(arr)) {
+      for (var i = arr.length; i--;) {
+        if (comparator(arr[i], item)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // add
+  function add(arr, item, comparator) {
+    arr = angular.isArray(arr) ? arr : [];
+      if(!contains(arr, item, comparator)) {
+          arr.push(item);
+      }
+    return arr;
+  }  
+
+  // remove
+  function remove(arr, item, comparator) {
+    if (angular.isArray(arr)) {
+      for (var i = arr.length; i--;) {
+        if (comparator(arr[i], item)) {
+          arr.splice(i, 1);
+          break;
+        }
+      }
+    }
+    return arr;
+  }
+
+  // http://stackoverflow.com/a/19228302/1458162
+  function postLinkFn(scope, elem, attrs) {
+     // exclude recursion, but still keep the model
+    var checklistModel = attrs.checklistModel;
+    attrs.$set("checklistModel", null);
+    // compile with `ng-model` pointing to `checked`
+    $compile(elem)(scope);
+    attrs.$set("checklistModel", checklistModel);
+
+    // getter / setter for original model
+    var getter = $parse(checklistModel);
+    var setter = getter.assign;
+    var checklistChange = $parse(attrs.checklistChange);
+    var checklistBeforeChange = $parse(attrs.checklistBeforeChange);
+
+    // value added to list
+    var value = attrs.checklistValue ? $parse(attrs.checklistValue)(scope.$parent) : attrs.value;
+
+
+    var comparator = angular.equals;
+
+    if (attrs.hasOwnProperty('checklistComparator')){
+      if (attrs.checklistComparator[0] == '.') {
+        var comparatorExpression = attrs.checklistComparator.substring(1);
+        comparator = function (a, b) {
+          return a[comparatorExpression] === b[comparatorExpression];
+        };
+        
+      } else {
+        comparator = $parse(attrs.checklistComparator)(scope.$parent);
+      }
+    }
+
+    // watch UI checked change
+    scope.$watch(attrs.ngModel, function(newValue, oldValue) {
+      if (newValue === oldValue) { 
+        return;
+      } 
+
+      if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
+        scope[attrs.ngModel] = contains(getter(scope.$parent), value, comparator);
+        return;
+      }
+
+      setValueInChecklistModel(value, newValue);
+
+      if (checklistChange) {
+        checklistChange(scope);
+      }
+    });
+
+    function setValueInChecklistModel(value, checked) {
+      var current = getter(scope.$parent);
+      if (angular.isFunction(setter)) {
+        if (checked === true) {
+          setter(scope.$parent, add(current, value, comparator));
+        } else {
+          setter(scope.$parent, remove(current, value, comparator));
+        }
+      }
+      
+    }
+
+    // declare one function to be used for both $watch functions
+    function setChecked(newArr, oldArr) {
+      if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
+        setValueInChecklistModel(value, scope[attrs.ngModel]);
+        return;
+      }
+      scope[attrs.ngModel] = contains(newArr, value, comparator);
+    }
+
+    // watch original model change
+    // use the faster $watchCollection method if it's available
+    if (angular.isFunction(scope.$parent.$watchCollection)) {
+        scope.$parent.$watchCollection(checklistModel, setChecked);
+    } else {
+        scope.$parent.$watch(checklistModel, setChecked, true);
+    }
+  }
+
+  return {
+    restrict: 'A',
+    priority: 1000,
+    terminal: true,
+    scope: true,
+    compile: function(tElement, tAttrs) {
+      if ((tElement[0].tagName !== 'INPUT' || tAttrs.type !== 'checkbox') && (tElement[0].tagName !== 'MD-CHECKBOX') && (!tAttrs.btnCheckbox)) {
+        throw 'checklist-model should be applied to `input[type="checkbox"]` or `md-checkbox`.';
+      }
+
+      if (!tAttrs.checklistValue && !tAttrs.value) {
+        throw 'You should provide `value` or `checklist-value`.';
+      }
+
+      // by default ngModel is 'checked', so we set it if not specified
+      if (!tAttrs.ngModel) {
+        // local scope var storing individual checkbox model
+        tAttrs.$set("ngModel", "checked");
+      }
+
+      return postLinkFn;
+    }
+  };
+}]);
+
+/*
+ * angular-ui-bootstrap
+ * http://angular-ui.github.io/bootstrap/
+
+ * Version: 1.1.2 - 2016-02-01
+ * License: MIT
+ */angular.module("ui.bootstrap",["ui.bootstrap.tpls","ui.bootstrap.collapse","ui.bootstrap.accordion","ui.bootstrap.alert","ui.bootstrap.buttons","ui.bootstrap.carousel","ui.bootstrap.dateparser","ui.bootstrap.isClass","ui.bootstrap.position","ui.bootstrap.datepicker","ui.bootstrap.debounce","ui.bootstrap.dropdown","ui.bootstrap.stackedMap","ui.bootstrap.modal","ui.bootstrap.paging","ui.bootstrap.pager","ui.bootstrap.pagination","ui.bootstrap.tooltip","ui.bootstrap.popover","ui.bootstrap.progressbar","ui.bootstrap.rating","ui.bootstrap.tabs","ui.bootstrap.timepicker","ui.bootstrap.typeahead"]),angular.module("ui.bootstrap.tpls",["uib/template/accordion/accordion-group.html","uib/template/accordion/accordion.html","uib/template/alert/alert.html","uib/template/carousel/carousel.html","uib/template/carousel/slide.html","uib/template/datepicker/datepicker.html","uib/template/datepicker/day.html","uib/template/datepicker/month.html","uib/template/datepicker/popup.html","uib/template/datepicker/year.html","uib/template/modal/backdrop.html","uib/template/modal/window.html","uib/template/pager/pager.html","uib/template/pagination/pagination.html","uib/template/tooltip/tooltip-html-popup.html","uib/template/tooltip/tooltip-popup.html","uib/template/tooltip/tooltip-template-popup.html","uib/template/popover/popover-html.html","uib/template/popover/popover-template.html","uib/template/popover/popover.html","uib/template/progressbar/bar.html","uib/template/progressbar/progress.html","uib/template/progressbar/progressbar.html","uib/template/rating/rating.html","uib/template/tabs/tab.html","uib/template/tabs/tabset.html","uib/template/timepicker/timepicker.html","uib/template/typeahead/typeahead-match.html","uib/template/typeahead/typeahead-popup.html"]),angular.module("ui.bootstrap.collapse",[]).directive("uibCollapse",["$animate","$q","$parse","$injector",function(a,b,c,d){var e=d.has("$animateCss")?d.get("$animateCss"):null;return{link:function(d,f,g){function h(){f.hasClass("collapse")&&f.hasClass("in")||b.resolve(l(d)).then(function(){f.removeClass("collapse").addClass("collapsing").attr("aria-expanded",!0).attr("aria-hidden",!1),e?e(f,{addClass:"in",easing:"ease",to:{height:f[0].scrollHeight+"px"}}).start()["finally"](i):a.addClass(f,"in",{to:{height:f[0].scrollHeight+"px"}}).then(i)})}function i(){f.removeClass("collapsing").addClass("collapse").css({height:"auto"}),m(d)}function j(){return f.hasClass("collapse")||f.hasClass("in")?void b.resolve(n(d)).then(function(){f.css({height:f[0].scrollHeight+"px"}).removeClass("collapse").addClass("collapsing").attr("aria-expanded",!1).attr("aria-hidden",!0),e?e(f,{removeClass:"in",to:{height:"0"}}).start()["finally"](k):a.removeClass(f,"in",{to:{height:"0"}}).then(k)}):k()}function k(){f.css({height:"0"}),f.removeClass("collapsing").addClass("collapse"),o(d)}var l=c(g.expanding),m=c(g.expanded),n=c(g.collapsing),o=c(g.collapsed);d.$eval(g.uibCollapse)||f.addClass("in").addClass("collapse").attr("aria-expanded",!0).attr("aria-hidden",!1).css({height:"auto"}),d.$watch(g.uibCollapse,function(a){a?j():h()})}}}]),angular.module("ui.bootstrap.accordion",["ui.bootstrap.collapse"]).constant("uibAccordionConfig",{closeOthers:!0}).controller("UibAccordionController",["$scope","$attrs","uibAccordionConfig",function(a,b,c){this.groups=[],this.closeOthers=function(d){var e=angular.isDefined(b.closeOthers)?a.$eval(b.closeOthers):c.closeOthers;e&&angular.forEach(this.groups,function(a){a!==d&&(a.isOpen=!1)})},this.addGroup=function(a){var b=this;this.groups.push(a),a.$on("$destroy",function(c){b.removeGroup(a)})},this.removeGroup=function(a){var b=this.groups.indexOf(a);-1!==b&&this.groups.splice(b,1)}}]).directive("uibAccordion",function(){return{controller:"UibAccordionController",controllerAs:"accordion",transclude:!0,templateUrl:function(a,b){return b.templateUrl||"uib/template/accordion/accordion.html"}}}).directive("uibAccordionGroup",function(){return{require:"^uibAccordion",transclude:!0,replace:!0,templateUrl:function(a,b){return b.templateUrl||"uib/template/accordion/accordion-group.html"},scope:{heading:"@",isOpen:"=?",isDisabled:"=?"},controller:function(){this.setHeading=function(a){this.heading=a}},link:function(a,b,c,d){d.addGroup(a),a.openClass=c.openClass||"panel-open",a.panelClass=c.panelClass||"panel-default",a.$watch("isOpen",function(c){b.toggleClass(a.openClass,!!c),c&&d.closeOthers(a)}),a.toggleOpen=function(b){a.isDisabled||b&&32!==b.which||(a.isOpen=!a.isOpen)};var e="accordiongroup-"+a.$id+"-"+Math.floor(1e4*Math.random());a.headingId=e+"-tab",a.panelId=e+"-panel"}}}).directive("uibAccordionHeading",function(){return{transclude:!0,template:"",replace:!0,require:"^uibAccordionGroup",link:function(a,b,c,d,e){d.setHeading(e(a,angular.noop))}}}).directive("uibAccordionTransclude",function(){return{require:"^uibAccordionGroup",link:function(a,b,c,d){a.$watch(function(){return d[c.uibAccordionTransclude]},function(a){a&&(b.find("span").html(""),b.find("span").append(a))})}}}),angular.module("ui.bootstrap.alert",[]).controller("UibAlertController",["$scope","$attrs","$interpolate","$timeout",function(a,b,c,d){a.closeable=!!b.close;var e=angular.isDefined(b.dismissOnTimeout)?c(b.dismissOnTimeout)(a.$parent):null;e&&d(function(){a.close()},parseInt(e,10))}]).directive("uibAlert",function(){return{controller:"UibAlertController",controllerAs:"alert",templateUrl:function(a,b){return b.templateUrl||"uib/template/alert/alert.html"},transclude:!0,replace:!0,scope:{type:"@",close:"&"}}}),angular.module("ui.bootstrap.buttons",[]).constant("uibButtonConfig",{activeClass:"active",toggleEvent:"click"}).controller("UibButtonsController",["uibButtonConfig",function(a){this.activeClass=a.activeClass||"active",this.toggleEvent=a.toggleEvent||"click"}]).directive("uibBtnRadio",["$parse",function(a){return{require:["uibBtnRadio","ngModel"],controller:"UibButtonsController",controllerAs:"buttons",link:function(b,c,d,e){var f=e[0],g=e[1],h=a(d.uibUncheckable);c.find("input").css({display:"none"}),g.$render=function(){c.toggleClass(f.activeClass,angular.equals(g.$modelValue,b.$eval(d.uibBtnRadio)))},c.on(f.toggleEvent,function(){if(!d.disabled){var a=c.hasClass(f.activeClass);(!a||angular.isDefined(d.uncheckable))&&b.$apply(function(){g.$setViewValue(a?null:b.$eval(d.uibBtnRadio)),g.$render()})}}),d.uibUncheckable&&b.$watch(h,function(a){d.$set("uncheckable",a?"":null)})}}}]).directive("uibBtnCheckbox",function(){return{require:["uibBtnCheckbox","ngModel"],controller:"UibButtonsController",controllerAs:"button",link:function(a,b,c,d){function e(){return g(c.btnCheckboxTrue,!0)}function f(){return g(c.btnCheckboxFalse,!1)}function g(b,c){return angular.isDefined(b)?a.$eval(b):c}var h=d[0],i=d[1];b.find("input").css({display:"none"}),i.$render=function(){b.toggleClass(h.activeClass,angular.equals(i.$modelValue,e()))},b.on(h.toggleEvent,function(){c.disabled||a.$apply(function(){i.$setViewValue(b.hasClass(h.activeClass)?f():e()),i.$render()})})}}}),angular.module("ui.bootstrap.carousel",[]).controller("UibCarouselController",["$scope","$element","$interval","$timeout","$animate",function(a,b,c,d,e){function f(){for(;s.length;)s.shift()}function g(a){if(angular.isUndefined(p[a].index))return p[a];for(var b=0,c=p.length;c>b;++b)if(p[b].index===a)return p[b]}function h(c,d,g){t||(angular.extend(c,{direction:g,active:!0}),angular.extend(o.currentSlide||{},{direction:g,active:!1}),e.enabled(b)&&!a.$currentTransition&&c.$element&&o.slides.length>1&&(c.$element.data(q,c.direction),o.currentSlide&&o.currentSlide.$element&&o.currentSlide.$element.data(q,c.direction),a.$currentTransition=!0,e.on("addClass",c.$element,function(b,c){if("close"===c&&(a.$currentTransition=null,e.off("addClass",b),s.length)){var d=s.pop(),g=a.indexOfSlide(d),i=g>o.getCurrentIndex()?"next":"prev";f(),h(d,g,i)}})),o.currentSlide=c,r=d,k())}function i(){m&&(c.cancel(m),m=null)}function j(b){b.length||(a.$currentTransition=null,f())}function k(){i();var b=+a.interval;!isNaN(b)&&b>0&&(m=c(l,b))}function l(){var b=+a.interval;n&&!isNaN(b)&&b>0&&p.length?a.next():a.pause()}var m,n,o=this,p=o.slides=a.slides=[],q="uib-slideDirection",r=-1,s=[];o.currentSlide=null;var t=!1;o.addSlide=function(b,c){b.$element=c,p.push(b),1===p.length||b.active?(a.$currentTransition&&(a.$currentTransition=null),o.select(p[p.length-1]),1===p.length&&a.play()):b.active=!1},o.getCurrentIndex=function(){return o.currentSlide&&angular.isDefined(o.currentSlide.index)?+o.currentSlide.index:r},o.next=a.next=function(){var b=(o.getCurrentIndex()+1)%p.length;return 0===b&&a.noWrap()?void a.pause():o.select(g(b),"next")},o.prev=a.prev=function(){var b=o.getCurrentIndex()-1<0?p.length-1:o.getCurrentIndex()-1;return a.noWrap()&&b===p.length-1?void a.pause():o.select(g(b),"prev")},o.removeSlide=function(a){angular.isDefined(a.index)&&p.sort(function(a,b){return+a.index>+b.index});var b=s.indexOf(a);-1!==b&&s.splice(b,1);var c=p.indexOf(a);p.splice(c,1),d(function(){p.length>0&&a.active?c>=p.length?o.select(p[c-1]):o.select(p[c]):r>c&&r--}),0===p.length&&(o.currentSlide=null,f())},o.select=a.select=function(b,c){var d=a.indexOfSlide(b);void 0===c&&(c=d>o.getCurrentIndex()?"next":"prev"),b&&b!==o.currentSlide&&!a.$currentTransition?h(b,d,c):b&&b!==o.currentSlide&&a.$currentTransition&&(s.push(b),b.active=!1)},a.indexOfSlide=function(a){return angular.isDefined(a.index)?+a.index:p.indexOf(a)},a.isActive=function(a){return o.currentSlide===a},a.pause=function(){a.noPause||(n=!1,i())},a.play=function(){n||(n=!0,k())},a.$on("$destroy",function(){t=!0,i()}),a.$watch("noTransition",function(a){e.enabled(b,!a)}),a.$watch("interval",k),a.$watchCollection("slides",j)}]).directive("uibCarousel",function(){return{transclude:!0,replace:!0,controller:"UibCarouselController",controllerAs:"carousel",templateUrl:function(a,b){return b.templateUrl||"uib/template/carousel/carousel.html"},scope:{interval:"=",noTransition:"=",noPause:"=",noWrap:"&"}}}).directive("uibSlide",function(){return{require:"^uibCarousel",transclude:!0,replace:!0,templateUrl:function(a,b){return b.templateUrl||"uib/template/carousel/slide.html"},scope:{active:"=?",actual:"=?",index:"=?"},link:function(a,b,c,d){d.addSlide(a,b),a.$on("$destroy",function(){d.removeSlide(a)}),a.$watch("active",function(b){b&&d.select(a)})}}}).animation(".item",["$animateCss",function(a){function b(a,b,c){a.removeClass(b),c&&c()}var c="uib-slideDirection";return{beforeAddClass:function(d,e,f){if("active"===e){var g=!1,h=d.data(c),i="next"===h?"left":"right",j=b.bind(this,d,i+" "+h,f);return d.addClass(h),a(d,{addClass:i}).start().done(j),function(){g=!0}}f()},beforeRemoveClass:function(d,e,f){if("active"===e){var g=!1,h=d.data(c),i="next"===h?"left":"right",j=b.bind(this,d,i,f);return a(d,{addClass:i}).start().done(j),function(){g=!0}}f()}}}]),angular.module("ui.bootstrap.dateparser",[]).service("uibDateParser",["$log","$locale","dateFilter","orderByFilter",function(a,b,c,d){function e(a,b){var c=[],e=a.split(""),f=a.indexOf("'");if(f>-1){var g=!1;a=a.split("");for(var h=f;h<a.length;h++)g?("'"===a[h]&&(h+1<a.length&&"'"===a[h+1]?(a[h+1]="$",e[h+1]=""):(e[h]="",g=!1)),a[h]="$"):"'"===a[h]&&(a[h]="$",e[h]="",g=!0);a=a.join("")}return angular.forEach(n,function(d){var f=a.indexOf(d.key);if(f>-1){a=a.split(""),e[f]="("+d.regex+")",a[f]="$";for(var g=f+1,h=f+d.key.length;h>g;g++)e[g]="",a[g]="$";a=a.join(""),c.push({index:f,key:d.key,apply:d[b],matcher:d.regex})}}),{regex:new RegExp("^"+e.join("")+"$"),map:d(c,"index")}}function f(a,b,c){return 1>c?!1:1===b&&c>28?29===c&&(a%4===0&&a%100!==0||a%400===0):3===b||5===b||8===b||10===b?31>c:!0}function g(a){return parseInt(a,10)}function h(a,b){return a&&b?l(a,b):a}function i(a,b){return a&&b?l(a,b,!0):a}function j(a,b){var c=Date.parse("Jan 01, 1970 00:00:00 "+a)/6e4;return isNaN(c)?b:c}function k(a,b){return a=new Date(a.getTime()),a.setMinutes(a.getMinutes()+b),a}function l(a,b,c){c=c?-1:1;var d=j(b,a.getTimezoneOffset());return k(a,c*(d-a.getTimezoneOffset()))}var m,n,o=/[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;this.init=function(){m=b.id,this.parsers={},this.formatters={},n=[{key:"yyyy",regex:"\\d{4}",apply:function(a){this.year=+a},formatter:function(a){var b=new Date;return b.setFullYear(Math.abs(a.getFullYear())),c(b,"yyyy")}},{key:"yy",regex:"\\d{2}",apply:function(a){this.year=+a+2e3},formatter:function(a){var b=new Date;return b.setFullYear(Math.abs(a.getFullYear())),c(b,"yy")}},{key:"y",regex:"\\d{1,4}",apply:function(a){this.year=+a},formatter:function(a){var b=new Date;return b.setFullYear(Math.abs(a.getFullYear())),c(b,"y")}},{key:"M!",regex:"0?[1-9]|1[0-2]",apply:function(a){this.month=a-1},formatter:function(a){var b=a.getMonth();return/^[0-9]$/.test(b)?c(a,"MM"):c(a,"M")}},{key:"MMMM",regex:b.DATETIME_FORMATS.MONTH.join("|"),apply:function(a){this.month=b.DATETIME_FORMATS.MONTH.indexOf(a)},formatter:function(a){return c(a,"MMMM")}},{key:"MMM",regex:b.DATETIME_FORMATS.SHORTMONTH.join("|"),apply:function(a){this.month=b.DATETIME_FORMATS.SHORTMONTH.indexOf(a)},formatter:function(a){return c(a,"MMM")}},{key:"MM",regex:"0[1-9]|1[0-2]",apply:function(a){this.month=a-1},formatter:function(a){return c(a,"MM")}},{key:"M",regex:"[1-9]|1[0-2]",apply:function(a){this.month=a-1},formatter:function(a){return c(a,"M")}},{key:"d!",regex:"[0-2]?[0-9]{1}|3[0-1]{1}",apply:function(a){this.date=+a},formatter:function(a){var b=a.getDate();return/^[1-9]$/.test(b)?c(a,"dd"):c(a,"d")}},{key:"dd",regex:"[0-2][0-9]{1}|3[0-1]{1}",apply:function(a){this.date=+a},formatter:function(a){return c(a,"dd")}},{key:"d",regex:"[1-2]?[0-9]{1}|3[0-1]{1}",apply:function(a){this.date=+a},formatter:function(a){return c(a,"d")}},{key:"EEEE",regex:b.DATETIME_FORMATS.DAY.join("|"),formatter:function(a){return c(a,"EEEE")}},{key:"EEE",regex:b.DATETIME_FORMATS.SHORTDAY.join("|"),formatter:function(a){return c(a,"EEE")}},{key:"HH",regex:"(?:0|1)[0-9]|2[0-3]",apply:function(a){this.hours=+a},formatter:function(a){return c(a,"HH")}},{key:"hh",regex:"0[0-9]|1[0-2]",apply:function(a){this.hours=+a},formatter:function(a){return c(a,"hh")}},{key:"H",regex:"1?[0-9]|2[0-3]",apply:function(a){this.hours=+a},formatter:function(a){return c(a,"H")}},{key:"h",regex:"[0-9]|1[0-2]",apply:function(a){this.hours=+a},formatter:function(a){return c(a,"h")}},{key:"mm",regex:"[0-5][0-9]",apply:function(a){this.minutes=+a},formatter:function(a){return c(a,"mm")}},{key:"m",regex:"[0-9]|[1-5][0-9]",apply:function(a){this.minutes=+a},formatter:function(a){return c(a,"m")}},{key:"sss",regex:"[0-9][0-9][0-9]",apply:function(a){this.milliseconds=+a},formatter:function(a){return c(a,"sss")}},{key:"ss",regex:"[0-5][0-9]",apply:function(a){this.seconds=+a},formatter:function(a){return c(a,"ss")}},{key:"s",regex:"[0-9]|[1-5][0-9]",apply:function(a){this.seconds=+a},formatter:function(a){return c(a,"s")}},{key:"a",regex:b.DATETIME_FORMATS.AMPMS.join("|"),apply:function(a){12===this.hours&&(this.hours=0),"PM"===a&&(this.hours+=12)},formatter:function(a){return c(a,"a")}},{key:"Z",regex:"[+-]\\d{4}",apply:function(a){var b=a.match(/([+-])(\d{2})(\d{2})/),c=b[1],d=b[2],e=b[3];this.hours+=g(c+d),this.minutes+=g(c+e)},formatter:function(a){return c(a,"Z")}},{key:"ww",regex:"[0-4][0-9]|5[0-3]",formatter:function(a){return c(a,"ww")}},{key:"w",regex:"[0-9]|[1-4][0-9]|5[0-3]",formatter:function(a){return c(a,"w")}},{key:"GGGG",regex:b.DATETIME_FORMATS.ERANAMES.join("|").replace(/\s/g,"\\s"),formatter:function(a){return c(a,"GGGG")}},{key:"GGG",regex:b.DATETIME_FORMATS.ERAS.join("|"),formatter:function(a){return c(a,"GGG")}},{key:"GG",regex:b.DATETIME_FORMATS.ERAS.join("|"),formatter:function(a){return c(a,"GG")}},{key:"G",regex:b.DATETIME_FORMATS.ERAS.join("|"),formatter:function(a){return c(a,"G")}}]},this.init(),this.filter=function(a,c){if(!angular.isDate(a)||isNaN(a)||!c)return"";c=b.DATETIME_FORMATS[c]||c,b.id!==m&&this.init(),this.formatters[c]||(this.formatters[c]=e(c,"formatter"));var d=this.formatters[c],f=d.map,g=c;return f.reduce(function(b,c,d){var e=g.match(new RegExp("(.*)"+c.key));return e&&angular.isString(e[1])&&(b+=e[1],g=g.replace(e[1]+c.key,"")),c.apply?b+c.apply.call(null,a):b},"")},this.parse=function(c,d,g){if(!angular.isString(c)||!d)return c;d=b.DATETIME_FORMATS[d]||d,d=d.replace(o,"\\$&"),b.id!==m&&this.init(),this.parsers[d]||(this.parsers[d]=e(d,"apply"));var h=this.parsers[d],i=h.regex,j=h.map,k=c.match(i),l=!1;if(k&&k.length){var n,p;angular.isDate(g)&&!isNaN(g.getTime())?n={year:g.getFullYear(),month:g.getMonth(),date:g.getDate(),hours:g.getHours(),minutes:g.getMinutes(),seconds:g.getSeconds(),milliseconds:g.getMilliseconds()}:(g&&a.warn("dateparser:","baseDate is not a valid date"),n={year:1900,month:0,date:1,hours:0,minutes:0,seconds:0,milliseconds:0});for(var q=1,r=k.length;r>q;q++){var s=j[q-1];"Z"===s.matcher&&(l=!0),s.apply&&s.apply.call(n,k[q])}var t=l?Date.prototype.setUTCFullYear:Date.prototype.setFullYear,u=l?Date.prototype.setUTCHours:Date.prototype.setHours;return f(n.year,n.month,n.date)&&(!angular.isDate(g)||isNaN(g.getTime())||l?(p=new Date(0),t.call(p,n.year,n.month,n.date),u.call(p,n.hours||0,n.minutes||0,n.seconds||0,n.milliseconds||0)):(p=new Date(g),t.call(p,n.year,n.month,n.date),u.call(p,n.hours,n.minutes,n.seconds,n.milliseconds))),p}},this.toTimezone=h,this.fromTimezone=i,this.timezoneToOffset=j,this.addDateMinutes=k,this.convertTimezoneToLocal=l}]),angular.module("ui.bootstrap.isClass",[]).directive("uibIsClass",["$animate",function(a){var b=/^\s*([\s\S]+?)\s+on\s+([\s\S]+?)\s*$/,c=/^\s*([\s\S]+?)\s+for\s+([\s\S]+?)\s*$/;return{restrict:"A",compile:function(d,e){function f(a,b,c){i.push(a),j.push({scope:a,element:b}),o.forEach(function(b,c){g(b,a)}),a.$on("$destroy",h)}function g(b,d){var e=b.match(c),f=d.$eval(e[1]),g=e[2],h=k[b];if(!h){var i=function(b){var c=null;j.some(function(a){var d=a.scope.$eval(m);return d===b?(c=a,!0):void 0}),h.lastActivated!==c&&(h.lastActivated&&a.removeClass(h.lastActivated.element,f),c&&a.addClass(c.element,f),h.lastActivated=c)};k[b]=h={lastActivated:null,scope:d,watchFn:i,compareWithExp:g,watcher:d.$watch(g,i)}}h.watchFn(d.$eval(g))}function h(a){var b=a.targetScope,c=i.indexOf(b);if(i.splice(c,1),j.splice(c,1),i.length){var d=i[0];angular.forEach(k,function(a){a.scope===b&&(a.watcher=d.$watch(a.compareWithExp,a.watchFn),a.scope=d)})}else k={}}var i=[],j=[],k={},l=e.uibIsClass.match(b),m=l[2],n=l[1],o=n.split(",");return f}}}]),angular.module("ui.bootstrap.position",[]).factory("$uibPosition",["$document","$window",function(a,b){var c,d={normal:/(auto|scroll)/,hidden:/(auto|scroll|hidden)/},e={auto:/\s?auto?\s?/i,primary:/^(top|bottom|left|right)$/,secondary:/^(top|bottom|left|right|center)$/,vertical:/^(top|bottom)$/};return{getRawNode:function(a){return a[0]||a},parseStyle:function(a){return a=parseFloat(a),isFinite(a)?a:0},offsetParent:function(c){function d(a){return"static"===(b.getComputedStyle(a).position||"static")}c=this.getRawNode(c);for(var e=c.offsetParent||a[0].documentElement;e&&e!==a[0].documentElement&&d(e);)e=e.offsetParent;return e||a[0].documentElement},scrollbarWidth:function(){if(angular.isUndefined(c)){var b=angular.element('<div style="position: absolute; top: -9999px; width: 50px; height: 50px; overflow: scroll;"></div>');a.find("body").append(b),c=b[0].offsetWidth-b[0].clientWidth,c=isFinite(c)?c:0,b.remove()}return c},scrollParent:function(c,e){c=this.getRawNode(c);var f=e?d.hidden:d.normal,g=a[0].documentElement,h=b.getComputedStyle(c),i="absolute"===h.position,j=c.parentElement||g;if(j===g||"fixed"===h.position)return g;for(;j.parentElement&&j!==g;){var k=b.getComputedStyle(j);if(i&&"static"!==k.position&&(i=!1),!i&&f.test(k.overflow+k.overflowY+k.overflowX))break;j=j.parentElement}return j},position:function(c,d){c=this.getRawNode(c);var e=this.offset(c);if(d){var f=b.getComputedStyle(c);e.top-=this.parseStyle(f.marginTop),e.left-=this.parseStyle(f.marginLeft)}var g=this.offsetParent(c),h={top:0,left:0};return g!==a[0].documentElement&&(h=this.offset(g),h.top+=g.clientTop-g.scrollTop,h.left+=g.clientLeft-g.scrollLeft),{width:Math.round(angular.isNumber(e.width)?e.width:c.offsetWidth),height:Math.round(angular.isNumber(e.height)?e.height:c.offsetHeight),top:Math.round(e.top-h.top),left:Math.round(e.left-h.left)}},offset:function(c){c=this.getRawNode(c);var d=c.getBoundingClientRect();return{width:Math.round(angular.isNumber(d.width)?d.width:c.offsetWidth),height:Math.round(angular.isNumber(d.height)?d.height:c.offsetHeight),top:Math.round(d.top+(b.pageYOffset||a[0].documentElement.scrollTop)),left:Math.round(d.left+(b.pageXOffset||a[0].documentElement.scrollLeft))}},viewportOffset:function(c,d,e){c=this.getRawNode(c),e=e!==!1?!0:!1;var f=c.getBoundingClientRect(),g={top:0,left:0,bottom:0,right:0},h=d?a[0].documentElement:this.scrollParent(c),i=h.getBoundingClientRect();if(g.top=i.top+h.clientTop,g.left=i.left+h.clientLeft,h===a[0].documentElement&&(g.top+=b.pageYOffset,g.left+=b.pageXOffset),g.bottom=g.top+h.clientHeight,g.right=g.left+h.clientWidth,e){var j=b.getComputedStyle(h);g.top+=this.parseStyle(j.paddingTop),g.bottom-=this.parseStyle(j.paddingBottom),g.left+=this.parseStyle(j.paddingLeft),g.right-=this.parseStyle(j.paddingRight)}return{top:Math.round(f.top-g.top),bottom:Math.round(g.bottom-f.bottom),left:Math.round(f.left-g.left),right:Math.round(g.right-f.right)}},parsePlacement:function(a){var b=e.auto.test(a);return b&&(a=a.replace(e.auto,"")),a=a.split("-"),a[0]=a[0]||"top",e.primary.test(a[0])||(a[0]="top"),a[1]=a[1]||"center",e.secondary.test(a[1])||(a[1]="center"),b?a[2]=!0:a[2]=!1,a},positionElements:function(a,c,d,f){a=this.getRawNode(a),c=this.getRawNode(c);var g=angular.isDefined(c.offsetWidth)?c.offsetWidth:c.prop("offsetWidth"),h=angular.isDefined(c.offsetHeight)?c.offsetHeight:c.prop("offsetHeight");d=this.parsePlacement(d);var i=f?this.offset(a):this.position(a),j={top:0,left:0,placement:""};if(d[2]){var k=this.viewportOffset(a),l=b.getComputedStyle(c),m={width:g+Math.round(Math.abs(this.parseStyle(l.marginLeft)+this.parseStyle(l.marginRight))),height:h+Math.round(Math.abs(this.parseStyle(l.marginTop)+this.parseStyle(l.marginBottom)))};if(d[0]="top"===d[0]&&m.height>k.top&&m.height<=k.bottom?"bottom":"bottom"===d[0]&&m.height>k.bottom&&m.height<=k.top?"top":"left"===d[0]&&m.width>k.left&&m.width<=k.right?"right":"right"===d[0]&&m.width>k.right&&m.width<=k.left?"left":d[0],d[1]="top"===d[1]&&m.height-i.height>k.bottom&&m.height-i.height<=k.top?"bottom":"bottom"===d[1]&&m.height-i.height>k.top&&m.height-i.height<=k.bottom?"top":"left"===d[1]&&m.width-i.width>k.right&&m.width-i.width<=k.left?"right":"right"===d[1]&&m.width-i.width>k.left&&m.width-i.width<=k.right?"left":d[1],"center"===d[1])if(e.vertical.test(d[0])){var n=i.width/2-g/2;k.left+n<0&&m.width-i.width<=k.right?d[1]="left":k.right+n<0&&m.width-i.width<=k.left&&(d[1]="right")}else{var o=i.height/2-m.height/2;k.top+o<0&&m.height-i.height<=k.bottom?d[1]="top":k.bottom+o<0&&m.height-i.height<=k.top&&(d[1]="bottom")}}switch(d[0]){case"top":j.top=i.top-h;break;case"bottom":j.top=i.top+i.height;break;case"left":j.left=i.left-g;break;case"right":j.left=i.left+i.width}switch(d[1]){case"top":j.top=i.top;break;case"bottom":j.top=i.top+i.height-h;break;case"left":j.left=i.left;break;case"right":j.left=i.left+i.width-g;break;case"center":e.vertical.test(d[0])?j.left=i.left+i.width/2-g/2:j.top=i.top+i.height/2-h/2}return j.top=Math.round(j.top),j.left=Math.round(j.left),j.placement="center"===d[1]?d[0]:d[0]+"-"+d[1],j},positionArrow:function(a,c){a=this.getRawNode(a);var d=a.querySelector(".tooltip-inner, .popover-inner");if(d){var f=angular.element(d).hasClass("tooltip-inner"),g=f?a.querySelector(".tooltip-arrow"):a.querySelector(".arrow");if(g){if(c=this.parsePlacement(c),"center"===c[1])return void angular.element(g).css({top:"",bottom:"",right:"",left:"",margin:""});var h="border-"+c[0]+"-width",i=b.getComputedStyle(g)[h],j="border-";j+=e.vertical.test(c[0])?c[0]+"-"+c[1]:c[1]+"-"+c[0],j+="-radius";var k=b.getComputedStyle(f?d:a)[j],l={top:"auto",bottom:"auto",left:"auto",right:"auto",margin:0};switch(c[0]){case"top":l.bottom=f?"0":"-"+i;break;case"bottom":l.top=f?"0":"-"+i;break;case"left":l.right=f?"0":"-"+i;break;case"right":l.left=f?"0":"-"+i}l[c[1]]=k,angular.element(g).css(l)}}}}}]),angular.module("ui.bootstrap.datepicker",["ui.bootstrap.dateparser","ui.bootstrap.isClass","ui.bootstrap.position"]).value("$datepickerSuppressError",!1).constant("uibDatepickerConfig",{datepickerMode:"day",formatDay:"dd",formatMonth:"MMMM",formatYear:"yyyy",formatDayHeader:"EEE",formatDayTitle:"MMMM yyyy",formatMonthTitle:"yyyy",maxDate:null,maxMode:"year",minDate:null,minMode:"day",ngModelOptions:{},shortcutPropagation:!1,showWeeks:!0,yearColumns:5,yearRows:4}).controller("UibDatepickerController",["$scope","$attrs","$parse","$interpolate","$locale","$log","dateFilter","uibDatepickerConfig","$datepickerSuppressError","uibDateParser",function(a,b,c,d,e,f,g,h,i,j){var k=this,l={$setViewValue:angular.noop},m={},n=[];this.modes=["day","month","year"],b.datepickerOptions?angular.forEach(["formatDay","formatDayHeader","formatDayTitle","formatMonth","formatMonthTitle","formatYear","initDate","maxDate","maxMode","minDate","minMode","showWeeks","shortcutPropagation","startingDay","yearColumns","yearRows"],function(b){switch(b){case"formatDay":case"formatDayHeader":case"formatDayTitle":case"formatMonth":case"formatMonthTitle":case"formatYear":k[b]=angular.isDefined(a.datepickerOptions[b])?d(a.datepickerOptions[b])(a.$parent):h[b];break;case"showWeeks":case"shortcutPropagation":case"yearColumns":case"yearRows":k[b]=angular.isDefined(a.datepickerOptions[b])?a.datepickerOptions[b]:h[b];break;case"startingDay":angular.isDefined(a.datepickerOptions.startingDay)?k.startingDay=a.datepickerOptions.startingDay:angular.isNumber(h.startingDay)?k.startingDay=h.startingDay:k.startingDay=(e.DATETIME_FORMATS.FIRSTDAYOFWEEK+8)%7;break;case"maxDate":case"minDate":a.datepickerOptions[b]?a.$watch(function(){return a.datepickerOptions[b]},function(a){a?angular.isDate(a)?k[b]=j.fromTimezone(new Date(a),m.timezone):k[b]=new Date(g(a,"medium")):k[b]=null,k.refreshView()}):k[b]=h[b]?j.fromTimezone(new Date(h[b]),m.timezone):null;break;case"maxMode":case"minMode":a.datepickerOptions[b]?a.$watch(function(){return a.datepickerOptions[b]},function(c){k[b]=a[b]=angular.isDefined(c)?c:datepickerOptions[b],("minMode"===b&&k.modes.indexOf(a.datepickerMode)<k.modes.indexOf(k[b])||"maxMode"===b&&k.modes.indexOf(a.datepickerMode)>k.modes.indexOf(k[b]))&&(a.datepickerMode=k[b])}):k[b]=a[b]=h[b]||null;break;case"initDate":a.datepickerOptions.initDate?(this.activeDate=j.fromTimezone(a.datepickerOptions.initDate,m.timezone)||new Date,a.$watch(function(){return a.datepickerOptions.initDate},function(a){a&&(l.$isEmpty(l.$modelValue)||l.$invalid)&&(k.activeDate=j.fromTimezone(a,m.timezone),k.refreshView())})):this.activeDate=new Date}}):(angular.forEach(["formatDay","formatMonth","formatYear","formatDayHeader","formatDayTitle","formatMonthTitle"],function(c){k[c]=angular.isDefined(b[c])?d(b[c])(a.$parent):h[c]}),angular.forEach(["showWeeks","yearRows","yearColumns","shortcutPropagation"],function(c){k[c]=angular.isDefined(b[c])?a.$parent.$eval(b[c]):h[c]}),angular.isDefined(b.startingDay)?k.startingDay=a.$parent.$eval(b.startingDay):angular.isNumber(h.startingDay)?k.startingDay=h.startingDay:k.startingDay=(e.DATETIME_FORMATS.FIRSTDAYOFWEEK+8)%7,angular.forEach(["minDate","maxDate"],function(c){b[c]?n.push(a.$parent.$watch(b[c],function(a){a?angular.isDate(a)?k[c]=j.fromTimezone(new Date(a),m.timezone):k[c]=new Date(g(a,"medium")):k[c]=null,k.refreshView()})):k[c]=h[c]?j.fromTimezone(new Date(h[c]),m.timezone):null}),angular.forEach(["minMode","maxMode"],function(c){b[c]?n.push(a.$parent.$watch(b[c],function(d){k[c]=a[c]=angular.isDefined(d)?d:b[c],("minMode"===c&&k.modes.indexOf(a.datepickerMode)<k.modes.indexOf(k[c])||"maxMode"===c&&k.modes.indexOf(a.datepickerMode)>k.modes.indexOf(k[c]))&&(a.datepickerMode=k[c])})):k[c]=a[c]=h[c]||null}),angular.isDefined(b.initDate)?(this.activeDate=j.fromTimezone(a.$parent.$eval(b.initDate),m.timezone)||new Date,n.push(a.$parent.$watch(b.initDate,function(a){a&&(l.$isEmpty(l.$modelValue)||l.$invalid)&&(k.activeDate=j.fromTimezone(a,m.timezone),k.refreshView())}))):this.activeDate=new Date),a.datepickerMode=a.datepickerMode||h.datepickerMode,a.uniqueId="datepicker-"+a.$id+"-"+Math.floor(1e4*Math.random()),a.disabled=angular.isDefined(b.disabled)||!1,angular.isDefined(b.ngDisabled)&&n.push(a.$parent.$watch(b.ngDisabled,function(b){a.disabled=b,k.refreshView()})),a.isActive=function(b){return 0===k.compare(b.date,k.activeDate)?(a.activeDateId=b.uid,!0):!1},this.init=function(a){l=a,m=a.$options||h.ngModelOptions,l.$modelValue&&(this.activeDate=l.$modelValue),l.$render=function(){k.render()}},this.render=function(){if(l.$viewValue){var a=new Date(l.$viewValue),b=!isNaN(a);b?this.activeDate=j.fromTimezone(a,m.timezone):i||f.error('Datepicker directive: "ng-model" value must be a Date object')}this.refreshView()},this.refreshView=function(){if(this.element){a.selectedDt=null,this._refreshView(),a.activeDt&&(a.activeDateId=a.activeDt.uid);var b=l.$viewValue?new Date(l.$viewValue):null;b=j.fromTimezone(b,m.timezone),l.$setValidity("dateDisabled",!b||this.element&&!this.isDisabled(b))}},this.createDateObject=function(b,c){var d=l.$viewValue?new Date(l.$viewValue):null;d=j.fromTimezone(d,m.timezone);var e={date:b,label:j.filter(b,c),selected:d&&0===this.compare(b,d),disabled:this.isDisabled(b),current:0===this.compare(b,new Date),customClass:this.customClass(b)||null};return d&&0===this.compare(b,d)&&(a.selectedDt=e),k.activeDate&&0===this.compare(e.date,k.activeDate)&&(a.activeDt=e),e},this.isDisabled=function(c){return a.disabled||this.minDate&&this.compare(c,this.minDate)<0||this.maxDate&&this.compare(c,this.maxDate)>0||b.dateDisabled&&a.dateDisabled({date:c,mode:a.datepickerMode})},this.customClass=function(b){return a.customClass({date:b,mode:a.datepickerMode})},this.split=function(a,b){for(var c=[];a.length>0;)c.push(a.splice(0,b));return c},a.select=function(b){if(a.datepickerMode===k.minMode){var c=l.$viewValue?j.fromTimezone(new Date(l.$viewValue),m.timezone):new Date(0,0,0,0,0,0,0);c.setFullYear(b.getFullYear(),b.getMonth(),b.getDate()),c=j.toTimezone(c,m.timezone),l.$setViewValue(c),l.$render()}else k.activeDate=b,a.datepickerMode=k.modes[k.modes.indexOf(a.datepickerMode)-1]},a.move=function(a){var b=k.activeDate.getFullYear()+a*(k.step.years||0),c=k.activeDate.getMonth()+a*(k.step.months||0);k.activeDate.setFullYear(b,c,1),k.refreshView()},a.toggleMode=function(b){b=b||1,a.datepickerMode===k.maxMode&&1===b||a.datepickerMode===k.minMode&&-1===b||(a.datepickerMode=k.modes[k.modes.indexOf(a.datepickerMode)+b])},a.keys={13:"enter",32:"space",33:"pageup",34:"pagedown",35:"end",36:"home",37:"left",38:"up",39:"right",40:"down"};var o=function(){k.element[0].focus()};a.$on("uib:datepicker.focus",o),a.keydown=function(b){var c=a.keys[b.which];if(c&&!b.shiftKey&&!b.altKey&&!a.disabled)if(b.preventDefault(),k.shortcutPropagation||b.stopPropagation(),"enter"===c||"space"===c){if(k.isDisabled(k.activeDate))return;a.select(k.activeDate)}else!b.ctrlKey||"up"!==c&&"down"!==c?(k.handleKeyDown(c,b),k.refreshView()):a.toggleMode("up"===c?1:-1)},a.$on("$destroy",function(){for(;n.length;)n.shift()()})}]).controller("UibDaypickerController",["$scope","$element","dateFilter",function(a,b,c){function d(a,b){return 1!==b||a%4!==0||a%100===0&&a%400!==0?f[b]:29}function e(a){var b=new Date(a);b.setDate(b.getDate()+4-(b.getDay()||7));var c=b.getTime();return b.setMonth(0),b.setDate(1),Math.floor(Math.round((c-b)/864e5)/7)+1}var f=[31,28,31,30,31,30,31,31,30,31,30,31];this.step={months:1},this.element=b,this.init=function(b){angular.extend(b,this),a.showWeeks=b.showWeeks,b.refreshView()},this.getDates=function(a,b){for(var c,d=new Array(b),e=new Date(a),f=0;b>f;)c=new Date(e),d[f++]=c,e.setDate(e.getDate()+1);return d;
+},this._refreshView=function(){var b=this.activeDate.getFullYear(),d=this.activeDate.getMonth(),f=new Date(this.activeDate);f.setFullYear(b,d,1);var g=this.startingDay-f.getDay(),h=g>0?7-g:-g,i=new Date(f);h>0&&i.setDate(-h+1);for(var j=this.getDates(i,42),k=0;42>k;k++)j[k]=angular.extend(this.createDateObject(j[k],this.formatDay),{secondary:j[k].getMonth()!==d,uid:a.uniqueId+"-"+k});a.labels=new Array(7);for(var l=0;7>l;l++)a.labels[l]={abbr:c(j[l].date,this.formatDayHeader),full:c(j[l].date,"EEEE")};if(a.title=c(this.activeDate,this.formatDayTitle),a.rows=this.split(j,7),a.showWeeks){a.weekNumbers=[];for(var m=(11-this.startingDay)%7,n=a.rows.length,o=0;n>o;o++)a.weekNumbers.push(e(a.rows[o][m].date))}},this.compare=function(a,b){var c=new Date(a.getFullYear(),a.getMonth(),a.getDate()),d=new Date(b.getFullYear(),b.getMonth(),b.getDate());return c.setFullYear(a.getFullYear()),d.setFullYear(b.getFullYear()),c-d},this.handleKeyDown=function(a,b){var c=this.activeDate.getDate();if("left"===a)c-=1;else if("up"===a)c-=7;else if("right"===a)c+=1;else if("down"===a)c+=7;else if("pageup"===a||"pagedown"===a){var e=this.activeDate.getMonth()+("pageup"===a?-1:1);this.activeDate.setMonth(e,1),c=Math.min(d(this.activeDate.getFullYear(),this.activeDate.getMonth()),c)}else"home"===a?c=1:"end"===a&&(c=d(this.activeDate.getFullYear(),this.activeDate.getMonth()));this.activeDate.setDate(c)}}]).controller("UibMonthpickerController",["$scope","$element","dateFilter",function(a,b,c){this.step={years:1},this.element=b,this.init=function(a){angular.extend(a,this),a.refreshView()},this._refreshView=function(){for(var b,d=new Array(12),e=this.activeDate.getFullYear(),f=0;12>f;f++)b=new Date(this.activeDate),b.setFullYear(e,f,1),d[f]=angular.extend(this.createDateObject(b,this.formatMonth),{uid:a.uniqueId+"-"+f});a.title=c(this.activeDate,this.formatMonthTitle),a.rows=this.split(d,3)},this.compare=function(a,b){var c=new Date(a.getFullYear(),a.getMonth()),d=new Date(b.getFullYear(),b.getMonth());return c.setFullYear(a.getFullYear()),d.setFullYear(b.getFullYear()),c-d},this.handleKeyDown=function(a,b){var c=this.activeDate.getMonth();if("left"===a)c-=1;else if("up"===a)c-=3;else if("right"===a)c+=1;else if("down"===a)c+=3;else if("pageup"===a||"pagedown"===a){var d=this.activeDate.getFullYear()+("pageup"===a?-1:1);this.activeDate.setFullYear(d)}else"home"===a?c=0:"end"===a&&(c=11);this.activeDate.setMonth(c)}}]).controller("UibYearpickerController",["$scope","$element","dateFilter",function(a,b,c){function d(a){return parseInt((a-1)/f,10)*f+1}var e,f;this.element=b,this.yearpickerInit=function(){e=this.yearColumns,f=this.yearRows*e,this.step={years:f}},this._refreshView=function(){for(var b,c=new Array(f),g=0,h=d(this.activeDate.getFullYear());f>g;g++)b=new Date(this.activeDate),b.setFullYear(h+g,0,1),c[g]=angular.extend(this.createDateObject(b,this.formatYear),{uid:a.uniqueId+"-"+g});a.title=[c[0].label,c[f-1].label].join(" - "),a.rows=this.split(c,e),a.columns=e},this.compare=function(a,b){return a.getFullYear()-b.getFullYear()},this.handleKeyDown=function(a,b){var c=this.activeDate.getFullYear();"left"===a?c-=1:"up"===a?c-=e:"right"===a?c+=1:"down"===a?c+=e:"pageup"===a||"pagedown"===a?c+=("pageup"===a?-1:1)*f:"home"===a?c=d(this.activeDate.getFullYear()):"end"===a&&(c=d(this.activeDate.getFullYear())+f-1),this.activeDate.setFullYear(c)}}]).directive("uibDatepicker",function(){return{replace:!0,templateUrl:function(a,b){return b.templateUrl||"uib/template/datepicker/datepicker.html"},scope:{datepickerMode:"=?",datepickerOptions:"=?",dateDisabled:"&",customClass:"&",shortcutPropagation:"&?"},require:["uibDatepicker","^ngModel"],controller:"UibDatepickerController",controllerAs:"datepicker",link:function(a,b,c,d){var e=d[0],f=d[1];e.init(f)}}}).directive("uibDaypicker",function(){return{replace:!0,templateUrl:function(a,b){return b.templateUrl||"uib/template/datepicker/day.html"},require:["^uibDatepicker","uibDaypicker"],controller:"UibDaypickerController",link:function(a,b,c,d){var e=d[0],f=d[1];f.init(e)}}}).directive("uibMonthpicker",function(){return{replace:!0,templateUrl:function(a,b){return b.templateUrl||"uib/template/datepicker/month.html"},require:["^uibDatepicker","uibMonthpicker"],controller:"UibMonthpickerController",link:function(a,b,c,d){var e=d[0],f=d[1];f.init(e)}}}).directive("uibYearpicker",function(){return{replace:!0,templateUrl:function(a,b){return b.templateUrl||"uib/template/datepicker/year.html"},require:["^uibDatepicker","uibYearpicker"],controller:"UibYearpickerController",link:function(a,b,c,d){var e=d[0];angular.extend(e,d[1]),e.yearpickerInit(),e.refreshView()}}}).constant("uibDatepickerPopupConfig",{altInputFormats:[],appendToBody:!1,clearText:"Clear",closeOnDateSelection:!0,closeText:"Done",currentText:"Today",datepickerPopup:"yyyy-MM-dd",datepickerPopupTemplateUrl:"uib/template/datepicker/popup.html",datepickerTemplateUrl:"uib/template/datepicker/datepicker.html",html5Types:{date:"yyyy-MM-dd","datetime-local":"yyyy-MM-ddTHH:mm:ss.sss",month:"yyyy-MM"},onOpenFocus:!0,showButtonBar:!0}).controller("UibDatepickerPopupController",["$scope","$element","$attrs","$compile","$parse","$document","$rootScope","$uibPosition","dateFilter","uibDateParser","uibDatepickerPopupConfig","$timeout","uibDatepickerConfig",function(a,b,c,d,e,f,g,h,i,j,k,l,m){function n(a){return a.replace(/([A-Z])/g,function(a){return"-"+a.toLowerCase()})}function o(b){var c=j.parse(b,t,a.date);if(isNaN(c))for(var d=0;d<E.length;d++)if(c=j.parse(b,E[d],a.date),!isNaN(c))return c;return c}function p(a){if(angular.isNumber(a)&&(a=new Date(a)),!a)return null;if(angular.isDate(a)&&!isNaN(a))return a;if(angular.isString(a)){var b=o(a);if(!isNaN(b))return j.toTimezone(b,C.timezone)}return B.$options&&B.$options.allowInvalid?a:void 0}function q(a,b){var d=a||b;return c.ngRequired||d?(angular.isNumber(d)&&(d=new Date(d)),d?angular.isDate(d)&&!isNaN(d)?!0:angular.isString(d)?!isNaN(o(b)):!1:!0):!0}function r(c){if(a.isOpen||!a.disabled){var d=D[0],e=b[0].contains(c.target),f=void 0!==d.contains&&d.contains(c.target);!a.isOpen||e||f||a.$apply(function(){a.isOpen=!1})}}function s(c){27===c.which&&a.isOpen?(c.preventDefault(),c.stopPropagation(),a.$apply(function(){a.isOpen=!1}),b[0].focus()):40!==c.which||a.isOpen||(c.preventDefault(),c.stopPropagation(),a.$apply(function(){a.isOpen=!0}))}var t,u,v,w,x,y,z,A,B,C,D,E,F={},G=!1,H=[];a.watchData={},this.init=function(h){if(B=h,C=h.$options||m.ngModelOptions,u=angular.isDefined(c.closeOnDateSelection)?a.$parent.$eval(c.closeOnDateSelection):k.closeOnDateSelection,v=angular.isDefined(c.datepickerAppendToBody)?a.$parent.$eval(c.datepickerAppendToBody):k.appendToBody,w=angular.isDefined(c.onOpenFocus)?a.$parent.$eval(c.onOpenFocus):k.onOpenFocus,x=angular.isDefined(c.datepickerPopupTemplateUrl)?c.datepickerPopupTemplateUrl:k.datepickerPopupTemplateUrl,y=angular.isDefined(c.datepickerTemplateUrl)?c.datepickerTemplateUrl:k.datepickerTemplateUrl,E=angular.isDefined(c.altInputFormats)?a.$parent.$eval(c.altInputFormats):k.altInputFormats,a.showButtonBar=angular.isDefined(c.showButtonBar)?a.$parent.$eval(c.showButtonBar):k.showButtonBar,k.html5Types[c.type]?(t=k.html5Types[c.type],G=!0):(t=c.uibDatepickerPopup||k.datepickerPopup,c.$observe("uibDatepickerPopup",function(a,b){var c=a||k.datepickerPopup;if(c!==t&&(t=c,B.$modelValue=null,!t))throw new Error("uibDatepickerPopup must have a date format specified.")})),!t)throw new Error("uibDatepickerPopup must have a date format specified.");if(G&&c.uibDatepickerPopup)throw new Error("HTML5 date input types do not support custom formats.");z=angular.element("<div uib-datepicker-popup-wrap><div uib-datepicker></div></div>"),a.ngModelOptions=angular.copy(C),a.ngModelOptions.timezone=null,z.attr({"ng-model":"date","ng-model-options":"ngModelOptions","ng-change":"dateSelection(date)","template-url":x}),A=angular.element(z.children()[0]),A.attr("template-url",y),G&&"month"===c.type&&(A.attr("datepicker-mode",'"month"'),A.attr("min-mode","month")),a.datepickerOptions&&angular.forEach(a.datepickerOptions,function(a,b){-1===["minDate","maxDate","minMode","maxMode","initDate","datepickerMode"].indexOf(b)?A.attr(n(b),a):A.attr(n(b),"datepickerOptions."+b)}),angular.forEach(["minMode","maxMode","datepickerMode","shortcutPropagation"],function(b){if(c[b]){var d=e(c[b]),f={get:function(){return d(a.$parent)}};if(A.attr(n(b),"watchData."+b),"datepickerMode"===b){var g=d.assign;f.set=function(b){g(a.$parent,b)}}Object.defineProperty(a.watchData,b,f)}}),angular.forEach(["minDate","maxDate","initDate"],function(b){if(c[b]){var d=e(c[b]);H.push(a.$parent.$watch(d,function(c){"minDate"===b||"maxDate"===b?(null===c?F[b]=null:angular.isDate(c)?F[b]=j.fromTimezone(new Date(c),C.timezone):F[b]=new Date(i(c,"medium")),a.watchData[b]=null===c?null:F[b]):a.watchData[b]=j.fromTimezone(new Date(c),C.timezone)})),A.attr(n(b),"watchData."+b)}}),c.dateDisabled&&A.attr("date-disabled","dateDisabled({ date: date, mode: mode })"),angular.forEach(["formatDay","formatMonth","formatYear","formatDayHeader","formatDayTitle","formatMonthTitle","showWeeks","startingDay","yearRows","yearColumns"],function(a){angular.isDefined(c[a])&&A.attr(n(a),c[a])}),c.customClass&&A.attr("custom-class","customClass({ date: date, mode: mode })"),G?B.$formatters.push(function(b){return a.date=j.fromTimezone(b,C.timezone),b}):(B.$$parserName="date",B.$validators.date=q,B.$parsers.unshift(p),B.$formatters.push(function(b){return B.$isEmpty(b)?(a.date=b,b):(a.date=j.fromTimezone(b,C.timezone),angular.isNumber(a.date)&&(a.date=new Date(a.date)),j.filter(a.date,t))})),B.$viewChangeListeners.push(function(){a.date=o(B.$viewValue)}),b.on("keydown",s),D=d(z)(a),z.remove(),v?f.find("body").append(D):b.after(D),a.$on("$destroy",function(){for(a.isOpen===!0&&(g.$$phase||a.$apply(function(){a.isOpen=!1})),D.remove(),b.off("keydown",s),f.off("click",r);H.length;)H.shift()()})},a.getText=function(b){return a[b+"Text"]||k[b+"Text"]},a.isDisabled=function(b){return"today"===b&&(b=new Date),a.watchData.minDate&&a.compare(b,F.minDate)<0||a.watchData.maxDate&&a.compare(b,F.maxDate)>0},a.compare=function(a,b){return new Date(a.getFullYear(),a.getMonth(),a.getDate())-new Date(b.getFullYear(),b.getMonth(),b.getDate())},a.dateSelection=function(c){angular.isDefined(c)&&(a.date=c);var d=a.date?j.filter(a.date,t):null;b.val(d),B.$setViewValue(d),u&&(a.isOpen=!1,b[0].focus())},a.keydown=function(c){27===c.which&&(c.stopPropagation(),a.isOpen=!1,b[0].focus())},a.select=function(b){if("today"===b){var c=new Date;angular.isDate(a.date)?(b=new Date(a.date),b.setFullYear(c.getFullYear(),c.getMonth(),c.getDate())):b=new Date(c.setHours(0,0,0,0))}a.dateSelection(b)},a.close=function(){a.isOpen=!1,b[0].focus()},a.disabled=angular.isDefined(c.disabled)||!1,c.ngDisabled&&H.push(a.$parent.$watch(e(c.ngDisabled),function(b){a.disabled=b})),a.$watch("isOpen",function(c){c?a.disabled?a.isOpen=!1:(a.position=v?h.offset(b):h.position(b),a.position.top=a.position.top+b.prop("offsetHeight"),l(function(){w&&a.$broadcast("uib:datepicker.focus"),f.on("click",r)},0,!1)):f.off("click",r)})}]).directive("uibDatepickerPopup",function(){return{require:["ngModel","uibDatepickerPopup"],controller:"UibDatepickerPopupController",scope:{datepickerOptions:"=?",isOpen:"=?",currentText:"@",clearText:"@",closeText:"@",dateDisabled:"&",customClass:"&"},link:function(a,b,c,d){var e=d[0],f=d[1];f.init(e)}}}).directive("uibDatepickerPopupWrap",function(){return{replace:!0,transclude:!0,templateUrl:function(a,b){return b.templateUrl||"uib/template/datepicker/popup.html"}}}),angular.module("ui.bootstrap.debounce",[]).factory("$$debounce",["$timeout",function(a){return function(b,c){var d;return function(){var e=this,f=Array.prototype.slice.call(arguments);d&&a.cancel(d),d=a(function(){b.apply(e,f)},c)}}}]),angular.module("ui.bootstrap.dropdown",["ui.bootstrap.position"]).constant("uibDropdownConfig",{appendToOpenClass:"uib-dropdown-open",openClass:"open"}).service("uibDropdownService",["$document","$rootScope",function(a,b){var c=null;this.open=function(b){c||(a.on("click",d),a.on("keydown",e)),c&&c!==b&&(c.isOpen=!1),c=b},this.close=function(b){c===b&&(c=null,a.off("click",d),a.off("keydown",e))};var d=function(a){if(c&&!(a&&"disabled"===c.getAutoClose()||a&&3===a.which)){var d=c.getToggleElement();if(!(a&&d&&d[0].contains(a.target))){var e=c.getDropdownElement();a&&"outsideClick"===c.getAutoClose()&&e&&e[0].contains(a.target)||(c.isOpen=!1,b.$$phase||c.$apply())}}},e=function(a){27===a.which?(c.focusToggleElement(),d()):c.isKeynavEnabled()&&-1!==[38,40].indexOf(a.which)&&c.isOpen&&(a.preventDefault(),a.stopPropagation(),c.focusDropdownEntry(a.which))}}]).controller("UibDropdownController",["$scope","$element","$attrs","$parse","uibDropdownConfig","uibDropdownService","$animate","$uibPosition","$document","$compile","$templateRequest",function(a,b,c,d,e,f,g,h,i,j,k){var l,m,n=this,o=a.$new(),p=e.appendToOpenClass,q=e.openClass,r=angular.noop,s=c.onToggle?d(c.onToggle):angular.noop,t=!1,u=null,v=!1,w=i.find("body");b.addClass("dropdown"),this.init=function(){if(c.isOpen&&(m=d(c.isOpen),r=m.assign,a.$watch(m,function(a){o.isOpen=!!a})),angular.isDefined(c.dropdownAppendTo)){var e=d(c.dropdownAppendTo)(o);e&&(u=angular.element(e))}t=angular.isDefined(c.dropdownAppendToBody),v=angular.isDefined(c.keyboardNav),t&&!u&&(u=w),u&&n.dropdownMenu&&(u.append(n.dropdownMenu),b.on("$destroy",function(){n.dropdownMenu.remove()}))},this.toggle=function(a){return o.isOpen=arguments.length?!!a:!o.isOpen},this.isOpen=function(){return o.isOpen},o.getToggleElement=function(){return n.toggleElement},o.getAutoClose=function(){return c.autoClose||"always"},o.getElement=function(){return b},o.isKeynavEnabled=function(){return v},o.focusDropdownEntry=function(a){var c=n.dropdownMenu?angular.element(n.dropdownMenu).find("a"):b.find("ul").eq(0).find("a");switch(a){case 40:angular.isNumber(n.selectedOption)?n.selectedOption=n.selectedOption===c.length-1?n.selectedOption:n.selectedOption+1:n.selectedOption=0;break;case 38:angular.isNumber(n.selectedOption)?n.selectedOption=0===n.selectedOption?0:n.selectedOption-1:n.selectedOption=c.length-1}c[n.selectedOption].focus()},o.getDropdownElement=function(){return n.dropdownMenu},o.focusToggleElement=function(){n.toggleElement&&n.toggleElement[0].focus()},o.$watch("isOpen",function(c,d){if(u&&n.dropdownMenu){var e,i,m=h.positionElements(b,n.dropdownMenu,"bottom-left",!0);if(e={top:m.top+"px",display:c?"block":"none"},i=n.dropdownMenu.hasClass("dropdown-menu-right"),i?(e.left="auto",e.right=window.innerWidth-(m.left+b.prop("offsetWidth"))+"px"):(e.left=m.left+"px",e.right="auto"),!t){var v=h.offset(u);e.top=m.top-v.top+"px",i?e.right=window.innerWidth-(m.left-v.left+b.prop("offsetWidth"))+"px":e.left=m.left-v.left+"px"}n.dropdownMenu.css(e)}var w=u?u:b;if(g[c?"addClass":"removeClass"](w,u?p:q).then(function(){angular.isDefined(c)&&c!==d&&s(a,{open:!!c})}),c)n.dropdownMenuTemplateUrl&&k(n.dropdownMenuTemplateUrl).then(function(a){l=o.$new(),j(a.trim())(l,function(a){var b=a;n.dropdownMenu.replaceWith(b),n.dropdownMenu=b})}),o.focusToggleElement(),f.open(o);else{if(n.dropdownMenuTemplateUrl){l&&l.$destroy();var x=angular.element('<ul class="dropdown-menu"></ul>');n.dropdownMenu.replaceWith(x),n.dropdownMenu=x}f.close(o),n.selectedOption=null}angular.isFunction(r)&&r(a,c)}),a.$on("$locationChangeSuccess",function(){"disabled"!==o.getAutoClose()&&(o.isOpen=!1)})}]).directive("uibDropdown",function(){return{controller:"UibDropdownController",link:function(a,b,c,d){d.init()}}}).directive("uibDropdownMenu",function(){return{restrict:"A",require:"?^uibDropdown",link:function(a,b,c,d){if(d&&!angular.isDefined(c.dropdownNested)){b.addClass("dropdown-menu");var e=c.templateUrl;e&&(d.dropdownMenuTemplateUrl=e),d.dropdownMenu||(d.dropdownMenu=b)}}}}).directive("uibDropdownToggle",function(){return{require:"?^uibDropdown",link:function(a,b,c,d){if(d){b.addClass("dropdown-toggle"),d.toggleElement=b;var e=function(e){e.preventDefault(),b.hasClass("disabled")||c.disabled||a.$apply(function(){d.toggle()})};b.bind("click",e),b.attr({"aria-haspopup":!0,"aria-expanded":!1}),a.$watch(d.isOpen,function(a){b.attr("aria-expanded",!!a)}),a.$on("$destroy",function(){b.unbind("click",e)})}}}}),angular.module("ui.bootstrap.stackedMap",[]).factory("$$stackedMap",function(){return{createNew:function(){var a=[];return{add:function(b,c){a.push({key:b,value:c})},get:function(b){for(var c=0;c<a.length;c++)if(b===a[c].key)return a[c]},keys:function(){for(var b=[],c=0;c<a.length;c++)b.push(a[c].key);return b},top:function(){return a[a.length-1]},remove:function(b){for(var c=-1,d=0;d<a.length;d++)if(b===a[d].key){c=d;break}return a.splice(c,1)[0]},removeTop:function(){return a.splice(a.length-1,1)[0]},length:function(){return a.length}}}}}),angular.module("ui.bootstrap.modal",["ui.bootstrap.stackedMap"]).factory("$$multiMap",function(){return{createNew:function(){var a={};return{entries:function(){return Object.keys(a).map(function(b){return{key:b,value:a[b]}})},get:function(b){return a[b]},hasKey:function(b){return!!a[b]},keys:function(){return Object.keys(a)},put:function(b,c){a[b]||(a[b]=[]),a[b].push(c)},remove:function(b,c){var d=a[b];if(d){var e=d.indexOf(c);-1!==e&&d.splice(e,1),d.length||delete a[b]}}}}}}).provider("$uibResolve",function(){var a=this;this.resolver=null,this.setResolver=function(a){this.resolver=a},this.$get=["$injector","$q",function(b,c){var d=a.resolver?b.get(a.resolver):null;return{resolve:function(a,e,f,g){if(d)return d.resolve(a,e,f,g);var h=[];return angular.forEach(a,function(a){angular.isFunction(a)||angular.isArray(a)?h.push(c.resolve(b.invoke(a))):angular.isString(a)?h.push(c.resolve(b.get(a))):h.push(c.resolve(a))}),c.all(h).then(function(b){var c={},d=0;return angular.forEach(a,function(a,e){c[e]=b[d++]}),c})}}}]}).directive("uibModalBackdrop",["$animateCss","$injector","$uibModalStack",function(a,b,c){function d(b,d,e){e.modalInClass&&(a(d,{addClass:e.modalInClass}).start(),b.$on(c.NOW_CLOSING_EVENT,function(c,f){var g=f();b.modalOptions.animation?a(d,{removeClass:e.modalInClass}).start().then(g):g()}))}return{replace:!0,templateUrl:"uib/template/modal/backdrop.html",compile:function(a,b){return a.addClass(b.backdropClass),d}}}]).directive("uibModalWindow",["$uibModalStack","$q","$animate","$animateCss","$document",function(a,b,c,d,e){return{scope:{index:"@"},replace:!0,transclude:!0,templateUrl:function(a,b){return b.templateUrl||"uib/template/modal/window.html"},link:function(f,g,h){g.addClass(h.windowClass||""),g.addClass(h.windowTopClass||""),f.size=h.size,f.close=function(b){var c=a.getTop();c&&c.value.backdrop&&"static"!==c.value.backdrop&&b.target===b.currentTarget&&(b.preventDefault(),b.stopPropagation(),a.dismiss(c.key,"backdrop click"))},g.on("click",f.close),f.$isRendered=!0;var i=b.defer();h.$observe("modalRender",function(a){"true"===a&&i.resolve()}),i.promise.then(function(){var i=null;h.modalInClass&&(i=d(g,{addClass:h.modalInClass}).start(),f.$on(a.NOW_CLOSING_EVENT,function(a,b){var e=b();d?d(g,{removeClass:h.modalInClass}).start().then(e):c.removeClass(g,h.modalInClass).then(e)})),b.when(i).then(function(){if(!e[0].activeElement||!g[0].contains(e[0].activeElement)){var a=g[0].querySelector("[autofocus]");a?a.focus():g[0].focus()}});var j=a.getTop();j&&a.modalRendered(j.key)})}}}]).directive("uibModalAnimationClass",function(){return{compile:function(a,b){b.modalAnimation&&a.addClass(b.uibModalAnimationClass)}}}).directive("uibModalTransclude",function(){return{link:function(a,b,c,d,e){e(a.$parent,function(a){b.empty(),b.append(a)})}}}).factory("$uibModalStack",["$animate","$animateCss","$document","$compile","$rootScope","$q","$$multiMap","$$stackedMap",function(a,b,c,d,e,f,g,h){function i(){for(var a=-1,b=t.keys(),c=0;c<b.length;c++)t.get(b[c]).value.backdrop&&(a=c);return a}function j(a,b){var c=t.get(a).value,d=c.appendTo;t.remove(a),m(c.modalDomEl,c.modalScope,function(){var b=c.openedClass||s;u.remove(b,a),d.toggleClass(b,u.hasKey(b)),k(!0)},c.closedDeferred),l(),b&&b.focus?b.focus():d.focus&&d.focus()}function k(a){var b;t.length()>0&&(b=t.top().value,b.modalDomEl.toggleClass(b.windowTopClass||"",a))}function l(){if(p&&-1===i()){var a=q;m(p,q,function(){a=null}),p=void 0,q=void 0}}function m(a,c,d,e){function g(){g.done||(g.done=!0,b(a,{event:"leave"}).start().then(function(){a.remove(),e&&e.resolve()}),c.$destroy(),d&&d())}var h,i=null,j=function(){return h||(h=f.defer(),i=h.promise),function(){h.resolve()}};return c.$broadcast(v.NOW_CLOSING_EVENT,j),f.when(i).then(g)}function n(a){if(a.isDefaultPrevented())return a;var b=t.top();if(b)switch(a.which){case 27:b.value.keyboard&&(a.preventDefault(),e.$apply(function(){v.dismiss(b.key,"escape key press")}));break;case 9:v.loadFocusElementList(b);var c=!1;a.shiftKey?(v.isFocusInFirstItem(a)||v.isModalFocused(a,b))&&(c=v.focusLastFocusableElement()):v.isFocusInLastItem(a)&&(c=v.focusFirstFocusableElement()),c&&(a.preventDefault(),a.stopPropagation())}}function o(a,b,c){return!a.value.modalScope.$broadcast("modal.closing",b,c).defaultPrevented}var p,q,r,s="modal-open",t=h.createNew(),u=g.createNew(),v={NOW_CLOSING_EVENT:"modal.stack.now-closing"},w=0,x="a[href], area[href], input:not([disabled]), button:not([disabled]),select:not([disabled]), textarea:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable=true]";return e.$watch(i,function(a){q&&(q.index=a)}),c.on("keydown",n),e.$on("$destroy",function(){c.off("keydown",n)}),v.open=function(b,f){var g=c[0].activeElement,h=f.openedClass||s;k(!1),t.add(b,{deferred:f.deferred,renderDeferred:f.renderDeferred,closedDeferred:f.closedDeferred,modalScope:f.scope,backdrop:f.backdrop,keyboard:f.keyboard,openedClass:f.openedClass,windowTopClass:f.windowTopClass,animation:f.animation,appendTo:f.appendTo}),u.put(h,b);var j=f.appendTo,l=i();if(!j.length)throw new Error("appendTo element not found. Make sure that the element passed is in DOM.");l>=0&&!p&&(q=e.$new(!0),q.modalOptions=f,q.index=l,p=angular.element('<div uib-modal-backdrop="modal-backdrop"></div>'),p.attr("backdrop-class",f.backdropClass),f.animation&&p.attr("modal-animation","true"),d(p)(q),a.enter(p,j));var m=angular.element('<div uib-modal-window="modal-window"></div>');m.attr({"template-url":f.windowTemplateUrl,"window-class":f.windowClass,"window-top-class":f.windowTopClass,size:f.size,index:t.length()-1,animate:"animate"}).html(f.content),f.animation&&m.attr("modal-animation","true"),a.enter(d(m)(f.scope),j).then(function(){a.addClass(j,h)}),t.top().value.modalDomEl=m,t.top().value.modalOpener=g,v.clearFocusListCache()},v.close=function(a,b){var c=t.get(a);return c&&o(c,b,!0)?(c.value.modalScope.$$uibDestructionScheduled=!0,c.value.deferred.resolve(b),j(a,c.value.modalOpener),!0):!c},v.dismiss=function(a,b){var c=t.get(a);return c&&o(c,b,!1)?(c.value.modalScope.$$uibDestructionScheduled=!0,c.value.deferred.reject(b),j(a,c.value.modalOpener),!0):!c},v.dismissAll=function(a){for(var b=this.getTop();b&&this.dismiss(b.key,a);)b=this.getTop()},v.getTop=function(){return t.top()},v.modalRendered=function(a){var b=t.get(a);b&&b.value.renderDeferred.resolve()},v.focusFirstFocusableElement=function(){return r.length>0?(r[0].focus(),!0):!1},v.focusLastFocusableElement=function(){return r.length>0?(r[r.length-1].focus(),!0):!1},v.isModalFocused=function(a,b){if(a&&b){var c=b.value.modalDomEl;if(c&&c.length)return(a.target||a.srcElement)===c[0]}return!1},v.isFocusInFirstItem=function(a){return r.length>0?(a.target||a.srcElement)===r[0]:!1},v.isFocusInLastItem=function(a){return r.length>0?(a.target||a.srcElement)===r[r.length-1]:!1},v.clearFocusListCache=function(){r=[],w=0},v.loadFocusElementList=function(a){if((void 0===r||!r.length)&&a){var b=a.value.modalDomEl;b&&b.length&&(r=b[0].querySelectorAll(x))}},v}]).provider("$uibModal",function(){var a={options:{animation:!0,backdrop:!0,keyboard:!0},$get:["$rootScope","$q","$document","$templateRequest","$controller","$uibResolve","$uibModalStack",function(b,c,d,e,f,g,h){function i(a){return a.template?c.when(a.template):e(angular.isFunction(a.templateUrl)?a.templateUrl():a.templateUrl)}var j={},k=null;return j.getPromiseChain=function(){return k},j.open=function(e){function j(){return r}var l=c.defer(),m=c.defer(),n=c.defer(),o=c.defer(),p={result:l.promise,opened:m.promise,closed:n.promise,rendered:o.promise,close:function(a){return h.close(p,a)},dismiss:function(a){return h.dismiss(p,a)}};if(e=angular.extend({},a.options,e),e.resolve=e.resolve||{},e.appendTo=e.appendTo||d.find("body").eq(0),!e.template&&!e.templateUrl)throw new Error("One of template or templateUrl options is required.");var q,r=c.all([i(e),g.resolve(e.resolve,{},null,null)]);return q=k=c.all([k]).then(j,j).then(function(a){var c=e.scope||b,d=c.$new();d.$close=p.close,d.$dismiss=p.dismiss,d.$on("$destroy",function(){d.$$uibDestructionScheduled||d.$dismiss("$uibUnscheduledDestruction")});var g,i={};e.controller&&(i.$scope=d,i.$uibModalInstance=p,angular.forEach(a[1],function(a,b){i[b]=a}),g=f(e.controller,i),e.controllerAs&&(e.bindToController&&(g.$close=d.$close,g.$dismiss=d.$dismiss,angular.extend(g,c)),d[e.controllerAs]=g)),h.open(p,{scope:d,deferred:l,renderDeferred:o,closedDeferred:n,content:a[0],animation:e.animation,backdrop:e.backdrop,keyboard:e.keyboard,backdropClass:e.backdropClass,windowTopClass:e.windowTopClass,windowClass:e.windowClass,windowTemplateUrl:e.windowTemplateUrl,size:e.size,openedClass:e.openedClass,appendTo:e.appendTo}),m.resolve(!0)},function(a){m.reject(a),l.reject(a)})["finally"](function(){k===q&&(k=null)}),p},j}]};return a}),angular.module("ui.bootstrap.paging",[]).factory("uibPaging",["$parse",function(a){return{create:function(b,c,d){b.setNumPages=d.numPages?a(d.numPages).assign:angular.noop,b.ngModelCtrl={$setViewValue:angular.noop},b._watchers=[],b.init=function(e,f){b.ngModelCtrl=e,b.config=f,e.$render=function(){b.render()},d.itemsPerPage?b._watchers.push(c.$parent.$watch(a(d.itemsPerPage),function(a){b.itemsPerPage=parseInt(a,10),c.totalPages=b.calculateTotalPages(),b.updatePage()})):b.itemsPerPage=f.itemsPerPage,c.$watch("totalItems",function(a,d){(angular.isDefined(a)||a!==d)&&(c.totalPages=b.calculateTotalPages(),b.updatePage())})},b.calculateTotalPages=function(){var a=b.itemsPerPage<1?1:Math.ceil(c.totalItems/b.itemsPerPage);return Math.max(a||0,1)},b.render=function(){c.page=parseInt(b.ngModelCtrl.$viewValue,10)||1},c.selectPage=function(a,d){d&&d.preventDefault();var e=!c.ngDisabled||!d;e&&c.page!==a&&a>0&&a<=c.totalPages&&(d&&d.target&&d.target.blur(),b.ngModelCtrl.$setViewValue(a),b.ngModelCtrl.$render())},c.getText=function(a){return c[a+"Text"]||b.config[a+"Text"]},c.noPrevious=function(){return 1===c.page},c.noNext=function(){return c.page===c.totalPages},b.updatePage=function(){b.setNumPages(c.$parent,c.totalPages),c.page>c.totalPages?c.selectPage(c.totalPages):b.ngModelCtrl.$render()},c.$on("$destroy",function(){for(;b._watchers.length;)b._watchers.shift()()})}}}]),angular.module("ui.bootstrap.pager",["ui.bootstrap.paging"]).controller("UibPagerController",["$scope","$attrs","uibPaging","uibPagerConfig",function(a,b,c,d){a.align=angular.isDefined(b.align)?a.$parent.$eval(b.align):d.align,c.create(this,a,b)}]).constant("uibPagerConfig",{itemsPerPage:10,previousText:"« Previous",nextText:"Next »",align:!0}).directive("uibPager",["uibPagerConfig",function(a){return{scope:{totalItems:"=",previousText:"@",nextText:"@",ngDisabled:"="},require:["uibPager","?ngModel"],controller:"UibPagerController",controllerAs:"pager",templateUrl:function(a,b){return b.templateUrl||"uib/template/pager/pager.html"},replace:!0,link:function(b,c,d,e){var f=e[0],g=e[1];g&&f.init(g,a)}}}]),angular.module("ui.bootstrap.pagination",["ui.bootstrap.paging"]).controller("UibPaginationController",["$scope","$attrs","$parse","uibPaging","uibPaginationConfig",function(a,b,c,d,e){function f(a,b,c){return{number:a,text:b,active:c}}function g(a,b){var c=[],d=1,e=b,g=angular.isDefined(i)&&b>i;g&&(j?(d=Math.max(a-Math.floor(i/2),1),e=d+i-1,e>b&&(e=b,d=e-i+1)):(d=(Math.ceil(a/i)-1)*i+1,e=Math.min(d+i-1,b)));for(var h=d;e>=h;h++){var m=f(h,h,h===a);c.push(m)}if(g&&i>0&&(!j||k||l)){if(d>1){if(!l||d>3){var n=f(d-1,"...",!1);c.unshift(n)}if(l){if(3===d){var o=f(2,"2",!1);c.unshift(o)}var p=f(1,"1",!1);c.unshift(p)}}if(b>e){if(!l||b-2>e){var q=f(e+1,"...",!1);c.push(q)}if(l){if(e===b-2){var r=f(b-1,b-1,!1);c.push(r)}var s=f(b,b,!1);c.push(s)}}}return c}var h=this,i=angular.isDefined(b.maxSize)?a.$parent.$eval(b.maxSize):e.maxSize,j=angular.isDefined(b.rotate)?a.$parent.$eval(b.rotate):e.rotate,k=angular.isDefined(b.forceEllipses)?a.$parent.$eval(b.forceEllipses):e.forceEllipses,l=angular.isDefined(b.boundaryLinkNumbers)?a.$parent.$eval(b.boundaryLinkNumbers):e.boundaryLinkNumbers;a.boundaryLinks=angular.isDefined(b.boundaryLinks)?a.$parent.$eval(b.boundaryLinks):e.boundaryLinks,a.directionLinks=angular.isDefined(b.directionLinks)?a.$parent.$eval(b.directionLinks):e.directionLinks,d.create(this,a,b),b.maxSize&&h._watchers.push(a.$parent.$watch(c(b.maxSize),function(a){i=parseInt(a,10),h.render()}));var m=this.render;this.render=function(){m(),a.page>0&&a.page<=a.totalPages&&(a.pages=g(a.page,a.totalPages))}}]).constant("uibPaginationConfig",{itemsPerPage:10,boundaryLinks:!1,boundaryLinkNumbers:!1,directionLinks:!0,firstText:"First",previousText:"Previous",nextText:"Next",lastText:"Last",rotate:!0,forceEllipses:!1}).directive("uibPagination",["$parse","uibPaginationConfig",function(a,b){return{scope:{totalItems:"=",firstText:"@",previousText:"@",nextText:"@",lastText:"@",ngDisabled:"="},require:["uibPagination","?ngModel"],controller:"UibPaginationController",controllerAs:"pagination",templateUrl:function(a,b){return b.templateUrl||"uib/template/pagination/pagination.html"},replace:!0,link:function(a,c,d,e){var f=e[0],g=e[1];g&&f.init(g,b)}}}]),angular.module("ui.bootstrap.tooltip",["ui.bootstrap.position","ui.bootstrap.stackedMap"]).provider("$uibTooltip",function(){function a(a){var b=/[A-Z]/g,c="-";return a.replace(b,function(a,b){return(b?c:"")+a.toLowerCase()})}var b={placement:"top",placementClassPrefix:"",animation:!0,popupDelay:0,popupCloseDelay:0,useContentExp:!1},c={mouseenter:"mouseleave",click:"click",outsideClick:"outsideClick",focus:"blur",none:""},d={};this.options=function(a){angular.extend(d,a)},this.setTriggers=function(a){angular.extend(c,a)},this.$get=["$window","$compile","$timeout","$document","$uibPosition","$interpolate","$rootScope","$parse","$$stackedMap",function(e,f,g,h,i,j,k,l,m){function n(a){if(27===a.which){var b=o.top();b&&(b.value.close(),o.removeTop(),b=null)}}var o=m.createNew();return h.on("keypress",n),k.$on("$destroy",function(){h.off("keypress",n)}),function(e,k,m,n){function p(a){var b=(a||n.trigger||m).split(" "),d=b.map(function(a){return c[a]||a});return{show:b,hide:d}}n=angular.extend({},b,d,n);var q=a(e),r=j.startSymbol(),s=j.endSymbol(),t="<div "+q+'-popup title="'+r+"title"+s+'" '+(n.useContentExp?'content-exp="contentExp()" ':'content="'+r+"content"+s+'" ')+'placement="'+r+"placement"+s+'" popup-class="'+r+"popupClass"+s+'" animation="animation" is-open="isOpen"origin-scope="origScope" style="visibility: hidden; display: block; top: -9999px; left: -9999px;"></div>';return{compile:function(a,b){var c=f(t);return function(a,b,d,f){function j(){M.isOpen?q():m()}function m(){(!L||a.$eval(d[k+"Enable"]))&&(u(),x(),M.popupDelay?G||(G=g(r,M.popupDelay,!1)):r())}function q(){s(),M.popupCloseDelay?H||(H=g(t,M.popupCloseDelay,!1)):t()}function r(){return s(),u(),M.content?(v(),void M.$evalAsync(function(){M.isOpen=!0,y(!0),R()})):angular.noop}function s(){G&&(g.cancel(G),G=null),I&&(g.cancel(I),I=null)}function t(){M&&M.$evalAsync(function(){M&&(M.isOpen=!1,y(!1),M.animation?F||(F=g(w,150,!1)):w())})}function u(){H&&(g.cancel(H),H=null),F&&(g.cancel(F),F=null)}function v(){D||(E=M.$new(),D=c(E,function(a){J?h.find("body").append(a):b.after(a);
+}),z())}function w(){s(),u(),A(),D&&(D.remove(),D=null),E&&(E.$destroy(),E=null)}function x(){M.title=d[k+"Title"],P?M.content=P(a):M.content=d[e],M.popupClass=d[k+"Class"],M.placement=angular.isDefined(d[k+"Placement"])?d[k+"Placement"]:n.placement;var b=parseInt(d[k+"PopupDelay"],10),c=parseInt(d[k+"PopupCloseDelay"],10);M.popupDelay=isNaN(b)?n.popupDelay:b,M.popupCloseDelay=isNaN(c)?n.popupCloseDelay:c}function y(b){O&&angular.isFunction(O.assign)&&O.assign(a,b)}function z(){Q.length=0,P?(Q.push(a.$watch(P,function(a){M.content=a,!a&&M.isOpen&&t()})),Q.push(E.$watch(function(){N||(N=!0,E.$$postDigest(function(){N=!1,M&&M.isOpen&&R()}))}))):Q.push(d.$observe(e,function(a){M.content=a,!a&&M.isOpen?t():R()})),Q.push(d.$observe(k+"Title",function(a){M.title=a,M.isOpen&&R()})),Q.push(d.$observe(k+"Placement",function(a){M.placement=a?a:n.placement,M.isOpen&&R()}))}function A(){Q.length&&(angular.forEach(Q,function(a){a()}),Q.length=0)}function B(a){M&&M.isOpen&&D&&(b[0].contains(a.target)||D[0].contains(a.target)||q())}function C(){var a=d[k+"Trigger"];S(),K=p(a),"none"!==K.show&&K.show.forEach(function(a,c){"outsideClick"===a?(b.on("click",j),h.on("click",B)):a===K.hide[c]?b.on(a,j):a&&(b.on(a,m),b.on(K.hide[c],q)),b.on("keypress",function(a){27===a.which&&q()})})}var D,E,F,G,H,I,J=angular.isDefined(n.appendToBody)?n.appendToBody:!1,K=p(void 0),L=angular.isDefined(d[k+"Enable"]),M=a.$new(!0),N=!1,O=angular.isDefined(d[k+"IsOpen"])?l(d[k+"IsOpen"]):!1,P=n.useContentExp?l(d[e]):!1,Q=[],R=function(){D&&D.html()&&(I||(I=g(function(){D.css({top:0,left:0});var a=i.positionElements(b,D,M.placement,J);D.css({top:a.top+"px",left:a.left+"px",visibility:"visible"}),n.placementClassPrefix&&D.removeClass("top bottom left right"),D.removeClass(n.placementClassPrefix+"top "+n.placementClassPrefix+"top-left "+n.placementClassPrefix+"top-right "+n.placementClassPrefix+"bottom "+n.placementClassPrefix+"bottom-left "+n.placementClassPrefix+"bottom-right "+n.placementClassPrefix+"left "+n.placementClassPrefix+"left-top "+n.placementClassPrefix+"left-bottom "+n.placementClassPrefix+"right "+n.placementClassPrefix+"right-top "+n.placementClassPrefix+"right-bottom");var c=a.placement.split("-");D.addClass(c[0]+" "+n.placementClassPrefix+a.placement),i.positionArrow(D,a.placement),I=null},0,!1)))};M.origScope=a,M.isOpen=!1,o.add(M,{close:t}),M.contentExp=function(){return M.content},d.$observe("disabled",function(a){a&&s(),a&&M.isOpen&&t()}),O&&a.$watch(O,function(a){M&&!a===M.isOpen&&j()});var S=function(){K.show.forEach(function(a){"outsideClick"===a?b.off("click",j):(b.off(a,m),b.off(a,j))}),K.hide.forEach(function(a){"outsideClick"===a?h.off("click",B):b.off(a,q)})};C();var T=a.$eval(d[k+"Animation"]);M.animation=angular.isDefined(T)?!!T:n.animation;var U,V=k+"AppendToBody";U=V in d&&void 0===d[V]?!0:a.$eval(d[V]),J=angular.isDefined(U)?U:J,a.$on("$destroy",function(){S(),w(),o.remove(M),M=null})}}}}}]}).directive("uibTooltipTemplateTransclude",["$animate","$sce","$compile","$templateRequest",function(a,b,c,d){return{link:function(e,f,g){var h,i,j,k=e.$eval(g.tooltipTemplateTranscludeScope),l=0,m=function(){i&&(i.remove(),i=null),h&&(h.$destroy(),h=null),j&&(a.leave(j).then(function(){i=null}),i=j,j=null)};e.$watch(b.parseAsResourceUrl(g.uibTooltipTemplateTransclude),function(b){var g=++l;b?(d(b,!0).then(function(d){if(g===l){var e=k.$new(),i=d,n=c(i)(e,function(b){m(),a.enter(b,f)});h=e,j=n,h.$emit("$includeContentLoaded",b)}},function(){g===l&&(m(),e.$emit("$includeContentError",b))}),e.$emit("$includeContentRequested",b)):m()}),e.$on("$destroy",m)}}}]).directive("uibTooltipClasses",["$uibPosition",function(a){return{restrict:"A",link:function(b,c,d){if(b.placement){var e=a.parsePlacement(b.placement);c.addClass(e[0])}else c.addClass("top");b.popupClass&&c.addClass(b.popupClass),b.animation()&&c.addClass(d.tooltipAnimationClass)}}}]).directive("uibTooltipPopup",function(){return{replace:!0,scope:{content:"@",placement:"@",popupClass:"@",animation:"&",isOpen:"&"},templateUrl:"uib/template/tooltip/tooltip-popup.html"}}).directive("uibTooltip",["$uibTooltip",function(a){return a("uibTooltip","tooltip","mouseenter")}]).directive("uibTooltipTemplatePopup",function(){return{replace:!0,scope:{contentExp:"&",placement:"@",popupClass:"@",animation:"&",isOpen:"&",originScope:"&"},templateUrl:"uib/template/tooltip/tooltip-template-popup.html"}}).directive("uibTooltipTemplate",["$uibTooltip",function(a){return a("uibTooltipTemplate","tooltip","mouseenter",{useContentExp:!0})}]).directive("uibTooltipHtmlPopup",function(){return{replace:!0,scope:{contentExp:"&",placement:"@",popupClass:"@",animation:"&",isOpen:"&"},templateUrl:"uib/template/tooltip/tooltip-html-popup.html"}}).directive("uibTooltipHtml",["$uibTooltip",function(a){return a("uibTooltipHtml","tooltip","mouseenter",{useContentExp:!0})}]),angular.module("ui.bootstrap.popover",["ui.bootstrap.tooltip"]).directive("uibPopoverTemplatePopup",function(){return{replace:!0,scope:{title:"@",contentExp:"&",placement:"@",popupClass:"@",animation:"&",isOpen:"&",originScope:"&"},templateUrl:"uib/template/popover/popover-template.html"}}).directive("uibPopoverTemplate",["$uibTooltip",function(a){return a("uibPopoverTemplate","popover","click",{useContentExp:!0})}]).directive("uibPopoverHtmlPopup",function(){return{replace:!0,scope:{contentExp:"&",title:"@",placement:"@",popupClass:"@",animation:"&",isOpen:"&"},templateUrl:"uib/template/popover/popover-html.html"}}).directive("uibPopoverHtml",["$uibTooltip",function(a){return a("uibPopoverHtml","popover","click",{useContentExp:!0})}]).directive("uibPopoverPopup",function(){return{replace:!0,scope:{title:"@",content:"@",placement:"@",popupClass:"@",animation:"&",isOpen:"&"},templateUrl:"uib/template/popover/popover.html"}}).directive("uibPopover",["$uibTooltip",function(a){return a("uibPopover","popover","click")}]),angular.module("ui.bootstrap.progressbar",[]).constant("uibProgressConfig",{animate:!0,max:100}).controller("UibProgressController",["$scope","$attrs","uibProgressConfig",function(a,b,c){var d=this,e=angular.isDefined(b.animate)?a.$parent.$eval(b.animate):c.animate;this.bars=[],a.max=angular.isDefined(a.max)?a.max:c.max,this.addBar=function(b,c,f){e||c.css({transition:"none"}),this.bars.push(b),b.max=a.max,b.title=f&&angular.isDefined(f.title)?f.title:"progressbar",b.$watch("value",function(a){b.recalculatePercentage()}),b.recalculatePercentage=function(){var a=d.bars.reduce(function(a,b){return b.percent=+(100*b.value/b.max).toFixed(2),a+b.percent},0);a>100&&(b.percent-=a-100)},b.$on("$destroy",function(){c=null,d.removeBar(b)})},this.removeBar=function(a){this.bars.splice(this.bars.indexOf(a),1),this.bars.forEach(function(a){a.recalculatePercentage()})},a.$watch("max",function(b){d.bars.forEach(function(b){b.max=a.max,b.recalculatePercentage()})})}]).directive("uibProgress",function(){return{replace:!0,transclude:!0,controller:"UibProgressController",require:"uibProgress",scope:{max:"=?"},templateUrl:"uib/template/progressbar/progress.html"}}).directive("uibBar",function(){return{replace:!0,transclude:!0,require:"^uibProgress",scope:{value:"=",type:"@"},templateUrl:"uib/template/progressbar/bar.html",link:function(a,b,c,d){d.addBar(a,b,c)}}}).directive("uibProgressbar",function(){return{replace:!0,transclude:!0,controller:"UibProgressController",scope:{value:"=",max:"=?",type:"@"},templateUrl:"uib/template/progressbar/progressbar.html",link:function(a,b,c,d){d.addBar(a,angular.element(b.children()[0]),{title:c.title})}}}),angular.module("ui.bootstrap.rating",[]).constant("uibRatingConfig",{max:5,stateOn:null,stateOff:null,titles:["one","two","three","four","five"]}).controller("UibRatingController",["$scope","$attrs","uibRatingConfig",function(a,b,c){var d={$setViewValue:angular.noop};this.init=function(e){d=e,d.$render=this.render,d.$formatters.push(function(a){return angular.isNumber(a)&&a<<0!==a&&(a=Math.round(a)),a}),this.stateOn=angular.isDefined(b.stateOn)?a.$parent.$eval(b.stateOn):c.stateOn,this.stateOff=angular.isDefined(b.stateOff)?a.$parent.$eval(b.stateOff):c.stateOff;var f=angular.isDefined(b.titles)?a.$parent.$eval(b.titles):c.titles;this.titles=angular.isArray(f)&&f.length>0?f:c.titles;var g=angular.isDefined(b.ratingStates)?a.$parent.$eval(b.ratingStates):new Array(angular.isDefined(b.max)?a.$parent.$eval(b.max):c.max);a.range=this.buildTemplateObjects(g)},this.buildTemplateObjects=function(a){for(var b=0,c=a.length;c>b;b++)a[b]=angular.extend({index:b},{stateOn:this.stateOn,stateOff:this.stateOff,title:this.getTitle(b)},a[b]);return a},this.getTitle=function(a){return a>=this.titles.length?a+1:this.titles[a]},a.rate=function(b){!a.readonly&&b>=0&&b<=a.range.length&&(d.$setViewValue(d.$viewValue===b?0:b),d.$render())},a.enter=function(b){a.readonly||(a.value=b),a.onHover({value:b})},a.reset=function(){a.value=d.$viewValue,a.onLeave()},a.onKeydown=function(b){/(37|38|39|40)/.test(b.which)&&(b.preventDefault(),b.stopPropagation(),a.rate(a.value+(38===b.which||39===b.which?1:-1)))},this.render=function(){a.value=d.$viewValue}}]).directive("uibRating",function(){return{require:["uibRating","ngModel"],scope:{readonly:"=?",onHover:"&",onLeave:"&"},controller:"UibRatingController",templateUrl:"uib/template/rating/rating.html",replace:!0,link:function(a,b,c,d){var e=d[0],f=d[1];e.init(f)}}}),angular.module("ui.bootstrap.tabs",[]).controller("UibTabsetController",["$scope",function(a){var b=this,c=b.tabs=a.tabs=[];b.select=function(a){angular.forEach(c,function(b){b.active&&b!==a&&(b.active=!1,b.onDeselect(),a.selectCalled=!1)}),a.active=!0,a.selectCalled||(a.onSelect(),a.selectCalled=!0)},b.addTab=function(a){c.push(a),1===c.length&&a.active!==!1?a.active=!0:a.active?b.select(a):a.active=!1},b.removeTab=function(a){var e=c.indexOf(a);if(a.active&&c.length>1&&!d){var f=e===c.length-1?e-1:e+1;b.select(c[f])}c.splice(e,1)};var d;a.$on("$destroy",function(){d=!0})}]).directive("uibTabset",function(){return{transclude:!0,replace:!0,scope:{type:"@"},controller:"UibTabsetController",templateUrl:"uib/template/tabs/tabset.html",link:function(a,b,c){a.vertical=angular.isDefined(c.vertical)?a.$parent.$eval(c.vertical):!1,a.justified=angular.isDefined(c.justified)?a.$parent.$eval(c.justified):!1}}}).directive("uibTab",["$parse",function(a){return{require:"^uibTabset",replace:!0,templateUrl:"uib/template/tabs/tab.html",transclude:!0,scope:{active:"=?",heading:"@",onSelect:"&select",onDeselect:"&deselect"},controller:function(){},controllerAs:"tab",link:function(b,c,d,e,f){b.$watch("active",function(a){a&&e.select(b)}),b.disabled=!1,d.disable&&b.$parent.$watch(a(d.disable),function(a){b.disabled=!!a}),b.select=function(){b.disabled||(b.active=!0)},e.addTab(b),b.$on("$destroy",function(){e.removeTab(b)}),b.$transcludeFn=f}}}]).directive("uibTabHeadingTransclude",function(){return{restrict:"A",require:"^uibTab",link:function(a,b){a.$watch("headingElement",function(a){a&&(b.html(""),b.append(a))})}}}).directive("uibTabContentTransclude",function(){function a(a){return a.tagName&&(a.hasAttribute("uib-tab-heading")||a.hasAttribute("data-uib-tab-heading")||a.hasAttribute("x-uib-tab-heading")||"uib-tab-heading"===a.tagName.toLowerCase()||"data-uib-tab-heading"===a.tagName.toLowerCase()||"x-uib-tab-heading"===a.tagName.toLowerCase())}return{restrict:"A",require:"^uibTabset",link:function(b,c,d){var e=b.$eval(d.uibTabContentTransclude);e.$transcludeFn(e.$parent,function(b){angular.forEach(b,function(b){a(b)?e.headingElement=b:c.append(b)})})}}}),angular.module("ui.bootstrap.timepicker",[]).constant("uibTimepickerConfig",{hourStep:1,minuteStep:1,secondStep:1,showMeridian:!0,showSeconds:!1,meridians:null,readonlyInput:!1,mousewheel:!0,arrowkeys:!0,showSpinners:!0,templateUrl:"uib/template/timepicker/timepicker.html"}).controller("UibTimepickerController",["$scope","$element","$attrs","$parse","$log","$locale","uibTimepickerConfig",function(a,b,c,d,e,f,g){function h(){var b=+a.hours,c=a.showMeridian?b>0&&13>b:b>=0&&24>b;return c?(a.showMeridian&&(12===b&&(b=0),a.meridian===u[1]&&(b+=12)),b):void 0}function i(){var b=+a.minutes;return b>=0&&60>b?b:void 0}function j(){var b=+a.seconds;return b>=0&&60>b?b:void 0}function k(a){return null===a?"":angular.isDefined(a)&&a.toString().length<2?"0"+a:a.toString()}function l(a){m(),t.$setViewValue(new Date(r)),n(a)}function m(){t.$setValidity("time",!0),a.invalidHours=!1,a.invalidMinutes=!1,a.invalidSeconds=!1}function n(b){if(t.$modelValue){var c=r.getHours(),d=r.getMinutes(),e=r.getSeconds();a.showMeridian&&(c=0===c||12===c?12:c%12),a.hours="h"===b?c:k(c),"m"!==b&&(a.minutes=k(d)),a.meridian=r.getHours()<12?u[0]:u[1],"s"!==b&&(a.seconds=k(e)),a.meridian=r.getHours()<12?u[0]:u[1]}else a.hours=null,a.minutes=null,a.seconds=null,a.meridian=u[0]}function o(a){r=q(r,a),l()}function p(a,b){return q(a,60*b)}function q(a,b){var c=new Date(a.getTime()+1e3*b),d=new Date(a);return d.setHours(c.getHours(),c.getMinutes(),c.getSeconds()),d}var r=new Date,s=[],t={$setViewValue:angular.noop},u=angular.isDefined(c.meridians)?a.$parent.$eval(c.meridians):g.meridians||f.DATETIME_FORMATS.AMPMS;a.tabindex=angular.isDefined(c.tabindex)?c.tabindex:0,b.removeAttr("tabindex"),this.init=function(b,d){t=b,t.$render=this.render,t.$formatters.unshift(function(a){return a?new Date(a):null});var e=d.eq(0),f=d.eq(1),h=d.eq(2),i=angular.isDefined(c.mousewheel)?a.$parent.$eval(c.mousewheel):g.mousewheel;i&&this.setupMousewheelEvents(e,f,h);var j=angular.isDefined(c.arrowkeys)?a.$parent.$eval(c.arrowkeys):g.arrowkeys;j&&this.setupArrowkeyEvents(e,f,h),a.readonlyInput=angular.isDefined(c.readonlyInput)?a.$parent.$eval(c.readonlyInput):g.readonlyInput,this.setupInputEvents(e,f,h)};var v=g.hourStep;c.hourStep&&s.push(a.$parent.$watch(d(c.hourStep),function(a){v=+a}));var w=g.minuteStep;c.minuteStep&&s.push(a.$parent.$watch(d(c.minuteStep),function(a){w=+a}));var x;s.push(a.$parent.$watch(d(c.min),function(a){var b=new Date(a);x=isNaN(b)?void 0:b}));var y;s.push(a.$parent.$watch(d(c.max),function(a){var b=new Date(a);y=isNaN(b)?void 0:b}));var z=!1;c.ngDisabled&&s.push(a.$parent.$watch(d(c.ngDisabled),function(a){z=a})),a.noIncrementHours=function(){var a=p(r,60*v);return z||a>y||r>a&&x>a},a.noDecrementHours=function(){var a=p(r,60*-v);return z||x>a||a>r&&a>y},a.noIncrementMinutes=function(){var a=p(r,w);return z||a>y||r>a&&x>a},a.noDecrementMinutes=function(){var a=p(r,-w);return z||x>a||a>r&&a>y},a.noIncrementSeconds=function(){var a=q(r,A);return z||a>y||r>a&&x>a},a.noDecrementSeconds=function(){var a=q(r,-A);return z||x>a||a>r&&a>y},a.noToggleMeridian=function(){return r.getHours()<12?z||p(r,720)>y:z||p(r,-720)<x};var A=g.secondStep;c.secondStep&&s.push(a.$parent.$watch(d(c.secondStep),function(a){A=+a})),a.showSeconds=g.showSeconds,c.showSeconds&&s.push(a.$parent.$watch(d(c.showSeconds),function(b){a.showSeconds=!!b})),a.showMeridian=g.showMeridian,c.showMeridian&&s.push(a.$parent.$watch(d(c.showMeridian),function(b){if(a.showMeridian=!!b,t.$error.time){var c=h(),d=i();angular.isDefined(c)&&angular.isDefined(d)&&(r.setHours(c),l())}else n()})),this.setupMousewheelEvents=function(b,c,d){var e=function(a){a.originalEvent&&(a=a.originalEvent);var b=a.wheelDelta?a.wheelDelta:-a.deltaY;return a.detail||b>0};b.bind("mousewheel wheel",function(b){z||a.$apply(e(b)?a.incrementHours():a.decrementHours()),b.preventDefault()}),c.bind("mousewheel wheel",function(b){z||a.$apply(e(b)?a.incrementMinutes():a.decrementMinutes()),b.preventDefault()}),d.bind("mousewheel wheel",function(b){z||a.$apply(e(b)?a.incrementSeconds():a.decrementSeconds()),b.preventDefault()})},this.setupArrowkeyEvents=function(b,c,d){b.bind("keydown",function(b){z||(38===b.which?(b.preventDefault(),a.incrementHours(),a.$apply()):40===b.which&&(b.preventDefault(),a.decrementHours(),a.$apply()))}),c.bind("keydown",function(b){z||(38===b.which?(b.preventDefault(),a.incrementMinutes(),a.$apply()):40===b.which&&(b.preventDefault(),a.decrementMinutes(),a.$apply()))}),d.bind("keydown",function(b){z||(38===b.which?(b.preventDefault(),a.incrementSeconds(),a.$apply()):40===b.which&&(b.preventDefault(),a.decrementSeconds(),a.$apply()))})},this.setupInputEvents=function(b,c,d){if(a.readonlyInput)return a.updateHours=angular.noop,a.updateMinutes=angular.noop,void(a.updateSeconds=angular.noop);var e=function(b,c,d){t.$setViewValue(null),t.$setValidity("time",!1),angular.isDefined(b)&&(a.invalidHours=b),angular.isDefined(c)&&(a.invalidMinutes=c),angular.isDefined(d)&&(a.invalidSeconds=d)};a.updateHours=function(){var a=h(),b=i();t.$setDirty(),angular.isDefined(a)&&angular.isDefined(b)?(r.setHours(a),r.setMinutes(b),x>r||r>y?e(!0):l("h")):e(!0)},b.bind("blur",function(b){t.$setTouched(),null===a.hours||""===a.hours?e(!0):!a.invalidHours&&a.hours<10&&a.$apply(function(){a.hours=k(a.hours)})}),a.updateMinutes=function(){var a=i(),b=h();t.$setDirty(),angular.isDefined(a)&&angular.isDefined(b)?(r.setHours(b),r.setMinutes(a),x>r||r>y?e(void 0,!0):l("m")):e(void 0,!0)},c.bind("blur",function(b){t.$setTouched(),null===a.minutes?e(void 0,!0):!a.invalidMinutes&&a.minutes<10&&a.$apply(function(){a.minutes=k(a.minutes)})}),a.updateSeconds=function(){var a=j();t.$setDirty(),angular.isDefined(a)?(r.setSeconds(a),l("s")):e(void 0,void 0,!0)},d.bind("blur",function(b){!a.invalidSeconds&&a.seconds<10&&a.$apply(function(){a.seconds=k(a.seconds)})})},this.render=function(){var b=t.$viewValue;isNaN(b)?(t.$setValidity("time",!1),e.error('Timepicker directive: "ng-model" value must be a Date object, a number of milliseconds since 01.01.1970 or a string representing an RFC2822 or ISO 8601 date.')):(b&&(r=b),x>r||r>y?(t.$setValidity("time",!1),a.invalidHours=!0,a.invalidMinutes=!0):m(),n())},a.showSpinners=angular.isDefined(c.showSpinners)?a.$parent.$eval(c.showSpinners):g.showSpinners,a.incrementHours=function(){a.noIncrementHours()||o(60*v*60)},a.decrementHours=function(){a.noDecrementHours()||o(60*-v*60)},a.incrementMinutes=function(){a.noIncrementMinutes()||o(60*w)},a.decrementMinutes=function(){a.noDecrementMinutes()||o(60*-w)},a.incrementSeconds=function(){a.noIncrementSeconds()||o(A)},a.decrementSeconds=function(){a.noDecrementSeconds()||o(-A)},a.toggleMeridian=function(){var b=i(),c=h();a.noToggleMeridian()||(angular.isDefined(b)&&angular.isDefined(c)?o(720*(r.getHours()<12?60:-60)):a.meridian=a.meridian===u[0]?u[1]:u[0])},a.blur=function(){t.$setTouched()},a.$on("$destroy",function(){for(;s.length;)s.shift()()})}]).directive("uibTimepicker",["uibTimepickerConfig",function(a){return{require:["uibTimepicker","?^ngModel"],controller:"UibTimepickerController",controllerAs:"timepicker",replace:!0,scope:{},templateUrl:function(b,c){return c.templateUrl||a.templateUrl},link:function(a,b,c,d){var e=d[0],f=d[1];f&&e.init(f,b.find("input"))}}}]),angular.module("ui.bootstrap.typeahead",["ui.bootstrap.debounce","ui.bootstrap.position"]).factory("uibTypeaheadParser",["$parse",function(a){var b=/^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w\d]*))\s+in\s+([\s\S]+?)$/;return{parse:function(c){var d=c.match(b);if(!d)throw new Error('Expected typeahead specification in form of "_modelValue_ (as _label_)? for _item_ in _collection_" but got "'+c+'".');return{itemName:d[3],source:a(d[4]),viewMapper:a(d[2]||d[1]),modelMapper:a(d[1])}}}}]).controller("UibTypeaheadController",["$scope","$element","$attrs","$compile","$parse","$q","$timeout","$document","$window","$rootScope","$$debounce","$uibPosition","uibTypeaheadParser",function(a,b,c,d,e,f,g,h,i,j,k,l,m){function n(){N.moveInProgress||(N.moveInProgress=!0,N.$digest()),Y()}function o(){N.position=D?l.offset(b):l.position(b),N.position.top+=b.prop("offsetHeight")}var p,q,r=[9,13,27,38,40],s=200,t=a.$eval(c.typeaheadMinLength);t||0===t||(t=1);var u=a.$eval(c.typeaheadWaitMs)||0,v=a.$eval(c.typeaheadEditable)!==!1;a.$watch(c.typeaheadEditable,function(a){v=a!==!1});var w,x,y=e(c.typeaheadLoading).assign||angular.noop,z=e(c.typeaheadOnSelect),A=angular.isDefined(c.typeaheadSelectOnBlur)?a.$eval(c.typeaheadSelectOnBlur):!1,B=e(c.typeaheadNoResults).assign||angular.noop,C=c.typeaheadInputFormatter?e(c.typeaheadInputFormatter):void 0,D=c.typeaheadAppendToBody?a.$eval(c.typeaheadAppendToBody):!1,E=c.typeaheadAppendTo?a.$eval(c.typeaheadAppendTo):null,F=a.$eval(c.typeaheadFocusFirst)!==!1,G=c.typeaheadSelectOnExact?a.$eval(c.typeaheadSelectOnExact):!1,H=e(c.typeaheadIsOpen).assign||angular.noop,I=a.$eval(c.typeaheadShowHint)||!1,J=e(c.ngModel),K=e(c.ngModel+"($$$p)"),L=function(b,c){return angular.isFunction(J(a))&&q&&q.$options&&q.$options.getterSetter?K(b,{$$$p:c}):J.assign(b,c)},M=m.parse(c.uibTypeahead),N=a.$new(),O=a.$on("$destroy",function(){N.$destroy()});N.$on("$destroy",O);var P="typeahead-"+N.$id+"-"+Math.floor(1e4*Math.random());b.attr({"aria-autocomplete":"list","aria-expanded":!1,"aria-owns":P});var Q,R;I&&(Q=angular.element("<div></div>"),Q.css("position","relative"),b.after(Q),R=b.clone(),R.attr("placeholder",""),R.val(""),R.css({position:"absolute",top:"0px",left:"0px","border-color":"transparent","box-shadow":"none",opacity:1,background:"none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255)",color:"#999"}),b.css({position:"relative","vertical-align":"top","background-color":"transparent"}),Q.append(R),R.after(b));var S=angular.element("<div uib-typeahead-popup></div>");S.attr({id:P,matches:"matches",active:"activeIdx",select:"select(activeIdx, evt)","move-in-progress":"moveInProgress",query:"query",position:"position","assign-is-open":"assignIsOpen(isOpen)",debounce:"debounceUpdate"}),angular.isDefined(c.typeaheadTemplateUrl)&&S.attr("template-url",c.typeaheadTemplateUrl),angular.isDefined(c.typeaheadPopupTemplateUrl)&&S.attr("popup-template-url",c.typeaheadPopupTemplateUrl);var T=function(){I&&R.val("")},U=function(){N.matches=[],N.activeIdx=-1,b.attr("aria-expanded",!1),T()},V=function(a){return P+"-option-"+a};N.$watch("activeIdx",function(a){0>a?b.removeAttr("aria-activedescendant"):b.attr("aria-activedescendant",V(a))});var W=function(a,b){return N.matches.length>b&&a?a.toUpperCase()===N.matches[b].label.toUpperCase():!1},X=function(c,d){var e={$viewValue:c};y(a,!0),B(a,!1),f.when(M.source(a,e)).then(function(f){var g=c===p.$viewValue;if(g&&w)if(f&&f.length>0){N.activeIdx=F?0:-1,B(a,!1),N.matches.length=0;for(var h=0;h<f.length;h++)e[M.itemName]=f[h],N.matches.push({id:V(h),label:M.viewMapper(N,e),model:f[h]});if(N.query=c,o(),b.attr("aria-expanded",!0),G&&1===N.matches.length&&W(c,0)&&(angular.isNumber(N.debounceUpdate)||angular.isObject(N.debounceUpdate)?k(function(){N.select(0,d)},angular.isNumber(N.debounceUpdate)?N.debounceUpdate:N.debounceUpdate["default"]):N.select(0,d)),I){var i=N.matches[0].label;angular.isString(c)&&c.length>0&&i.slice(0,c.length).toUpperCase()===c.toUpperCase()?R.val(c+i.slice(c.length)):R.val("")}}else U(),B(a,!0);g&&y(a,!1)},function(){U(),y(a,!1),B(a,!0)})};D&&(angular.element(i).on("resize",n),h.find("body").on("scroll",n));var Y=k(function(){N.matches.length&&o(),N.moveInProgress=!1},s);N.moveInProgress=!1,N.query=void 0;var Z,$=function(a){Z=g(function(){X(a)},u)},_=function(){Z&&g.cancel(Z)};U(),N.assignIsOpen=function(b){H(a,b)},N.select=function(d,e){var f,h,i={};x=!0,i[M.itemName]=h=N.matches[d].model,f=M.modelMapper(a,i),L(a,f),p.$setValidity("editable",!0),p.$setValidity("parse",!0),z(a,{$item:h,$model:f,$label:M.viewMapper(a,i),$event:e}),U(),N.$eval(c.typeaheadFocusOnSelect)!==!1&&g(function(){b[0].focus()},0,!1)},b.on("keydown",function(a){if(0!==N.matches.length&&-1!==r.indexOf(a.which)){if(-1===N.activeIdx&&(9===a.which||13===a.which))return U(),void N.$digest();a.preventDefault();var b;switch(a.which){case 9:case 13:N.$apply(function(){angular.isNumber(N.debounceUpdate)||angular.isObject(N.debounceUpdate)?k(function(){N.select(N.activeIdx,a)},angular.isNumber(N.debounceUpdate)?N.debounceUpdate:N.debounceUpdate["default"]):N.select(N.activeIdx,a)});break;case 27:a.stopPropagation(),U(),N.$digest();break;case 38:N.activeIdx=(N.activeIdx>0?N.activeIdx:N.matches.length)-1,N.$digest(),b=S.find("li")[N.activeIdx],b.parentNode.scrollTop=b.offsetTop;break;case 40:N.activeIdx=(N.activeIdx+1)%N.matches.length,N.$digest(),b=S.find("li")[N.activeIdx],b.parentNode.scrollTop=b.offsetTop}}}),b.bind("focus",function(a){w=!0,0!==t||p.$viewValue||g(function(){X(p.$viewValue,a)},0)}),b.bind("blur",function(a){A&&N.matches.length&&-1!==N.activeIdx&&!x&&(x=!0,N.$apply(function(){angular.isObject(N.debounceUpdate)&&angular.isNumber(N.debounceUpdate.blur)?k(function(){N.select(N.activeIdx,a)},N.debounceUpdate.blur):N.select(N.activeIdx,a)})),!v&&p.$error.editable&&(p.$viewValue="",b.val("")),w=!1,x=!1});var aa=function(a){b[0]!==a.target&&3!==a.which&&0!==N.matches.length&&(U(),j.$$phase||N.$digest())};h.on("click",aa),a.$on("$destroy",function(){h.off("click",aa),(D||E)&&ba.remove(),D&&(angular.element(i).off("resize",n),h.find("body").off("scroll",n)),S.remove(),I&&Q.remove()});var ba=d(S)(N);D?h.find("body").append(ba):E?angular.element(E).eq(0).append(ba):b.after(ba),this.init=function(b,c){p=b,q=c,N.debounceUpdate=p.$options&&e(p.$options.debounce)(a),p.$parsers.unshift(function(b){return w=!0,0===t||b&&b.length>=t?u>0?(_(),$(b)):X(b):(y(a,!1),_(),U()),v?b:b?void p.$setValidity("editable",!1):(p.$setValidity("editable",!0),null)}),p.$formatters.push(function(b){var c,d,e={};return v||p.$setValidity("editable",!0),C?(e.$model=b,C(a,e)):(e[M.itemName]=b,c=M.viewMapper(a,e),e[M.itemName]=void 0,d=M.viewMapper(a,e),c!==d?c:b)})}}]).directive("uibTypeahead",function(){return{controller:"UibTypeaheadController",require:["ngModel","^?ngModelOptions","uibTypeahead"],link:function(a,b,c,d){d[2].init(d[0],d[1])}}}).directive("uibTypeaheadPopup",["$$debounce",function(a){return{scope:{matches:"=",query:"=",active:"=",position:"&",moveInProgress:"=",select:"&",assignIsOpen:"&",debounce:"&"},replace:!0,templateUrl:function(a,b){return b.popupTemplateUrl||"uib/template/typeahead/typeahead-popup.html"},link:function(b,c,d){b.templateUrl=d.templateUrl,b.isOpen=function(){var a=b.matches.length>0;return b.assignIsOpen({isOpen:a}),a},b.isActive=function(a){return b.active===a},b.selectActive=function(a){b.active=a},b.selectMatch=function(c,d){var e=b.debounce();angular.isNumber(e)||angular.isObject(e)?a(function(){b.select({activeIdx:c,evt:d})},angular.isNumber(e)?e:e["default"]):b.select({activeIdx:c,evt:d})}}}}]).directive("uibTypeaheadMatch",["$templateRequest","$compile","$parse",function(a,b,c){return{scope:{index:"=",match:"=",query:"="},link:function(d,e,f){var g=c(f.templateUrl)(d.$parent)||"uib/template/typeahead/typeahead-match.html";a(g).then(function(a){var c=angular.element(a.trim());e.replaceWith(c),b(c)(d)})}}}]).filter("uibTypeaheadHighlight",["$sce","$injector","$log",function(a,b,c){function d(a){return a.replace(/([.?*+^$[\]\\(){}|-])/g,"\\$1")}function e(a){return/<.*>/g.test(a)}var f;return f=b.has("$sanitize"),function(b,g){return!f&&e(b)&&c.warn("Unsafe use of typeahead please use ngSanitize"),b=g?(""+b).replace(new RegExp(d(g),"gi"),"<strong>$&</strong>"):b,f||(b=a.trustAsHtml(b)),b}}]),angular.module("uib/template/accordion/accordion-group.html",[]).run(["$templateCache",function(a){a.put("uib/template/accordion/accordion-group.html",'<div class="panel" ng-class="panelClass || \'panel-default\'">\n  <div role="tab" id="{{::headingId}}" aria-selected="{{isOpen}}" class="panel-heading" ng-keypress="toggleOpen($event)">\n    <h4 class="panel-title">\n      <a role="button" data-toggle="collapse" href aria-expanded="{{isOpen}}" aria-controls="{{::panelId}}" tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" uib-accordion-transclude="heading"><span ng-class="{\'text-muted\': isDisabled}">{{heading}}</span></a>\n    </h4>\n  </div>\n  <div id="{{::panelId}}" aria-labelledby="{{::headingId}}" aria-hidden="{{!isOpen}}" role="tabpanel" class="panel-collapse collapse" uib-collapse="!isOpen">\n    <div class="panel-body" ng-transclude></div>\n  </div>\n</div>\n')}]),angular.module("uib/template/accordion/accordion.html",[]).run(["$templateCache",function(a){a.put("uib/template/accordion/accordion.html",'<div role="tablist" class="panel-group" ng-transclude></div>')}]),angular.module("uib/template/alert/alert.html",[]).run(["$templateCache",function(a){a.put("uib/template/alert/alert.html",'<div class="alert" ng-class="[\'alert-\' + (type || \'warning\'), closeable ? \'alert-dismissible\' : null]" role="alert">\n    <button ng-show="closeable" type="button" class="close" ng-click="close({$event: $event})">\n        <span aria-hidden="true">&times;</span>\n        <span class="sr-only">Close</span>\n    </button>\n    <div ng-transclude></div>\n</div>\n')}]),angular.module("uib/template/carousel/carousel.html",[]).run(["$templateCache",function(a){a.put("uib/template/carousel/carousel.html",'<div ng-mouseenter="pause()" ng-mouseleave="play()" class="carousel" ng-swipe-right="prev()" ng-swipe-left="next()">\n  <div class="carousel-inner" ng-transclude></div>\n  <a role="button" href class="left carousel-control" ng-click="prev()" ng-show="slides.length > 1">\n    <span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>\n    <span class="sr-only">previous</span>\n  </a>\n  <a role="button" href class="right carousel-control" ng-click="next()" ng-show="slides.length > 1">\n    <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>\n    <span class="sr-only">next</span>\n  </a>\n  <ol class="carousel-indicators" ng-show="slides.length > 1">\n    <li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-class="{ active: isActive(slide) }" ng-click="select(slide)">\n      <span class="sr-only">slide {{ $index + 1 }} of {{ slides.length }}<span ng-if="isActive(slide)">, currently active</span></span>\n    </li>\n  </ol>\n</div>')}]),angular.module("uib/template/carousel/slide.html",[]).run(["$templateCache",function(a){a.put("uib/template/carousel/slide.html",'<div ng-class="{\n    \'active\': active\n  }" class="item text-center" ng-transclude></div>\n')}]),angular.module("uib/template/datepicker/datepicker.html",[]).run(["$templateCache",function(a){a.put("uib/template/datepicker/datepicker.html",'<div class="uib-datepicker" ng-switch="datepickerMode" role="application" ng-keydown="keydown($event)">\n  <uib-daypicker ng-switch-when="day" tabindex="0"></uib-daypicker>\n  <uib-monthpicker ng-switch-when="month" tabindex="0"></uib-monthpicker>\n  <uib-yearpicker ng-switch-when="year" tabindex="0"></uib-yearpicker>\n</div>')}]),angular.module("uib/template/datepicker/day.html",[]).run(["$templateCache",function(a){a.put("uib/template/datepicker/day.html",'<table class="uib-daypicker" role="grid" aria-labelledby="{{::uniqueId}}-title" aria-activedescendant="{{activeDateId}}">\n  <thead>\n    <tr>\n      <th><button type="button" class="btn btn-default btn-sm pull-left uib-left" ng-click="move(-1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-left"></i></button></th>\n      <th colspan="{{::5 + showWeeks}}"><button id="{{::uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm uib-title" ng-click="toggleMode()" ng-disabled="datepickerMode === maxMode" tabindex="-1"><strong>{{title}}</strong></button></th>\n      <th><button type="button" class="btn btn-default btn-sm pull-right uib-right" ng-click="move(1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-right"></i></button></th>\n    </tr>\n    <tr>\n      <th ng-if="showWeeks" class="text-center"></th>\n      <th ng-repeat="label in ::labels track by $index" class="text-center"><small aria-label="{{::label.full}}">{{::label.abbr}}</small></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr class="uib-weeks" ng-repeat="row in rows track by $index">\n      <td ng-if="showWeeks" class="text-center h6"><em>{{ weekNumbers[$index] }}</em></td>\n      <td ng-repeat="dt in row" class="uib-day text-center" role="gridcell"\n        id="{{::dt.uid}}"\n        ng-class="::dt.customClass">\n        <button type="button" class="btn btn-default btn-sm"\n          uib-is-class="\n            \'btn-info\' for selectedDt,\n            \'active\' for activeDt\n            on dt"\n          ng-click="select(dt.date)"\n          ng-disabled="::dt.disabled"\n          tabindex="-1"><span ng-class="::{\'text-muted\': dt.secondary, \'text-info\': dt.current}">{{::dt.label}}</span></button>\n      </td>\n    </tr>\n  </tbody>\n</table>\n');
+}]),angular.module("uib/template/datepicker/month.html",[]).run(["$templateCache",function(a){a.put("uib/template/datepicker/month.html",'<table class="uib-monthpicker" role="grid" aria-labelledby="{{::uniqueId}}-title" aria-activedescendant="{{activeDateId}}">\n  <thead>\n    <tr>\n      <th><button type="button" class="btn btn-default btn-sm pull-left uib-left" ng-click="move(-1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-left"></i></button></th>\n      <th><button id="{{::uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm uib-title" ng-click="toggleMode()" ng-disabled="datepickerMode === maxMode" tabindex="-1"><strong>{{title}}</strong></button></th>\n      <th><button type="button" class="btn btn-default btn-sm pull-right uib-right" ng-click="move(1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-right"></i></button></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr class="uib-months" ng-repeat="row in rows track by $index">\n      <td ng-repeat="dt in row" class="uib-month text-center" role="gridcell"\n        id="{{::dt.uid}}"\n        ng-class="::dt.customClass">\n        <button type="button" class="btn btn-default"\n          uib-is-class="\n            \'btn-info\' for selectedDt,\n            \'active\' for activeDt\n            on dt"\n          ng-click="select(dt.date)"\n          ng-disabled="::dt.disabled"\n          tabindex="-1"><span ng-class="::{\'text-info\': dt.current}">{{::dt.label}}</span></button>\n      </td>\n    </tr>\n  </tbody>\n</table>\n')}]),angular.module("uib/template/datepicker/popup.html",[]).run(["$templateCache",function(a){a.put("uib/template/datepicker/popup.html",'<div>\n  <ul class="uib-datepicker-popup dropdown-menu" dropdown-nested ng-if="isOpen" ng-style="{top: position.top+\'px\', left: position.left+\'px\'}" ng-keydown="keydown($event)" ng-click="$event.stopPropagation()">\n    <li ng-transclude></li>\n    <li ng-if="showButtonBar" class="uib-button-bar">\n    <span class="btn-group pull-left">\n      <button type="button" class="btn btn-sm btn-info uib-datepicker-current" ng-click="select(\'today\')" ng-disabled="isDisabled(\'today\')">{{ getText(\'current\') }}</button>\n      <button type="button" class="btn btn-sm btn-danger uib-clear" ng-click="select(null)">{{ getText(\'clear\') }}</button>\n    </span>\n      <button type="button" class="btn btn-sm btn-success pull-right uib-close" ng-click="close()">{{ getText(\'close\') }}</button>\n    </li>\n  </ul>\n</div>\n')}]),angular.module("uib/template/datepicker/year.html",[]).run(["$templateCache",function(a){a.put("uib/template/datepicker/year.html",'<table class="uib-yearpicker" role="grid" aria-labelledby="{{::uniqueId}}-title" aria-activedescendant="{{activeDateId}}">\n  <thead>\n    <tr>\n      <th><button type="button" class="btn btn-default btn-sm pull-left uib-left" ng-click="move(-1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-left"></i></button></th>\n      <th colspan="{{::columns - 2}}"><button id="{{::uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="btn btn-default btn-sm uib-title" ng-click="toggleMode()" ng-disabled="datepickerMode === maxMode" tabindex="-1"><strong>{{title}}</strong></button></th>\n      <th><button type="button" class="btn btn-default btn-sm pull-right uib-right" ng-click="move(1)" tabindex="-1"><i class="glyphicon glyphicon-chevron-right"></i></button></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr class="uib-years" ng-repeat="row in rows track by $index">\n      <td ng-repeat="dt in row" class="uib-year text-center" role="gridcell"\n        id="{{::dt.uid}}"\n        ng-class="::dt.customClass">\n        <button type="button" class="btn btn-default"\n          uib-is-class="\n            \'btn-info\' for selectedDt,\n            \'active\' for activeDt\n            on dt"\n          ng-click="select(dt.date)"\n          ng-disabled="::dt.disabled"\n          tabindex="-1"><span ng-class="::{\'text-info\': dt.current}">{{::dt.label}}</span></button>\n      </td>\n    </tr>\n  </tbody>\n</table>\n')}]),angular.module("uib/template/modal/backdrop.html",[]).run(["$templateCache",function(a){a.put("uib/template/modal/backdrop.html",'<div class="modal-backdrop"\n     uib-modal-animation-class="fade"\n     modal-in-class="in"\n     ng-style="{\'z-index\': 1040 + (index && 1 || 0) + index*10}"\n></div>\n')}]),angular.module("uib/template/modal/window.html",[]).run(["$templateCache",function(a){a.put("uib/template/modal/window.html",'<div modal-render="{{$isRendered}}" tabindex="-1" role="dialog" class="modal"\n    uib-modal-animation-class="fade"\n    modal-in-class="in"\n    ng-style="{\'z-index\': 1050 + index*10, display: \'block\'}">\n    <div class="modal-dialog {{size ? \'modal-\' + size : \'\'}}"><div class="modal-content" uib-modal-transclude></div></div>\n</div>\n')}]),angular.module("uib/template/pager/pager.html",[]).run(["$templateCache",function(a){a.put("uib/template/pager/pager.html",'<ul class="pager">\n  <li ng-class="{disabled: noPrevious()||ngDisabled, previous: align}"><a href ng-click="selectPage(page - 1, $event)">{{::getText(\'previous\')}}</a></li>\n  <li ng-class="{disabled: noNext()||ngDisabled, next: align}"><a href ng-click="selectPage(page + 1, $event)">{{::getText(\'next\')}}</a></li>\n</ul>\n')}]),angular.module("uib/template/pagination/pagination.html",[]).run(["$templateCache",function(a){a.put("uib/template/pagination/pagination.html",'<ul class="pagination">\n  <li ng-if="::boundaryLinks" ng-class="{disabled: noPrevious()||ngDisabled}" class="pagination-first"><a href ng-click="selectPage(1, $event)">{{::getText(\'first\')}}</a></li>\n  <li ng-if="::directionLinks" ng-class="{disabled: noPrevious()||ngDisabled}" class="pagination-prev"><a href ng-click="selectPage(page - 1, $event)">{{::getText(\'previous\')}}</a></li>\n  <li ng-repeat="page in pages track by $index" ng-class="{active: page.active,disabled: ngDisabled&&!page.active}" class="pagination-page"><a href ng-click="selectPage(page.number, $event)">{{page.text}}</a></li>\n  <li ng-if="::directionLinks" ng-class="{disabled: noNext()||ngDisabled}" class="pagination-next"><a href ng-click="selectPage(page + 1, $event)">{{::getText(\'next\')}}</a></li>\n  <li ng-if="::boundaryLinks" ng-class="{disabled: noNext()||ngDisabled}" class="pagination-last"><a href ng-click="selectPage(totalPages, $event)">{{::getText(\'last\')}}</a></li>\n</ul>\n')}]),angular.module("uib/template/tooltip/tooltip-html-popup.html",[]).run(["$templateCache",function(a){a.put("uib/template/tooltip/tooltip-html-popup.html",'<div class="tooltip"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="tooltip-arrow"></div>\n  <div class="tooltip-inner" ng-bind-html="contentExp()"></div>\n</div>\n')}]),angular.module("uib/template/tooltip/tooltip-popup.html",[]).run(["$templateCache",function(a){a.put("uib/template/tooltip/tooltip-popup.html",'<div class="tooltip"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="tooltip-arrow"></div>\n  <div class="tooltip-inner" ng-bind="content"></div>\n</div>\n')}]),angular.module("uib/template/tooltip/tooltip-template-popup.html",[]).run(["$templateCache",function(a){a.put("uib/template/tooltip/tooltip-template-popup.html",'<div class="tooltip"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="tooltip-arrow"></div>\n  <div class="tooltip-inner"\n    uib-tooltip-template-transclude="contentExp()"\n    tooltip-template-transclude-scope="originScope()"></div>\n</div>\n')}]),angular.module("uib/template/popover/popover-html.html",[]).run(["$templateCache",function(a){a.put("uib/template/popover/popover-html.html",'<div class="popover"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="arrow"></div>\n\n  <div class="popover-inner">\n      <h3 class="popover-title" ng-bind="title" ng-if="title"></h3>\n      <div class="popover-content" ng-bind-html="contentExp()"></div>\n  </div>\n</div>\n')}]),angular.module("uib/template/popover/popover-template.html",[]).run(["$templateCache",function(a){a.put("uib/template/popover/popover-template.html",'<div class="popover"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="arrow"></div>\n\n  <div class="popover-inner">\n      <h3 class="popover-title" ng-bind="title" ng-if="title"></h3>\n      <div class="popover-content"\n        uib-tooltip-template-transclude="contentExp()"\n        tooltip-template-transclude-scope="originScope()"></div>\n  </div>\n</div>\n')}]),angular.module("uib/template/popover/popover.html",[]).run(["$templateCache",function(a){a.put("uib/template/popover/popover.html",'<div class="popover"\n  tooltip-animation-class="fade"\n  uib-tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="arrow"></div>\n\n  <div class="popover-inner">\n      <h3 class="popover-title" ng-bind="title" ng-if="title"></h3>\n      <div class="popover-content" ng-bind="content"></div>\n  </div>\n</div>\n')}]),angular.module("uib/template/progressbar/bar.html",[]).run(["$templateCache",function(a){a.put("uib/template/progressbar/bar.html",'<div class="progress-bar" ng-class="type && \'progress-bar-\' + type" role="progressbar" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="{{max}}" ng-style="{width: (percent < 100 ? percent : 100) + \'%\'}" aria-valuetext="{{percent | number:0}}%" aria-labelledby="{{::title}}" ng-transclude></div>\n')}]),angular.module("uib/template/progressbar/progress.html",[]).run(["$templateCache",function(a){a.put("uib/template/progressbar/progress.html",'<div class="progress" ng-transclude aria-labelledby="{{::title}}"></div>')}]),angular.module("uib/template/progressbar/progressbar.html",[]).run(["$templateCache",function(a){a.put("uib/template/progressbar/progressbar.html",'<div class="progress">\n  <div class="progress-bar" ng-class="type && \'progress-bar-\' + type" role="progressbar" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="{{max}}" ng-style="{width: (percent < 100 ? percent : 100) + \'%\'}" aria-valuetext="{{percent | number:0}}%" aria-labelledby="{{::title}}" ng-transclude></div>\n</div>\n')}]),angular.module("uib/template/rating/rating.html",[]).run(["$templateCache",function(a){a.put("uib/template/rating/rating.html",'<span ng-mouseleave="reset()" ng-keydown="onKeydown($event)" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="{{range.length}}" aria-valuenow="{{value}}">\n    <span ng-repeat-start="r in range track by $index" class="sr-only">({{ $index < value ? \'*\' : \' \' }})</span>\n    <i ng-repeat-end ng-mouseenter="enter($index + 1)" ng-click="rate($index + 1)" class="glyphicon" ng-class="$index < value && (r.stateOn || \'glyphicon-star\') || (r.stateOff || \'glyphicon-star-empty\')" ng-attr-title="{{r.title}}" aria-valuetext="{{r.title}}"></i>\n</span>\n')}]),angular.module("uib/template/tabs/tab.html",[]).run(["$templateCache",function(a){a.put("uib/template/tabs/tab.html",'<li ng-class="{active: active, disabled: disabled}" class="uib-tab">\n  <a href ng-click="select()" uib-tab-heading-transclude>{{heading}}</a>\n</li>\n')}]),angular.module("uib/template/tabs/tabset.html",[]).run(["$templateCache",function(a){a.put("uib/template/tabs/tabset.html",'<div>\n  <ul class="nav nav-{{type || \'tabs\'}}" ng-class="{\'nav-stacked\': vertical, \'nav-justified\': justified}" ng-transclude></ul>\n  <div class="tab-content">\n    <div class="tab-pane" \n         ng-repeat="tab in tabs" \n         ng-class="{active: tab.active}"\n         uib-tab-content-transclude="tab">\n    </div>\n  </div>\n</div>\n')}]),angular.module("uib/template/timepicker/timepicker.html",[]).run(["$templateCache",function(a){a.put("uib/template/timepicker/timepicker.html",'<table class="uib-timepicker">\n  <tbody>\n    <tr class="text-center" ng-show="::showSpinners">\n      <td class="uib-increment hours"><a ng-click="incrementHours()" ng-class="{disabled: noIncrementHours()}" class="btn btn-link" ng-disabled="noIncrementHours()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-up"></span></a></td>\n      <td>&nbsp;</td>\n      <td class="uib-increment minutes"><a ng-click="incrementMinutes()" ng-class="{disabled: noIncrementMinutes()}" class="btn btn-link" ng-disabled="noIncrementMinutes()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-up"></span></a></td>\n      <td ng-show="showSeconds">&nbsp;</td>\n      <td ng-show="showSeconds" class="uib-increment seconds"><a ng-click="incrementSeconds()" ng-class="{disabled: noIncrementSeconds()}" class="btn btn-link" ng-disabled="noIncrementSeconds()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-up"></span></a></td>\n      <td ng-show="showMeridian"></td>\n    </tr>\n    <tr>\n      <td class="form-group uib-time hours" ng-class="{\'has-error\': invalidHours}">\n        <input style="width:50px;" type="text" placeholder="HH" ng-model="hours" ng-change="updateHours()" class="form-control text-center" ng-readonly="::readonlyInput" maxlength="2" tabindex="{{::tabindex}}" ng-disabled="noIncrementHours()" ng-blur="blur()">\n      </td>\n      <td class="uib-separator">:</td>\n      <td class="form-group uib-time minutes" ng-class="{\'has-error\': invalidMinutes}">\n        <input style="width:50px;" type="text" placeholder="MM" ng-model="minutes" ng-change="updateMinutes()" class="form-control text-center" ng-readonly="::readonlyInput" maxlength="2" tabindex="{{::tabindex}}" ng-disabled="noIncrementMinutes()" ng-blur="blur()">\n      </td>\n      <td ng-show="showSeconds" class="uib-separator">:</td>\n      <td class="form-group uib-time seconds" ng-class="{\'has-error\': invalidSeconds}" ng-show="showSeconds">\n        <input style="width:50px;" type="text" placeholder="SS" ng-model="seconds" ng-change="updateSeconds()" class="form-control text-center" ng-readonly="readonlyInput" maxlength="2" tabindex="{{::tabindex}}" ng-disabled="noIncrementSeconds()" ng-blur="blur()">\n      </td>\n      <td ng-show="showMeridian" class="uib-time am-pm"><button type="button" ng-class="{disabled: noToggleMeridian()}" class="btn btn-default text-center" ng-click="toggleMeridian()" ng-disabled="noToggleMeridian()" tabindex="{{::tabindex}}">{{meridian}}</button></td>\n    </tr>\n    <tr class="text-center" ng-show="::showSpinners">\n      <td class="uib-decrement hours"><a ng-click="decrementHours()" ng-class="{disabled: noDecrementHours()}" class="btn btn-link" ng-disabled="noDecrementHours()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-down"></span></a></td>\n      <td>&nbsp;</td>\n      <td class="uib-decrement minutes"><a ng-click="decrementMinutes()" ng-class="{disabled: noDecrementMinutes()}" class="btn btn-link" ng-disabled="noDecrementMinutes()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-down"></span></a></td>\n      <td ng-show="showSeconds">&nbsp;</td>\n      <td ng-show="showSeconds" class="uib-decrement seconds"><a ng-click="decrementSeconds()" ng-class="{disabled: noDecrementSeconds()}" class="btn btn-link" ng-disabled="noDecrementSeconds()" tabindex="{{::tabindex}}"><span class="glyphicon glyphicon-chevron-down"></span></a></td>\n      <td ng-show="showMeridian"></td>\n    </tr>\n  </tbody>\n</table>\n')}]),angular.module("uib/template/typeahead/typeahead-match.html",[]).run(["$templateCache",function(a){a.put("uib/template/typeahead/typeahead-match.html",'<a href\n   tabindex="-1"\n   ng-bind-html="match.label | uibTypeaheadHighlight:query"\n   ng-attr-title="{{match.label}}"></a>\n')}]),angular.module("uib/template/typeahead/typeahead-popup.html",[]).run(["$templateCache",function(a){a.put("uib/template/typeahead/typeahead-popup.html",'<ul class="dropdown-menu" ng-show="isOpen() && !moveInProgress" ng-style="{top: position().top+\'px\', left: position().left+\'px\'}" role="listbox" aria-hidden="{{!isOpen()}}">\n    <li ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index, $event)" role="option" id="{{::match.id}}">\n        <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>\n    </li>\n</ul>\n')}]),angular.module("ui.bootstrap.carousel").run(function(){!angular.$$csp().noInlineStyle&&angular.element(document).find("head").prepend('<style type="text/css">.ng-animate.item:not(.left):not(.right){-webkit-transition:0s ease-in-out left;transition:0s ease-in-out left}</style>')}),angular.module("ui.bootstrap.datepicker").run(function(){!angular.$$csp().noInlineStyle&&angular.element(document).find("head").prepend('<style type="text/css">.uib-datepicker .uib-title{width:100%;}.uib-day button,.uib-month button,.uib-year button{min-width:100%;}.uib-datepicker-popup.dropdown-menu{display:block;}.uib-button-bar{padding:10px 9px 2px;}</style>')}),angular.module("ui.bootstrap.timepicker").run(function(){!angular.$$csp().noInlineStyle&&angular.element(document).find("head").prepend('<style type="text/css">.uib-time input{width:50px;}</style>')}),angular.module("ui.bootstrap.typeahead").run(function(){!angular.$$csp().noInlineStyle&&angular.element(document).find("head").prepend('<style type="text/css">[uib-typeahead-popup].dropdown-menu{display:block;}</style>')});
+var HEADERS = {};
+var headerss = {Authorization : "dfsdfsdfsfs"};
+var APP_URL = {
+    login: API_ENGINE_URL + "authenticate",
+    userbytoken: API_ENGINE_URL + "user-by-token",
+    signup: API_ENGINE_URL + "users",
+    update: API_ENGINE_URL + "users",
+    delete: API_ENGINE_URL + "users",
+    get_me: API_ENGINE_URL + "me",
+    
+    order_item: API_ENGINE_URL + "orders",
+    order_read: API_ENGINE_URL + "orders/:id",
+    order_update: API_ENGINE_URL + "orders/:id",
+    order_delete: API_ENGINE_URL + "orders/:id",
+    order_history: API_ENGINE_URL + "orders",
+    
+//    place_enquiry: API_ENGINE_URL + "enquiry",
+    
+    read_item:API_ENGINE_URL + "items/:id",
+    get_category_items:API_ENGINE_URL + "category/:id/items",
+    get_all_category:API_ENGINE_URL + "category",
+    change_password:API_ENGINE_URL + "changepassword/:id",
+    forgot_password:API_ENGINE_URL + "resetpassword",
+    item_children:API_ENGINE_URL + "item-children",
+    // address
+    address_by_userid:API_ENGINE_URL + "address/user/:id",
+    address_remove:API_ENGINE_URL + "address/remove",
+    
+    get_children:API_ENGINE_URL + "children/:parent_id",
+    admin_order_history:API_ENGINE_URL + "admin/orders",
+    admin_order_details:API_ENGINE_URL + "admin/order-details/:id",
+    add_item:API_ENGINE_URL + "admin/items",
+    update_item:API_ENGINE_URL + "admin/items",
+    delete_item:API_ENGINE_URL + "admin/items/:id",
+    update_order:API_ENGINE_URL + "admin/orders",
+    order_address:API_ENGINE_URL + "admin/order-address/:id"
+    
+};
+
+
+
+APP_LOCALITY = ["Kahilpara",
+    "Lokhra Rd",
+    "Maligaon",
+    "Zoo Road",
+    "Bhetapara",
+    "VIP Road",
+    "Bikash Nagar",
+    "Dhirenpara",
+    "Lankeshwar",
+    "Beltola",
+    "Jalukbari",
+    "Dharapur",
+    "Lokhra",
+    "Panjabari Bus Stand",
+    "Hatigaon",
+    "Ganeshguri",
+    "Dispur",
+    "Rehabari",
+    "GS Road",
+    "Adabari",
+    "Lal Ganesh",
+    "Geetanagar",
+    "Garchuk",
+    "Azara",
+    "Pandu",
+    "Borbari",
+    "Survey",
+    "Rukmini Gaon",
+    "Jayanagar",
+    "Pator Kuchi",
+    "Pragjyotish Nagar",
+    "Amingaon",
+    "Janakpur",
+    "Ulubari",
+    "Chandmari",
+    "Bharalumukh",
+    "Birubari",
+    "Machkhowa",
+    "9th Mile",
+    "Khanapara",
+    "Nalapara",
+    "Silpukhuri",
+    "Christian Basti",
+    "Navagraha Rd",
+    "Tripura Rd",
+    "Tarun Nagar"];
+APP_LOCALITY = APP_LOCALITY.sort();
+var mainApp = angular.module('mainApp', ['ngRoute', 'ngResource', 'ngCookies','ngMessages',"checklist-model","ngSanitize",'ngCart','ngAnimate', 'ui.bootstrap','ui.router', 'snap']);
+var isPublicRoute = function(path) {
+    publicPathArray = ['/signup','/login','/forgot-password','/auth/facebook','/auth-token','/about-us'];
+    if (location.href.indexOf('auth-token') > -1) {
+        return true;
+    }
+    if (publicPathArray.indexOf(path) > -1) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+
+
+
+
+
+
+
+
+mainApp.run(['$rootScope', '$location', 'AuthFactory','$cookies', function ($rootScope, $location, Auth,$cookies) {
+        
+    $rootScope.show_loader = 0;
+        $rootScope.enquiry_made = {};
+         var history = [];
+         $rootScope.statusList = ['new','processing','completed'];
+
+        $rootScope.$on('$routeChangeSuccess', function() {
+            history.push($location.$$path);
+        });
+
+        $rootScope.back = function () {
+            var prevUrl = history.length > 1 ? history.splice(-2)[0] : "/";
+            $location.path(prevUrl);
+        };
+        $rootScope.$on('$stateChangeStart', function (event) {
+            
+            Auth.syncCookieUser();
+            console.log($location.path());
+            if (!Auth.isLoggedIn() && !isPublicRoute($location.path())) {
+                console.log('DENY');
+                $location.path('/login');
+            }
+            else {
+                if (Auth.isLoggedIn() && $location.path() == '/login') {
+                    $location.path('/');
+                } 
+                console.log('ALLOW');
+                
+               // $cookies.put('enquiry_made', JSON.stringify({items:[]}));
+
+                $rootScope.$emit('syncEnquiryMade');
+                
+            }
+        });
+    }]);
+
+
+
+/*
+mainApp.config(['$routeProvider', function ($routeProvider) {
+
+
+        $routeProvider.when('/order-preview',
+                {
+                    templateUrl: 'app/ordersenquiry/enquiry-preview.html',
+                    controller: 'orderItemCtrl'
+                }
+        );
+
+        $routeProvider.when('/orders',
+                {
+                    templateUrl: 'app/ordersenquiry/order-history.html',
+                    controller: 'orderItemCtrl'
+                }
+        );
+        $routeProvider.when('/order-summary',
+                {
+                    templateUrl: 'app/ordersenquiry/order-summary.html',
+                    controller: 'orderItemCtrl'
+                }
+        );
+        $routeProvider.when('/order-success',
+                {
+                    templateUrl: 'app/ordersenquiry/order-success.html',
+                    controller: 'orderItemCtrl'
+                }
+        );
+
+
+
+    }]);
+*/
+mainApp.controller('orderItemCtrl', ['$scope', '$rootScope', 'AddressFactory','OrderFactory', '$cookies','$location','ngCart','$stateParams', function ($scope, $rootScope, AddressFactory,OrderFactory, $cookies,$location,ngCart,$stateParams) {
+
+
+        $rootScope.$on('addToCartEnquiry', function (idk, item) {
+            console.log($cookies.get('enquiry_made'));
+            if ($cookies.get('enquiry_made') == undefined) {
+                var enquiry = {items:{}};
+                enquiry.items[item.id] = item;
+            } else {
+                var enquiry = JSON.parse($cookies.get('enquiry_made'));
+                if (enquiry.items) {
+                    enquiry.items[item.id] = item;
+
+                } else {
+                    enquiry.items = {};
+                    enquiry.items[item.id] = item;
+                }
+            }
+            $cookies.put('enquiry_made', JSON.stringify(enquiry));
+            $rootScope.$emit('syncEnquiryMade');
+        });
+        
+        
+        $scope.removeFromEnquiryCart = function() {};
+
+        $rootScope.$on('addEnquiryDetails', function (idk, item) {
+            var x =$cookies.get('enquiry_made');
+            if ($cookies.get('enquiry_made')!=null) {
+                var enquiry = JSON.parse($cookies.get('enquiry_made'));
+
+            } else {
+                var enquiry = {};
+
+            }
+            angular.forEach(item, function (value, key) {
+                enquiry[key] = value;
+            });
+            $cookies.put('enquiry_made', JSON.stringify(enquiry));
+            $rootScope.$emit('syncEnquiryMade');
+        });
+
+        $rootScope.$on('syncEnquiryMade', function () {
+            var enquiry = null;
+            if ($cookies.get('enquiry_made')) {
+                 enquiry = JSON.parse($cookies.get('enquiry_made'));
+            }
+
+            $rootScope.enquiry_made = enquiry;
+            console.log($rootScope.enquiry_made);
+
+        });
+        
+        $rootScope.$on('emptyCart', function () {
+            ngCart.empty();
+            $cookies.put('enquiry_made', JSON.stringify({}));
+            $rootScope.$emit('syncEnquiryMade');
+        });
+
+
+        if ($rootScope.enquiry_made)
+        if ($rootScope.enquiry_made.address_id) {
+            var promise = AddressFactory.get({id: $rootScope.enquiry_made.address_id}).$promise;
+            promise.then(function (result) {
+                if (result.error) {
+                    $scope.errorMessage = result.error;
+                } else {
+                    $scope.errorMessage = "";
+                    $scope.address = result;
+                }
+
+            });
+
+        }
+        $scope.enquiry_made = $rootScope.enquiry_made;
+        
+        $rootScope.formatDate = function(inputDate) {
+            return new Date(inputDate).toISOString();
+        };
+        
+        
+
+
+        $scope.checkout = function() {
+            var order = {};
+            order.address_id = $scope.enquiry_made.address_id;
+            
+            order.pickup_date = $scope.enquiry_made.pickup_date
+            order.pickup_time = $scope.enquiry_made.pickup_time;
+            order.items = ngCart.getItems();
+            var promise = OrderFactory.placeOrder(order).$promise;
+            promise.then(function(result) {
+                swal("Order placed!","Our team will contact you soon!");
+                $rootScope.$emit('emptyCart');
+                $location.path("/order-summary/"+result.id);
+                
+            })
+        };
+        $scope.orderHistory = {};
+        $scope.oneAtATime = true;
+        $scope.status = {
+            isFirstOpen: true,
+            isFirstDisabled: false
+        };
+        
+        $scope.getTotal = function(quantity,amt) {
+            return quantity*amt;
+        };
+        $scope.statusClass = STATUS_COLORS;
+
+        $scope.lengthOfOrder = 0;
+        $scope.getOrderHistory = function() {
+            var promise = OrderFactory.getOrderHistory().$promise;
+            
+            //orderhistory
+            //  orderhistory[]  
+            //  orderhistory
+            //  orderhistory
+            
+            promise.then(function(result) {
+                angular.forEach(result,function(val) {
+                    if ($scope.orderHistory[val.order_id]) {
+                        $scope.orderHistory[val.order_id].items.push(val);
+                        $scope.orderHistory[val.order_id].total_amnt = $scope.getTotal(val.quantity,val.price) + $scope.orderHistory[val.order_id].total_amnt;
+                    } else {
+                        
+                        $scope.orderHistory[val.order_id] = {total_amnt:$scope.getTotal(val.quantity,val.price),items:[val],order_date:val.order_date,status:val.status,pickup_date:val.pickup_date};
+                    }
+                });
+                $scope.lengthOfOrder = Object.keys($scope.orderHistory).length;
+                console.log($scope.lengthOfOrder);
+                
+                
+            })
+        };
+        $scope.orderSummary = {};
+        $scope.orderSummaryTotal = 0;
+        $scope.getMyOrderSummary = function(orderId) {
+            var promise = OrderFactory.getMyOrderSummary({id:orderId}).$promise;
+            promise.then(function(resp) {
+                $scope.orderSummary = resp;
+                angular.forEach(resp,function(val) {
+                  $scope.orderSummaryTotal+=$scope.getTotal(val.quantity,val.price);
+                });
+                console.log("#############################");
+                console.log($scope.orderSummaryTotal);
+
+            }); 
+
+        }
+
+
+
+        if ($location.path() == '/orders') {
+            $scope.getOrderHistory();
+        }
+        var sss = $location.path() ;
+        if ($stateParams.order_id) {
+            $scope.getMyOrderSummary($stateParams.order_id);
+        }
+
+
+    }]);
+
+
+'use strict';
+mainApp.factory('AuthFactory', ['$resource', '$rootScope', '$cookies','$location', function ($resource, $rootScope, $cookies,$location) {
+        var user;
+        return{
+            setAuthorizationHeader: function () {
+                HEADERS = {Authorization: "Bearer " + $rootScope.user.token};
+            },
+            setAuthorizationHeaderSocial: function (token) {
+                HEADERS = {Authorization: "Bearer " + token};
+            },
+            resetAuthorizationHeader: function() {
+                HEADERS = null;
+            }
+            ,
+            setUser: function (aUser) {
+
+                $rootScope.user = aUser;
+                $cookies.put('user', JSON.stringify(aUser));
+                this.setAuthorizationHeader();
+
+
+            },
+            
+            syncCookieUser: function () {
+
+                var user = $cookies.get('user');
+                if (!user) {
+                    return;
+                }
+                $rootScope.user = JSON.parse(user);
+
+                console.log(JSON.stringify($rootScope.user));
+                console.log($rootScope.user);
+                this.setAuthorizationHeader();
+
+            },
+            getUser: function () {
+
+                return $rootScope.user;
+            },
+            logout: function () {
+                $rootScope.user = undefined;
+                this.resetAuthorizationHeader();
+                $cookies.remove("user");
+                $rootScope.$emit('emptyCart');
+                console.log("LOGGED OUT");
+//                $location("/");
+                
+            },
+            isLoggedIn: function () {
+                console.log(this.getUser());
+                return(this.getUser()) ? true : false;
+            },
+            login: function (username, password,callback) {
+                var self = this;
+//                console.log(username + password);
+                var Login = $resource(APP_URL.login, {},
+                        {
+                            login: {method: "POST"}
+                        }
+                );
+                var promise = Login.login({email: username, password: password}).$promise;
+                promise.then(function (result) {
+
+                    if (result.token) {
+                        console.log(result.token);
+                        result.user['token'] = result.token;
+                        self.setUser(result.user);
+                        callback(null);
+                    } 
+                    
+
+                },function(error) {
+                    console.log(error);
+                    callback(error) 
+                });
+            },
+            loginWithToken: function (token,callback) {
+                var self = this;
+//                console.log(username + password);
+                self.setAuthorizationHeaderSocial(token);
+                var Login = $resource(APP_URL.userbytoken, {},{
+                    query: {method: 'GET', headers: HEADERS,isArray:false},
+                });
+                var promise = Login.query({token:token}).$promise;
+                promise.then(function (result) {
+
+                    if (result) {
+                        console.log(token);
+                        result['token'] = token;
+                        self.setUser(result);
+                        callback(null);
+                    } 
+                    
+
+                },function(error) {
+                    console.log(error);
+                    callback(error) 
+                });
+            }
+        }
+    }]);
+'use strict';
+mainApp.factory('ItemFactory', ['$resource', '$rootScope', '$cookies', function ($resource, $rootScope, $cookies) {
+        return $resource(API_ENGINE_URL + 'users/:id',
+                {},
+                {
+                    getChildren: {method: 'GET', headers: HEADERS, params: {parent_id: '@parent_id'},url:APP_URL.get_children,isArray:true},
+
+                    save: {method: 'POST', headers: HEADERS,url:APP_URL.add_item},
+                    update: {method: 'PUT', headers: HEADERS,url:APP_URL.update_item},
+                   
+                   
+                });
+
+    }]);
+
+
+
+mainApp.config(function($stateProvider) {
+  $stateProvider
+    .state('login', {
+      url: '/login',
+      
+      views: {
+        '': {
+          templateUrl: 'app/users/login-partial.html',
+          controller: 'loginCtrl'
+        }
+      },
+      data: {
+        displayName: '',
+      }
+    })
+    
+
+})
+
+/*
+mainApp.config(['$routeProvider', function ($routeProvider) {
+
+        $routeProvider.when('/login',
+                {
+                    templateUrl: 'app/users/login-partial.html',
+                    controller: 'loginCtrl'
+                }
+        );
+        $routeProvider.when('/auth-token/:token',
+                {
+                    templateUrl: 'app/users/login-partial.html',
+                    controller: 'loginCtrl'
+                }
+        );
+    }]);
+    */
+mainApp.controller('loginCtrl', ['$scope', 'AuthFactory','$location','ItemFactory','$routeParams','$state','$rootScope', function ($scope, Auth, $location,ItemFactory,$routeParams,$state,$rootScope) {
+        $scope.user = {};
+        $scope.facebookLoginLink = LOGIN_FACEBOOK_LINK;
+        $scope.submit = function () {
+            Auth.login($scope.user.email, $scope.user.password, function (err) {
+                if (err) {
+                    if (err.status == 401) {
+                        $scope.errorMessage = "Login failed";
+                    }
+                } else {
+                   // $rootScope.previous_url = "";
+                   // $rootScope.previous_url = "/";
+                   if ($rootScope.user.role == 'admin') {
+                    $state.go("admin_orders");
+                    return;
+                   }
+                   $location.path("/");
+                } 
+
+            });
+        };
+       
+       
+        $scope.logout = function () {
+            Auth.logout();
+            $location.path("/login");
+        }
+        
+        
+        if ($routeParams.token) {
+            Auth.loginWithToken($routeParams.token,function (err) {
+                if (err) {
+                    if (err.status == 401) {
+                        $scope.errorMessage = "Login failed";
+                    }
+                } else {
+                   // $rootScope.previous_url = "";
+                   // $rootScope.previous_url = "/";
+                   $location.path("/");
+                } 
+
+            });
+        }
+
+
+    }
+]).directive('login', function () {
+    return {
+        restrict: 'E',
+        template:'<div style="margin-top:16px;" ng-show="$root.user.email"  class="dropdown nav navbar-nav navbar-right"\n\
+     role="menu" aria-labelledby="menu1">\n\
+<a data-target="#" href="" data-toggle="dropdown" class="dropdown-toggle">{{$root.user.email}}<b class="caret"></b></a><ul class="dropdown-menu"><li><a href="#/my-info">My info</a></li><li><a href="" ng-click="logout();">Logout</a></li></ul></div>'    };
+});
+mainApp.controller('signupCtrl', ['$scope', 'UserFactory','$location', function ($scope, UserFactory,$location) {
+        $scope.user = {};
+        $scope.submit = function (isValid) {
+            $scope.errorMessage = "";
+            if (isValid) {
+                var promise = UserFactory.save($scope.user).$promise;
+                promise.then(function(result) {
+                  if (result.error) {
+                      $scope.errorMessage = result.error;
+                  } else {
+//                      $scope.sucessMsg = "Great! Account successfully created"u
+                        swal("Awesome! You have created your account!");
+                      $scope.errorMessage = "";
+                      $location.path("#/");
+                  }  
+                    
+                });
+            }
+            
+
+        };
+
+    }
+]);
+'use strict';
+mainApp.factory('UserFactory', ['$resource', '$rootScope', '$cookies', function ($resource, $rootScope, $cookies) {
+        return $resource(API_ENGINE_URL + 'users/:id',
+                {},
+                {
+                    get: {method: 'GET', headers: HEADERS},
+                    getMe: {method: 'GET', headers: HEADERS,url:APP_URL.get_me},
+                    save: {method: 'POST', headers: HEADERS},
+                    update: {method: 'PUT', headers: HEADERS},
+                    changePassword: {method: 'PUT', headers: HEADERS,url: APP_URL.change_password},
+                    forgotPassword: {method: 'POST', headers: HEADERS,url: APP_URL.forgot_password}
+                });
+
+    }]);
+'use strict';
+mainApp.factory('AddressFactory', ['$resource', '$rootScope', '$cookies', function ($resource, $rootScope, $cookies) {
+        return $resource(API_ENGINE_URL + 'address/:id',
+                {},
+                {
+                    get: {method: 'GET', headers: HEADERS, params: {id: '@id'}},
+                    delete: {method: 'POST', headers: HEADERS,  url:APP_URL.address_remove},
+                    save: {method: 'POST', headers: HEADERS},
+                    update: {method: 'PUT', headers: HEADERS},
+                    getAddressByUser: {method: 'GET',params:{id:'@id'}, url:APP_URL.address_by_userid,isArray:true}
+
+                });
+
+    }]);
+mainApp.config(function($stateProvider) {
+  $stateProvider
+    .state('Products', {
+      url: '/',
+      
+      views: {
+        '': {
+          templateUrl: 'app/items/all-products.html',
+          controller: 'itemCtrl'
+        }
+      },
+      data: {
+        displayName: 'Home',
+      }
+    })
+    
+
+});
+/*
+mainApp.config(['$routeProvider', function ($routeProvider) {
+
+        $routeProvider.when('/my-info',
+                {
+                    templateUrl: 'app/users/my-info.html',
+                    controller: 'userCtrl'
+                }
+        );
+        $routeProvider.when('/changepassword/:id',
+                {
+                    templateUrl: 'app/users/change-password-partial.html',
+                    controller: 'userCtrl'
+                }
+        );
+
+        $routeProvider.when('/forgot-password',
+                {
+                    templateUrl: 'app/users/forgot-password.html',
+                    controller: 'userCtrl'
+                }
+        );
+
+        
+    }]);
+*/
+mainApp.controller('userCtrl', ['$scope', 'UserFactory', '$routeParams', 'OrderFactory','$location', function ($scope, UserFactory, $routeParams, OrderFactory,$location) {
+        $scope.user = {};
+        $scope.get = function () {
+            $scope.errorMessage = "";
+            var promise = UserFactory.getMe().$promise;
+            promise.then(function (result) {
+                if (result.error) {
+                    $scope.errorMessage = result.error;
+                } else {
+                    $scope.errorMessage = "";
+                    $scope.user = result;
+                }
+
+            });
+        };
+
+        $scope.update = function () {
+            $scope.errorMessage = "";
+            console.log($scope.user);
+            var promise = UserFactory.update($scope.user).$promise;
+            promise.then(function (result) {
+                if (result.error) {
+                    $scope.errorMessage = result.error;
+                } else {
+                    $scope.errorMessage = "";
+                }
+
+            });
+        };
+
+        $scope.passwordObject = {};
+        $scope.changePassword = function () {
+            $scope.passwordObject.id = $routeParams.id;
+            if ($scope.passwordObject.new_password != $scope.passwordObject.reenter_new_password) {
+                $scope.errorMessage = "renenter password mismatch";
+                return false;
+            }
+            console.log($scope.passwordObject);
+            var promise = UserFactory.changePassword($scope.passwordObject).$promise;
+            promise.then(function (result) {
+                if (result.error) {
+                    $scope.errorMessage = result.error;
+                } else {
+                    $scope.errorMessage = "";
+                }
+
+            });
+        };
+        $scope.user = {};
+        $scope.submitForgotPassword = function () {
+            var promise = UserFactory.forgotPassword($scope.user).$promise;
+            promise.then(function (result) {
+                if (result.error) {
+                    $scope.errorMessage = result.error;
+                } else {
+                    $scope.errorMessage = "";
+                    $scope.successMessage = result.message;
+
+                }
+
+            });
+        };
+        
+        
+        
+        $scope.$watch('$viewContentLoaded', function () {
+
+            if ($location.path() == '/my-info') {
+                $scope.get();
+
+            }
+
+        });
+
+    }
+]);
+
+mainApp.factory('httpinterceptor',['$q','$location','$rootScope','$cookies',function($q,$location,$rootScope,$cookies){
+    return {
+            request: function (req) {
+                if (HEADERS) {
+                    req.headers.Authorization = HEADERS.Authorization;
+
+                }
+                $rootScope.show_loader++;
+                return req;
+//            return response || $q.when(response);
+            },
+        response: function(response){
+            $rootScope.show_loader--;
+            if (response.status === 401) {
+               $location.path("/");
+               //AuthFactory.logout();
+            }
+            return response || $q.when(response);
+        },
+        responseError: function(rejection) {
+            if (rejection.status == 500) {
+                $rootScope.show_loader--;
+
+                swal({title:"Something went wrong",text:"Please relogin",type:"warning"});
+                $location.path("/");
+            }
+
+            if (rejection.status === 401) {
+                console.log("Response Error 401",rejection);
+                
+                $rootScope.user = undefined;
+                $cookies.remove("user");
+                HEADERS = null;
+                $location.path("/");
+            } else {
+                console.log(rejection);
+//                alert(rejection.error);
+                
+            }
+            return $q.reject(rejection);
+        }
+    }
+}])
+.config(['$httpProvider',function($httpProvider) {
+    //Http Intercpetor to check auth failures for xhr requests
+    $httpProvider.interceptors.push('httpinterceptor');
+}]);
+
+
+//mainApp.config(['$stateProvider', function ($stateProvider) {
+//
+//        
+//        $stateProvider.state('address', {
+//            url: '/address',
+//            views: {
+//                'main@': {
+//                    templateUrl: 'app/users/address-partial.html',
+//                }
+//            },
+//            data: {
+//                displayName: 'Users'
+//            }
+//        });
+        
+        /*
+        
+        $routeProvider.when('/address/service/:service_type',
+                {
+                    templateUrl: 'app/users/address-partial.html',
+                    controller: 'addressCtrl'
+                }
+        );
+        $routeProvider.when('/address/:id/edit',
+                {
+                    templateUrl: 'app/users/address-save.html',
+                    controller: 'addressCtrl'
+                }
+        );
+        */
+
+//    }]);
+
+
+mainApp.controller('addressCtrl', ['$scope', 'AddressFactory', '$stateParams', '$rootScope', '$location', function ($scope, AddressFactory, $stateParams, $rootScope, $location) {
+        $scope.address = {};
+        $scope.get = function () {
+            $scope.errorMessage = "";
+            var promise = AddressFactory.get({id: $stateParams.id}).$promise;
+            promise.then(function (result) {
+                if (result.error) {
+                    $scope.errorMessage = result.error;
+                } else {
+                    $scope.errorMessage = "";
+                    $scope.address = result;
+                }
+
+            });
+        };
+
+        $scope.getAddressList = function () {
+//            console.log(HEADERS);
+            var promise = AddressFactory.getAddressByUser({id: $rootScope.user.id}).$promise;
+            promise.then(function (result) {
+                $scope.addressList = result;
+                if (result[0]) {
+                    $scope.enquiry.address_id = result[0].id;
+                }
+                if (0 == $scope.addressList.length) {
+                    $scope.setMode('create_address');
+                    console.log($scope.addressList.length);
+                } else {
+                    if ($location.path().indexOf("edit") > -1) {
+                        console.log("EDIT MODE");
+                        $scope.setMode("create_address");
+                    } else {
+                        $scope.setMode('');
+
+                    }
+
+                }
+
+            });
+
+        };
+
+        $scope.setMode = function (mode) {
+            $scope.mode = mode;
+        };
+        $scope.areaList = APP_LOCALITY;
+        $scope.getAddressList();
+
+        
+        
+        
+        $scope.addressMode = "";
+        $scope.save = function (isValid) {
+            if (!isValid) {
+                $scope.errorMessage = "Form fields incorrect";
+                return;
+            }
+            $scope.address.user_id = $rootScope.user.id;
+            $scope.address.state="Assam";
+            $scope.address.city="Guwahati";
+            $scope.errorMessage = "";
+//            var isUpdate = false;
+            if ($stateParams.id) {
+                $scope.address.id = $stateParams.id;
+                var promise = AddressFactory.update($scope.address).$promise;
+//                isUpdate = true;
+
+            } else {
+                var promise = AddressFactory.save($scope.address).$promise;
+
+            }
+            promise.then(function (result) {
+                if (result.error) {
+                    $scope.errorMessage = result.error;
+                } else {
+                    $scope.errorMessage = "";
+                    $scope.getAddressList();
+
+                    $scope.address = result;
+                    swal("Address saved!");
+                    
+                    if ($stateParams.id) {
+                        $rootScope.back();
+                    } else {
+                        $scope.enquiry.address_id = result.id;
+                    }
+                    
+                   
+                }
+
+            });
+        };
+        $scope.delete = function (deleteAddressId) {
+//            console.log(deleteAddressId);
+//            alert(deleteAddressId);
+            
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55", 
+                confirmButtonText: "Yes, delete it!", closeOnConfirm: false}, 
+                function () {
+//                swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                $scope.errorMessage = "";
+                var promise = AddressFactory.delete({id: deleteAddressId}).$promise;
+                promise.then(function (result) {
+                    if (result.error) {
+                        $scope.errorMessage = result.error;
+                    } else {
+                        swal("Delete successful!");
+                        $scope.getAddressList();
+
+
+                    }
+
+                });
+                
+            });
+            
+            
+            
+        };
+        
+        $scope.availableTimeList = [];
+        for (i = 8; i < 20; i++) {
+            if (i < 12) {
+                if (i + 1 == 12) {
+                    $scope.availableTimeList.push({key:i,val:i + ":00 am  - " + (i + 1) + ":00 pm"});
+
+                } else {
+                    $scope.availableTimeList.push({key:i,val:i + ":00 am  - " + (i + 1) + ":00 am"});
+
+                }
+
+            } else if (i == 12) {
+                $scope.availableTimeList.push({key:i,val:i + ":00 pm - 1:00 pm"});
+            } else {
+
+                $scope.availableTimeList.push({key:i,val:(i - 12) + ":00 pm - " + (i - 11) + ":00 pm"});
+
+            }
+        }
+        
+        $scope.order = {};
+        var laundry_service = {dry_wash: 1, wash_iron: 2};
+        if ($stateParams.service_type) {
+            var laundry_type = $stateParams.service_type.split('=');
+            var items = [];
+            if (laundry_type[1]) {
+
+                var temp = laundry_type[1].split(',');
+                for (var i = 0; i < temp.length; i++) {
+
+                    items.push(laundry_service[[temp[i]]]);
+                }
+                $scope.order.items = items;
+
+
+            }
+        } else {
+            $scope.mode="create_address";
+        }
+//        console.log(items);
+
+        $scope.enquiry = {};
+        if ($rootScope.enquiry_made) {
+            $scope.enquiry = $rootScope.enquiry_made;
+        }
+        $scope.enquiry.updated_by = $rootScope.user.id;
+        $scope.placeEnquiry = function () {
+            if ($scope.enquiry.address_id) {
+                
+                $rootScope.$emit('addEnquiryDetails',{
+                    address_id:$scope.enquiry.address_id,
+                    pickup_date:$scope.enquiry.pickup_date,
+                    pickup_time:$scope.enquiry.pickup_time
+                
+                });
+                $location.path("/order-preview");
+
+            } else {
+                $scope.errorMessage = "Please select an address";
+            }
+
+
+            return;
+
+
+        };
+
+
+        $scope.update = function () {
+            $scope.errorMessage = "";
+            console.log($scope.address);
+            var promise = AddressFactory.update($scope.address).$promise;
+            promise.then(function (result) {
+                if (result.error) {
+                    $scope.errorMessage = result.error;
+                } else {
+                    $scope.errorMessage = "";
+                }
+
+            });
+        };
+        
+        $scope.$watch('$viewContentLoaded', function () {
+            if ($stateParams.id) {
+                $scope.get();
+            }
+
+        });
+
+    }
+]).directive('addressform', function () {
+    return {
+        restrict: 'E',
+        templateUrl: 'app/users/address-save.html'};
+}).directive('jqdatepicker', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+         link: function (scope, element, attrs, ngModelCtrl) {
+            $(element).datepicker({
+                dateFormat: 'dd/mm/yy',
+                minDate:0,
+                onSelect: function (date) {
+                    scope.enquiry.pickup_date = date;
+                    scope.$apply();
+                }
+            });
+        }
+    };
+});
+
+/*.directive('address-info', function () {
+    return {
+        restrict: 'E',
+        templateUrl: 'app/address/address-info.html'};
+});
+*/
+
+
+//mainApp.
+
+// list 
+// create
+// update
+//mainApp.config(['ui.router', function ($stateProvider) {
+//        $stateProvider
+//        .state('home', {
+//            url:'/',
+//            templateUrl: 'app/products/all-products.html',
+//            controller: 'itemCtrl'
+//        })
+//        .state('about', {
+//            url:'/about',
+//            templateUrl: 'templates/about.html',
+//            controller: 'AboutController'
+//        });
+ 
+        
+        
+//        $routeProvider.when('/admin/items',
+//                {
+//                    templateUrl: 'app/items/items.html',
+//                    controller: 'adminItemCtrl'
+//                }
+//        );
+//    }]);
+
+
+
+
+mainApp.controller('itemCtrl', ['$scope', 'ItemFactory', '$stateParams', '$rootScope', '$location', function ($scope, ItemFactory, $stateParams, $rootScope, $location) {
+        $scope.html="";
+        $scope.helloWorld = "Hellow world";
+        $scope.childrenList = "";
+        $scope.getChildren = function (parentId) {
+          //alert("HLLOW");
+
+            var promise = ItemFactory.getChildren({parent_id: parentId}).$promise;
+            promise.then(function (result) {
+                $scope.categoryList = result;
+                console.log("SADAD");
+                
+            });
+
+        };
+        $scope.getChildren(1);
+        $scope.$watch('$viewContentLoaded', function () {
+            $scope.getChildren(1);
+        });
+
+    }
+]).directive('itemlist', function ($compile) {
+    return {
+        restrict: 'A',
+        replace: true,
+        link: function (scope, ele, attrs) {
+            scope.$watch(attrs.itemlist, function (html) {
+                ele.html(html);
+                $compile(ele.contents())(scope);
+            });
+        }
+    };
+});
+
+
+
+mainApp.config(function($stateProvider) {
+  $stateProvider
+    
+    .state('laundry', {
+      url: '/service/Laundry/:id',
+      
+      views: {
+        '': {
+          templateUrl: 'app/services/laundry/laundry.html',
+          controller: 'laundryCtrl'
+        }
+      },
+      data: {
+        displayName: 'Laundry',
+      }
+    })  
+    
+
+});
+        
+//$scope.clothPric  = {};        
+mainApp.controller('laundryCtrl', ['$scope', 'ItemFactory',
+    '$stateParams',"$rootScope","$location","ngCart","ngCartItem", function ($scope, ItemFactory, $stateParams,$rootScope,$location,ngCart,ngCartItem) {
+        $scope.laundryServiceTypes = {};
+        $scope.laundryServiceNames = {};
+        $scope.now_showing = "service_types";
+        $scope.getChildren = function (id,callback) {
+            if (id == undefined) {
+                return;
+            }
+            var promise = ItemFactory.getChildren({parent_id:id}).$promise;
+            promise.then(function (itemList) {
+                callback(itemList);
+                
+            });
+        };
+        $scope.clothPrices = {};
+        $scope.clothItems = null;
+        $scope.showClothPriceList = function(parentId,parentName) {
+            
+            if ($scope.clothPrices[parentId]) {
+                $scope.clothItems = $scope.clothPrices[parentId];
+                return;
+            }
+            $scope.getChildren(parentId,function(itemList) {
+                var name = parentName;
+                var items = [];
+                angular.forEach(itemList, function (value, key) {
+                    items.push(value);
+                
+                });
+                $scope.clothPrices[parentId] = {name:name,items:items};
+                $scope.clothItems = $scope.clothPrices[parentId];
+//                $scope.now_showing = "price_list";
+                
+            });
+        };
+        $scope.enquiry = {};
+//        $scope.enquiry 
+        $scope.showServices = function() {
+            $scope.now_showing = "service_types";
+        };
+        $scope.addCartLaundry = function() {
+            angular.forEach($scope.enquiry.items,function(value,key) {
+//                var temp = value.split(":");
+                $rootScope.$emit('addToCartEnquiry', {id:value,name:$scope.laundryServiceNames[value]});
+            });
+            
+            $location.path("/address");
+        };
+        $scope.showAddressDetails = function() {
+            if(ngCart.getTotalItems()==0) {
+                $scope.errorMessage = "No items added!";
+                return false;
+            }
+            
+            $location.path("/address");
+        };
+        
+        
+        $scope.$watch('$stateChangeStart', function () {
+            $scope.getChildren($stateParams.id,function(itemList) {
+                $scope.laundryServiceTypes = itemList;
+                var first = true;
+                angular.forEach($scope.laundryServiceTypes, function (value, key) {
+                    if (first) {
+                        first = false;
+                        $scope.showClothPriceList(value.id,value.name);
+                    }
+                    $scope.laundryServiceNames[value.id] = value.name;
+                });
+                $scope.showClothPriceList();
+
+            });
+        });
+
+
+    }]).directive('laundryprices', function () {
+    return {
+        restrict: 'E',
+        templateUrl: 'app/services/laundry/laundry-prices.html'};
+});;       
+mainApp.factory('OrderFactory', ['$resource',
+    function ($resource) {
+        return $resource(APP_URL.order_item,
+                {},
+                {
+                    get: {method: 'GET', headers: HEADERS, params: {category_id: '@category_id', id: '@id'}, isArray: true},
+                    placeOrder: {method: 'POST', params: {}},
+                    getOrderHistory: {method: 'GET',  params: {},url:APP_URL.order_history,isArray:true},
+                    adminOrderHistory: {method: 'POST',  params: {},url:APP_URL.admin_order_history,isArray:true},
+                    adminGetOrderDetails: {method: 'GET',  params: {id:'@id'},url:APP_URL.admin_order_details,isArray:true},
+                    updateOrder: {method: 'PUT', params: {},url:APP_URL.update_order},                    
+                    getMyOrderSummary:{method:'GET',params:{}, url:APP_URL.order_read,isArray:true},                    
+                    getOrderAddress:{method:'GET',params:{}, url:APP_URL.order_address}                    
+
+                });
+    }]);
+
+var sortingOrder = 'name'; //default sort
+mainApp.config(['$routeProvider', function ($routeProvider) {
+
+        $routeProvider.when('/admin/orders',
+                {
+                    templateUrl: 'app/admin/admin-orders.html',
+                    controller: 'userCtrl'
+                }
+        );
+        $routeProvider.when('/admin/category',
+                {
+                    templateUrl: 'app/admin/admin-category.html',
+                    controller: 'adminCtrl'
+                }
+        );
+
+
+
+    }]);
+mainApp.controller('adminCtrl', ['$scope', 'OrderFactory', '$location','$filter','ItemFactory', function ($scope,  OrderFactory, $location,$filter,ItemFactory) {
+
+        $scope.status_colors = STATUS_COLORS;
+        $scope.show_order_list=true;
+        $scope.generateData = function() {
+            
+            
+
+            var promise = OrderFactory.adminOrderHistory().$promise;
+            promise.then(function(result) {
+                $scope.items = result;
+                $scope.search();
+            });
+        }
+        $scope.sortingOrder = sortingOrder;
+        $scope.pageSizes = [5, 10, 25, 50];
+        $scope.reverse = false;
+        $scope.filteredItems = [];
+        $scope.groupedItems = [];
+        $scope.itemsPerPage = 10;
+        $scope.pagedItems = [];
+        $scope.currentPage = 0;
+//        $scope.items =  generateData();
+
+        var searchMatch = function (haystack, needle) {
+            if (!needle) {
+                return true;
+            }
+            return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+        };
+
+        // init the filtered items
+        $scope.search = function () {
+            $scope.filteredItems = $filter('filter')($scope.items, function (item) {
+                for (var attr in item) {
+                    if (searchMatch(item[attr], $scope.query))
+                        return true;
+                }
+                return false;
+            });
+            // take care of the sorting order
+            if ($scope.sortingOrder !== '') {
+                $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+            }
+            $scope.currentPage = 0;
+            // now group by pages
+            $scope.groupToPages();
+        };
+
+        // show items per page
+        $scope.perPage = function () {
+            $scope.groupToPages();
+        };
+
+        // calculate page in place
+        $scope.groupToPages = function () {
+            $scope.pagedItems = [];
+
+            for (var i = 0; i < $scope.filteredItems.length; i++) {
+                if (i % $scope.itemsPerPage === 0) {
+                    $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)] = [$scope.filteredItems[i]];
+                } else {
+                    $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push($scope.filteredItems[i]);
+                }
+            }
+        };
+
+        $scope.deleteItem = function (idx) {
+            var itemToDelete = $scope.pagedItems[$scope.currentPage][idx];
+            var idxInItems = $scope.items.indexOf(itemToDelete);
+            $scope.items.splice(idxInItems, 1);
+            $scope.search();
+
+            return false;
+        };
+
+        $scope.range = function (start, end) {
+            var ret = [];
+            if (!end) {
+                end = start;
+                start = 0;
+            }
+            for (var i = start; i < end; i++) {
+                ret.push(i);
+            }
+            return ret;
+        };
+
+        $scope.prevPage = function () {
+            if ($scope.currentPage > 0) {
+                $scope.currentPage--;
+            }
+        };
+
+        $scope.nextPage = function () {
+            if ($scope.currentPage < $scope.pagedItems.length - 1) {
+                $scope.currentPage++;
+            }
+        };
+
+        $scope.setPage = function () {
+            $scope.currentPage = this.n;
+        };
+
+        // functions have been describe process the data for display
+        $scope.generateData();
+
+
+        // change sorting order
+        $scope.sort_by = function (newSortingOrder) {
+            if ($scope.sortingOrder == newSortingOrder)
+                $scope.reverse = !$scope.reverse;
+
+            $scope.sortingOrder = newSortingOrder;
+        };
+
+        $scope.orderDetails = {items:[]};
+        $scope.showOrderDetails =function(id) {
+            $scope.orderAddressHistory(id);
+            $scope.orderDetails.items = [];
+            var promise = OrderFactory.adminGetOrderDetails({id:id}).$promise;
+            promise.then(function(result) {
+                var itemTotal = 0;
+                
+                
+                angular.forEach(result,function(val) {
+                    if (!$scope.orderDetails.status) {
+                        $scope.orderDetails.status = val.status;
+                        $scope.orderDetails.order_id = val.order_id;
+                    }
+                    $scope.orderDetails.items.push(val);
+                    itemTotal+= val.price*val.quantity;
+                    
+                    
+                });
+                $scope.orderDetails.total_amount = itemTotal;
+                $scope.show_order_list = false;
+                
+                
+
+            });
+        };
+
+
+   
+
+    
+    // /admin/category
+    
+    $scope.getCategories = function(parentId) {
+        
+    }
+    
+    
+    $scope.deleteNode = function(data) {
+        data.nodes = [];
+    };
+    $scope.addNode = function(data) {
+        var post = data.nodes.length + 1;
+        var newName = data.name + '-' + post;
+        data.nodes.push({name: newName,nodes: []});
+    };
+    
+    $scope.displayTree = function(node) {
+        
+        var promise = ItemFactory.getChildren({parent_id:node.id}).$promise;
+        promise.then(function(itemList) {
+            if (itemList) {
+                node.nodes = itemList;
+            } 
+
+        });
+        
+        
+    };
+    $scope.tree = [{name: "ServEaseMe",id:1, nodes: []}];
+    if ($location.path() == "/admin/category") {
+        $scope.displayTree($scope.tree[0]);
+    }
+    
+    $scope.itemCategory = {};
+    $scope.saveNodeMode = false;
+    $scope.showEditNode = function(data) {
+        $scope.itemCategory = data;
+        $scope.saveNodeMode = true;
+    }
+    
+    $scope.showAddNode = function(data) {
+        $scope.itemCategory = {};
+        $scope.itemCategory.parent_id = data.id;
+        
+        $scope.saveNodeMode = true;
+        
+    }
+    
+    $scope.saveNodeItem = function () {
+        if ($scope.itemCategory.id) {
+        var promise = ItemFactory.update($scope.itemCategory).$promise;
+        } else {
+            var promise = ItemFactory.save($scope.itemCategory).$promise;
+
+        }
+        promise.then(function (result) {
+
+            $scope.saveNodeMode = false;
+
+        });
+
+
+
+    }
+    $scope.cancelSave = function () {
+        
+            $scope.saveNodeMode = false;
+
+
+    }
+    $scope.showOrderList = function() {
+        $scope.show_order_list  = true;
+    }
+
+    $scope.updateOrder = function(id,status) {
+        swal({   title: "Are you sure?",   
+            text: "You want to update!",  
+             type: "warning",   
+             showCancelButton: true, 
+               confirmButtonColor: "#DD6B55",
+                  confirmButtonText: "Yes",  
+                   closeOnConfirm: false }, 
+                   function(){  
+
+        var promise = OrderFactory.updateOrder({id:$scope.orderDetails.order_id,status:$scope.orderDetails.status}).$promise;
+        promise.then(function(res) {
+
+            if (res) {
+                swal("Done!");
+                $scope.show_order_list  = true;
+                $scope.generateData();
+//                 swal("Deleted!", "The order is updated.", "success"); });
+            }
+            });
+        });
+    };
+
+    $scope.address = {};
+    $scope.orderAddressHistory = function(orderId) {
+        var promise = OrderFactory.getOrderAddress({id:orderId}).$promise;
+        promise.then(function(res) {
+
+            if (res) {
+                $scope.address = res;
+             }
+            });
+        
+
+    }
+
+
+
+
+
+}    
+    
+    
+]);
+//initApp.$inject = ['$scope', '$filter'];
+
+//$(document).ready(function() {});
+//$scope.clothPric  = {};        
+mainApp.controller('driverCtrl', ['$scope', 'ItemFactory',
+    '$stateParams',"$rootScope","$location","ngCart","ngCartItem", function ($scope, ItemFactory, $stateParams,$rootScope,$location,ngCart,ngCartItem) {
+        
+        $scope.now_showing = "service_types";
+        
+        
+       
+        $scope.dirverItems =[];
+       
+       
+        $scope.enquiry = {};
+        $scope.showServices = function() {
+            $scope.now_showing = "service_types";
+        };
+        $scope.addCartDriver = function() {
+            angular.forEach($scope.enquiry.items,function(value,key) {
+                $rootScope.$emit('addToCartEnquiry', {id:value,name:$scope.laundryServiceNames[value]});
+            });
+            
+            $location.path("/address");
+        };
+        $scope.showAddressDetails = function() {
+            if(ngCart.getTotalItems()==0) {
+                $scope.errorMessage = "No items added!";
+                return false;
+            }
+            
+            $location.path("/address");
+        };
+        
+        
+        $scope.$watch('$viewContentLoaded', function () {
+            var promise = ItemFactory.getChildren({parent_id:$stateParams.id}).$promise;
+            promise.then(function(itemList) {
+                $scope.dirverItems = itemList;
+            });
+
+        });
+
+
+    }]).directive('laundryprices', function () {
+    return {
+        restrict: 'E',
+        templateUrl: 'app/services/laundry/laundry-prices.html'};
+});;       
 //# sourceMappingURL=minifyify-app.js.map

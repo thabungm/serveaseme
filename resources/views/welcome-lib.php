@@ -11,7 +11,6 @@
 <script src="bower_components/checklist-model/checklist-model.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
 <script src="bower_components/angular-utils-ui-breadcrumbs/uiBreadcrumbs.js"></script>
-<!--<script src="bower_components/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html"></script>-->
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/snapjs/snap.js"></script>
 <script src="bower_components/angular-snap/angular-snap.js"></script>
@@ -21,7 +20,6 @@
 
 
         <script src="/app/env.js"></script>
-
         <script src="/app/app-url.js"></script>
         <script src="/app/locality.js"></script>
         <script src="/app/app.js"></script>

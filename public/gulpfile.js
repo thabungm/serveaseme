@@ -3,6 +3,9 @@ var gulp = require('gulp'),
     gp_rename = require('gulp-rename'),
     gp_uglify = require('gulp-uglify'),
     gp_sourcemaps = require('gulp-sourcemaps');
+var argv = require('yargs').argv;
+
+console.log(argv.argu);
 
 var config = {
 app:{
@@ -33,7 +36,7 @@ var jsLibFiles = [
 "bower_components/angular-route/angular-route.js",
 "bower_components/checklist-model/checklist-model.js",
 "bower_components/angular-bootstrap/ui-bootstrap.js",
-"bower_components/angular-utils-ui-breadcrumbs/uiBreadcrumbs.js",
+
 "bower_components/angular-ui-router/release/angular-ui-router.js",
 "bower_components/snapjs/snap.js",
 "bower_components/angular-snap/angular-snap.js"
@@ -68,6 +71,10 @@ var jsAppFiles = [
 
 
 var runForApp = false;
+if (argv.argu) {
+	runForApp = argv.argu; 
+}
+//console.log(process.env);
 if (runForApp) {
 	var souceFileArr = jsAppFiles;
 	var destination= "dist/app";
@@ -78,7 +85,8 @@ if (runForApp) {
 	var minifiedName = 'minifyify-lib.js';
 
 }
-
+console.log(destination);
+console.log(minifiedName);
 
 
 gulp.task('js-app', function(){
@@ -87,7 +95,7 @@ gulp.task('js-app', function(){
         .pipe(gp_concat('concat-app.js'))
         .pipe(gulp.dest('dist'))
         .pipe(gp_rename(minifiedName))
-        .pipe(gp_uglify())
+       // .pipe(gp_uglify())
         .pipe(gp_sourcemaps.write('./'))
         .pipe(gulp.dest(destination));
 });
