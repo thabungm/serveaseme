@@ -66,6 +66,9 @@ a{    text-decoration: none !important;
     @media (max-width:767px) {
        .top-menu-cart { margin:-40px 15px 0 0; float:right;} 
        button.navbar-toggle { margin:13px 65px 0 0 !important;}
+       .main-logo{width:260px;}
+       .main-logo img{width:201px;}
+
     }
     
     
