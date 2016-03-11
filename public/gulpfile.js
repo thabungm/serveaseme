@@ -32,7 +32,8 @@ var jsLibFiles = [
 "bower_components/angular-cookies/angular-cookies.js",
 "bower_components/angular-route/angular-route.js",
 "bower_components/checklist-model/checklist-model.js",
-"bower_components/angular-bootstrap/ui-bootstrap.js"
+"bower_components/angular-bootstrap/ui-bootstrap.js",
+"bower_components/angular-ui-router/release/angular-ui-router.js"
 ];
 
 
