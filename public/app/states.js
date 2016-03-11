@@ -162,6 +162,20 @@ mainApp.config(function($stateProvider) {
       data: {
         displayName: 'Edit address',
       }
+    }).state('admin_category',{
+      url: '/admin/category',
+      
+      views: {
+        '': {
+          templateUrl: 'app/admin/admin-category.html',
+          controller: 'adminCtrl'
+          
+                  
+        }
+      },
+      data: {
+        displayName: 'Admin Items',
+      }
     })
     
 

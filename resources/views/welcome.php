@@ -29,7 +29,8 @@
 
         <?php
         //if ($env == 'local') {
-        if ($env == 'production') {
+        //if ($env != 'production') {
+            if (true) {
             include_once('welcome-lib.php');
             ?>
 
