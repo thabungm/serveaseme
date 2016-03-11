@@ -49,6 +49,7 @@ var jsAppFiles = [
 "app/app-url.js",
 "app/locality.js",
 "app/app.js",
+"/app/states.js",
 "app/ordersenquiry/order-enquiry-controller.js",
 "app/users/authFactory.js","app/items/itemFactory.js",
 "app/products/product.js","app/products/orderFactory.js",
