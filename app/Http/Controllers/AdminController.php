@@ -12,6 +12,25 @@ use App\Dao\ItemsDao as ItemsDao;
 use App\Dao\OrdersDao as ordersDao;
 
 class AdminController extends Controller {
+    
+    function isAdmin($user) {
+        if (!$user) {
+            return false;
+        }
+        if ($user->role == "admin") {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+    function __construct() {
+        parent::__construct();
+        if (!$this->isAdmin($this->getLoggedInUser())) {
+            throw new \Exception("Not allowed, only admin has access",401);
+
+        }
+    }
 
     //  Item
     // create item child
