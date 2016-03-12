@@ -82,6 +82,7 @@
                 <span class="icon-bar"></span>
             </button>
             <div class="navbar-brand main-logo"><a style="margin-bottom:10%;" href="#/" class=""><img src="/app/assets/app/images/logo.png"></a></div>
+            <div ng-show="$root.user.role=='admin'" class="navbar-brand"><a class="btn btn-sm btn-primary" ui-sref="admin_orders">Orders</a></div>            
             
             
         
