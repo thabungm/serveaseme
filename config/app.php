@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    'app_site_name'=>'ServEaseMe',
     /*
     |--------------------------------------------------------------------------
     | Application Environment

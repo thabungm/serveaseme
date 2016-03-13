@@ -6,11 +6,13 @@ class MailService {
     private $sender;
     private $defaultTo;
     private $mailSenderLink;
+    private $siteName;
 
     function __construct() {
         $this->sender = "abc@abc.com";
         $this->defaultTo = "thabungm@gmail.com";
         $this->mailSenderLink = 'http://localhost:3000/mail';
+        $this->siteName = config('app_site_name');
     }
     
     function apiCall($method, $url, $data = false) {
@@ -89,20 +91,35 @@ class MailService {
         $mailArray['cc'] = 'thabung@gmail.com';
         $mailArray['subject'] = 'New product enquiry';
         $this->sendMail($mailArray);
+
+        
+        // or
+        //$contents = $view->render();
     }
     
     
     function resetPasswordMail($inputArray) {
+        try {
         $mailService = new MailService();
-        $message = 'Hi,<br>Click <a href="'.$inputArray['reset_link'].'">here</a> to reset your password.<br> Link not working? <br> Copy paste this url to browser '. ' '. $inputArray['reset_link'] ;
         $mailArray = array();
-        $mailArray['body'] = $message;
         $mailArray['to'] = $inputArray['to'];
-//        $mailArray['from'] = $inputArray['to'];
-        $mailArray['cc'] = 'thabung@gmail.com';
+        $inputArray['reset_link'] = $inputArray['reset_link'];
+        $mailArray['cc'] = 'thabungm@gmail.com';
         $mailArray['subject'] = 'Reset your password';
+
+        
+        $view = \View::make('email-template/forgot-password', $inputArray);
+        $contents = (string) $view;
+        
+        $contents = "sdfsdfsf ddasd as a asd a";
+        $mailArray['body'] = $contents;
+        
         $this->sendMail($mailArray);
         return true;
+    } catch (\Exception $e) {
+        throw new \Exception($e);
+
+    }
     }
 
 }

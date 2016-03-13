@@ -62,8 +62,9 @@ class UsersController extends Controller
     
     function forgotPassword(RequestFacade $request){
         $usersDao = new UsersDao();
-        
-        $user = $usersDao->changePassword(RequestFacade::all());
+        $inputArray = RequestFacade::all();
+        $inputArray['user_object'] = $this->getLoggedInUser();
+        $user = $usersDao->changePassword();
         return $this->jsonResponse($user);
     }
     

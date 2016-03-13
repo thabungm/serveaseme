@@ -28,8 +28,11 @@ class UsersManager   {
         $mailService = new MailService();
         $passwordArray = array();
         $passwordArray['to'] = $user->email;
-        $webClient = config('WEB_CLIENT');
+        $passwordArray['user_object'] = $user; 
+        $webClient = env('WEB_CLIENT');
+        
         $passwordArray['reset_link'] = $webClient . "#/resetpassword/" .  $hash;
+        $passwordArray['user_object'] = $user;
         
         $sent = $mailService->resetPasswordMail($passwordArray);
 
