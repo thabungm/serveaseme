@@ -107,11 +107,11 @@ class MailService {
         $mailArray['cc'] = 'thabungm@gmail.com';
         $mailArray['subject'] = 'Reset your password';
 
-        
+
         $view = \View::make('email-template/forgot-password', $inputArray);
         $contents = (string) $view;
         
-        $contents = "sdfsdfsf ddasd as a asd a";
+        
         $mailArray['body'] = $contents;
         
         $this->sendMail($mailArray);
